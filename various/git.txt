@@ -1,0 +1,48 @@
+create new branch
+  git branch <new branch name>
+
+switch branches
+  git checkout <branch name>
+
+initial commit
+  git push -u
+
+specify which remote repo branch
+  git push -u origin develop
+
+attach current commit to previous commit
+  git commit --amend -m "update"
+
+pull changes
+  git pull
+
+delete a branch
+  git branch -d <branch name> 
+
+reset code (if you didn't commit any changes)
+  git reset HEAD --hard
+
+switch branches without commiting changes in current branch
+  git stash
+    <switch branches> when you return 
+  git stash apply
+
+see all branches in the repository not only on your machine
+  git branch -r
+
+
+prevent git from recognizing swp files in .gitignore
+
+# swap
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-v][a-z]
+[._]sw[a-p]
+# session
+Session.vim
+# temporary
+.netrwhist
+*~
+# auto-generated tag files
+tags
+

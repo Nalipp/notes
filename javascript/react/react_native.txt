@@ -1,0 +1,59 @@
+**********************************************************************
+React Native
+**********************************************************************
+
+install 
+  $ react-native start
+
+  quit simiulator
+  $ rm -rf ios/build/; kill $(lsof -t -i:8081); 
+  $ rm -rf ios/build/; kill $(lsof -t -i:8081); react-native run-ios
+
+  $ npm install -g react-native-cli
+  $ react-native init <project name>
+  $ npm install
+  $ react-native run-ios
+
+
+
+
+Create React Native App -> 
+  don't need to write native code (runs on both) 
+  can develop on your actual phone
+  not locked in, you can eject anytime
+  can't be added to an existing Andriod or IOS app
+
+
+Create React App ->
+  ? is more customizable because it allows you to develop natively
+
+
+Expo -> 
+  an app that you download on your mobile device
+  allows us to create apps using javascript, requires little configuration
+
+
+
+simulators
+  💡 Bundling Error (Unexpected Token)💡
+
+  If you're seeing bundling errors while attempting to run a simulator, try changing your Babel preset for React Native to version 2.1.0. Then, remove your node-modules directory, reinstall with npm install, and run the simulator again. For more information, check out this post on Stack Overflow.
+
+    https://facebook.github.io/react-native/docs/getting-started.html
+    https://stackoverflow.com/questions/45725376/react-native-starter-project-bundling-fails-with-unexpected-token-error
+
+
+Create Reatct Native App
+  create-react-native-app <app name>
+  cd <app name>
+  ? yarn
+  ? yarn install 
+  ? yarn add babel-preset-react-native@2.1.0
+  yarn start
+
+start React Native
+  react-native init MyProjectName
+  cd MyProjectName
+  open xcode
+  react-native run-ios / run-andriod
+

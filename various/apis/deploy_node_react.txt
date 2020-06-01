@@ -1,0 +1,62 @@
+****************************************************************************************************
+deploy node react fullstack with heroku
+
+1. create a parent folder that holds the folowing
+   -> server (this holds the entire node app)
+   -> create-react-app <app name>
+      npm install 
+      npm run build 
+
+2. in the parrent folder 
+   -> git init . 
+   -> .gitignore 
+   -> npm init (to generate a package.json file)
+
+  ../.gitignore
+
+    ### Vim ###
+    # swap
+    [._]*.s[a-v][a-z]
+    [._]*.sw[a-p]
+    [._]s[a-v][a-z]
+    [._]sw[a-p]
+    # session
+    Session.vim
+    # temporary
+    .netrwhist
+    *~
+    # auto-generated tag files
+    tags
+
+    # End of https://www.gitignore.io/api/vim
+
+    ### React ###
+    node_modules
+    .DS_Store
+    react-ui/build
+
+  ../package.json
+    add the following to scripts
+      "start": "node todoapi", 
+      "heroku-postbuild": "cd todosfrontend/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
+
+      https://github.com/Nalipp/deploy_fullstack_node_react/blob/master/package.json
+
+  ../server/index.js
+    add the following
+      const path = require('path');
+      app.use(express.static(path.resolve(__dirname, '../todosfrontend/build')));  // this directs the base path to the react app
+
+      https://github.com/Nalipp/deploy_fullstack_node_react/blob/master/server/index.js
+
+3. heroku
+   -> heroku create <app name>
+   -> heroku addons:create mongolab
+   -> heroku config:get MONGODB_URI (the mondodb code (most likely in your models or db config file) needs MONGODB_URI url in order to connect to mlab)
+   -> git push heroku master
+   -> heroku open
+
+
+resources
+  http://ericsowell.com/blog/2017/5/16/create-react-app-and-express
+  https://scotch.io/tutorials/use-mongodb-with-a-node-application-on-heroku

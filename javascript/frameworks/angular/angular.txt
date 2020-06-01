@@ -1,0 +1,589 @@
+*******************************************************************************************
+angular
+
+
+  *most used
+  *property binding vs string interpolation
+  *event binding
+  *two way data binding
+  *directives
+
+sharing components / exposing data
+  *custom property binding
+  *local references
+  *passing html into a componenet using <ng-content>
+
+  *lifecyle hooks
+  *routing
+  *custom pipe
+  *forms
+
+
+*******************************************************************************************
+*******************************************************************************************
+*most used
+
+  property binding and string interpolation
+
+    {{ }}         =>    <div>{{ tsValue }}</div>
+    [(ngModel)]   =>    <input type="text" [(ngModel)]="variableName">
+    (click)       =>    <button (click)="myFunction()">click</button>
+    (input)       =>    <input type="text" (input)="methodName($event)">      methodName(event: Event) { 
+                                                                                (<HTMLInputElement>event.target).value; 
+                                                                              }
+  structural directives
+
+    *ngFor        =>    <div *ngFor="let ___ of ___s"></div>
+    *ngFor (index)=>    <div *ngFor="let ___ of ___s; let i = index">index: {{ i }}</div>
+    *ngIf         =>    <div *ngIf="boolean"></div>
+    *ngIf (else)  =>    <div *ngIf="boolean; else hashName"></div>            <ng-template #hashName>
+                                                                                <div>content</div>
+                                                                              </ng-template>
+  attribute directives
+
+    [ngClass]     =>    <div [ngClass]="{'class_name': boolean}"></div>
+    [ngStyle]     =>    <div [ngStyle]="{'background-color': getColor()}"></div>
+    (mouseenter)  =>    <div (mouseenter)="color = 'red'"></div>
+    [disabled]    =>    [disabled]="true"
+    [innerText]   =>    <p [innerText]="dataString"></p>
+
+  custom property and event binding
+
+    <app-num *ngFor="let catName of catNames" [name]="catName"></app-num>   => cats.component.html
+    catNames: string[] = [];                                                => cats.component.ts
+
+    <p>Cat name : {{ name }}</p>                                            => child-cat.component.html
+    @Input() name: string;                                                  => child-cat.component.ts
+
+
+key notes
+
+  *two types of binding
+    property binding and event binding 
+
+    parent -> child
+
+    the parent property uses property or event binding and the child property / reciving property recieves the output
+
+      property binding (from parent) => [property_name]="expression"                             // parent.component.html 
+                                        message: Message = new Message('some message', 'nate');  // parent.component.ts
+
+      event binding (from child)     => (event_name)="expression"                                // child.component.html
+
+      // property binding can be done with dom properties, html elements (hidden, value..) 
+          or directive properties directives (ngStyle), 
+          or component properties
+
+      // event binding can be binded to native dom user events (click, mouseover..), 
+          or directive events, 
+          or component events
+
+      property binding (child recieves) => @Input('Alias') propertyName (alternative => inputs:['propertyName:Alias'])
+                                             @Input() message: Message;                                // child.component.ts
+
+      event binding (parent recieves)   => @Output('Alias') eventName   (alternative => outputs:['eventName:Alias'])
+                                              @Output() eventName = new EventEmitter<string>();        // child.component.ts 
+                                              export..
+                                              this.eventName.emit('new value');                        // this can be accessed in the parent with $event
+                                           (eventName)="message.content = $event"                      // parent.component.html
+                                              message.content now is 'new value'
+
+
+*******************************************************************************************
+*property binding and string interpolation
+
+  two ways of rendering data from the .component.ts file to the .component.html file
+    property binding     => []     can be used to change html properties
+    string interpolation => {{ }}  usually used for inserting a string of text
+
+    it is better not to mix the two (for the same expression)
+
+    // <component name>.component.ts file
+
+      export class ServersComponent implements OnInit {
+        dataString = 'sample string';
+
+        ngOnInit() {
+        }
+      }
+
+    // <component name>.component.html file
+
+      <p [innerText]="dataString"></p>      => using data binding approach
+      <p>{{ dataString }}</p>               => using data binding approach
+
+*******************************************************************************************
+*event binding
+  
+  example
+    <button (click)="myFunction()">click</button>
+
+    or
+
+    <input type="text"
+           (input)="onUpdateServerName($event)">    // $event allows you to pass the value of the text input
+
+    onUpdateServerName(event: Event) {
+      this.serverName = (<HTMLInputElement>event.target).value;  // $event.target.value can access the input value
+    }                                                            // it is necessary to specify the HTMLInputElementType
+
+
+*******************************************************************************************
+*two way data binding
+
+  binding in both directions
+  combines property and event binding
+
+  with angular 4 you need to update the app/app.module.ts file with the following two lines
+
+  import { FormsModule }   from '@angular/forms'; 
+  FormsModule
+      |-> goes after AppComponent,
+
+  <input type="text"
+         class="form-control"
+         [(ngModel)]="serverName">
+
+    the serverName is updateded automatially allowing it to be called on the page with string interpolation
+      {{ serverName }}         
+
+    it will also update it on the server side .ts code (two ways)
+      //<component name>.component.ts
+        serverName = '';   // will be updated to the binded value from the input tag
+
+
+*******************************************************************************************
+*directives
+  
+  instructions in the DOM
+
+  attribute directives = look just like noramal html attributes, 
+                         they onlychange the appearence of current attributes
+  structural directives => actually add or remove elements ( *ngIf="" )
+
+
+  example of ngStyle attribute directive
+    [ngStyle]="{css goes here}"  => ngStyle is a directive name
+                                    [] is property binding (the two are not exclusive)
+                                      you create bindings to properties of directives (ngStyle is a directive)
+
+    <p [ngStyle]="{'background-color': 'green'}">words go here<p>     // wrap with quotations
+    <p [ngStyle]="{backgroundColor: 'green'}">words go here<p>        // camel case example
+
+    <p [ngStyle]="{'background-color': getColor()}">words go here<p>  // the style property values can also be methods
+
+
+  example [ngClass]
+    [ngClass] adds a css class if a certain condition is true
+
+    [ngClass]="{'class-name': serverStatus === 'online'}"> 
+      // serverStatus === 'online' can be replaced with a function
+
+
+
+  example of *ngIf="" (structural directive)
+
+    // component.html file
+
+      <input type="text"
+             [(ngModel)]="serverName">
+             
+      <button (click)="onCreateServer()">add server</button>
+      
+      <p *ngIf="serverCreated">Server was created. Server Name : {{ serverName }}</p>  
+                               // if "serverCreated" is true then the <p> will appear
+
+    // component.ts file (inside export class)
+
+      serverName = '';
+      serverCreated = false;
+
+      onCreateServer() {
+        serverCreated = true;
+      }
+
+
+    there is also an if else option but requires angular 4
+
+      <p *ngIf="serverCreated; else noServer">Server name is : {{ serverName }}</p>
+      <ng-template #noServer>
+        <p>No current servers</p>
+      </ng-template>
+
+      
+  example of *ngFor="" (structural directive)
+    loops over an array of elements and creates a element for each array
+
+    // servers.component.html 
+
+      <input type="text"
+             [(ngModel)]="serverName">
+
+      <button (click)="createServer()">add server</button>
+      <app-server *ngFor="let server of servers"></app-server>
+
+      // you can also access the index of a let iteration
+      <app-server *ngFor="let server of servers; let i = index"></app-server>
+
+    // servers.component.ts
+
+      servers = ['element1', 'element2', 'element3']; 
+
+      createServer() {
+        this.servers.push(this.serverName)
+        this.serverCreated = true;
+      }
+
+          
+
+*******************************************************************************************
+sharing components / exposing data
+*******************************************************************************************
+
+
+*******************************************************************************************
+*custom property binding and event binding
+
+  binding can be done on html elements and directives and it can also be done on 
+    components with custom properties and custom events allowing us to emit our own events
+
+  by default all properties of components are only accessable inside these components
+  you have to be specific about which properties you want to expose by adding a decorator
+
+  example passing data from a component down to another component
+
+    @Input() // is placed in front of the property you want to expose
+             // you also need to import Input from angular core at the top of the ts file 
+    import { Component, OnInit, Imput } from '@angular/core';
+             // this allows the property to be acessed within its selector from a different component html file
+    <app-name 
+      *ngFor="let element of elements"
+      [name]="element">  // @Input() name{first: string, last: string} is accessable from a different componenet.ts 
+    </app-name>          // any parent component can now access [name]="" and bind it to an element
+
+      -you can assign an alias to the property you are exposeing by passing and argument to @Input('alias')
+
+
+*******************************************************************************************
+*binding to events
+
+  when you have a component and something changes, we need to inform the parent component
+  we need the capablity of communicating between components
+
+  the child component needs to communicate with the parent component
+  
+
+  example
+
+    // child.component.html
+
+      <input type='text' [(ngModel)]="newFirstName">
+      <input type='text' [(ngModel)]="newLastName">
+      <button (click)="onAddName(); newFirstName = null; newLastName = null">submit</button>
+
+
+    // child.component.ts
+
+      import { Component, EventEmitter, Output } from '@angular/core';                        // add 'EventEmitter' and 'Output'
+
+      export class NameComponent {
+        @Output() nameCreated = new EventEmitter<{firstName: string, lastName: string}>();    // emits serverCreated with 
+        newFirstName = '';                                                                    // the values captured in the form
+        newLastName = ''; 
+        
+        onAddName() {
+          this.nameCreated.emit({           // instead of setting the values captured in the form locally the values need to be 
+            firstName = this.newFirstName   // exposed and emited allowing them to be accessed by a parent component
+            lastName = this.newLastName     // these values can be emited through multiple methods and given multiple @Output() emits
+        }) 
+      }
+
+    // parent.component.html
+
+      <app-name (nameCreated)="onNameAdded($event)"></app-name>  // (nameCreated) matches the @Output() value from the child ts file
+                                                                 // the $event is an object of all form values
+                                                                 // use past tense naming convention because this is after form submission
+      <ul *ngFor="let name of allNames">
+        <li>{{ name.fName }}</li>
+        <li>{{ name.lName }}</li>
+      </ul>
+
+    // parent.component.ts
+
+    export class AppComponent {
+      allNames = [];
+
+      onNameAdded(nameData: {firstName: string, lastName: string}) {  // nameData needs to be created here
+        this.allNames.push({
+          fName = nameData.firstName,
+          lName = nameData.lastName
+        })
+      }
+    }
+
+
+*******************************************************************************************
+*local references  (alternative to two way binding)
+  #elementReferenceName
+
+  local references can be added to any html element
+  is an input element is made into a local reference the entire element and element value can be passed throughout the template
+  the element can only be accessed in the template, not in the typescript code
+  to use the element in the typescript code it needs to be passed through a method
+  local references can be used with the data dosen't need to be stored as a variable in the ts file and is only being passed to a template
+  can be used in place of two way binding
+
+    example
+    // html file
+      <input
+        type="text"
+        #elementReverenceName>
+     
+      <button (click)="method(elementReverenceName)">submit</button>  // the element can be passed through a method parameter
+
+    // ts file
+       method(elementName: HTMLInputElement) {
+         elementName.value      // accesses the value of the text input
+       }
+
+*******************************************************************************************
+*@ViewChild and @ContentChild
+
+  if you want access to the local reference values in the ts file without passing them as a parameter through a method
+  you can import the @ViewChild() decorator and @ContentChild() decorator
+    @ViewChild      => used to access a local reference within the same view (adjacent.component.html, adjacent.component.js)
+    @ComponentChild => used to access a local reference from different views (parent.component.html, child.component.js)
+
+    example @ViewChild
+
+      // adjacent.component.html file
+        <p #htmlLocalReferenceName>I'm a paragraph</p>
+
+      // adjacent.component.ts file
+
+        import { ViewChild, ElementRef } from '@angular/core';
+
+        exportClass className {
+          @ViewChild('htmlLocalReferenceName') paragraphLocalReference: ElementRef;    // ElementRef also needs to be imported
+
+          method() {
+            this.paragraphLocalReference.nativeElement.value;                          // is now accessable
+          }
+        }
+
+        instead of the value being the element itself (when passed through a local reference)
+        with @ViewChild the value is type ElementRef which is an Angular type
+        nativeElement.value is used to get access to the underlying element of ElementRef
+
+    example @ContentChild
+
+      // parent.component.html file
+        <p #localReferenceInParentComponent>Im the parent paragraph</p>
+        
+      // child.component.ts file
+
+        import { ContentChild, ElementRef } from '@angular/core';
+
+        exportClass className {
+          @ContentChild('localReferenceInParentComponent') parentLocalReference: ElementRef;
+
+          method() {
+            this.parentLocalReference.nativeElement.value;  // child ts file now has access to a parant local reference element 
+          }
+        }
+
+
+
+*******************************************************************************************
+*passing html into a componenet using <ng-content>
+
+  <ng-content> basically allows you to switch where the html is placed in your project 
+    by allowing you to project the values found between a componenet tag
+
+  by default, everything placed within the opening and closing tags of a component is ignored
+  even if the html belongs to the component that is being referenced
+    <app-component-name>
+      <p>{{ content }}</p>   // will be ignored by default
+    <app-/component-name>
+
+  if you want the content to appear you can use <ng-content></ng-content> 
+  which acts as a hook that allows you to project any content found within the component tag
+  <ng-content> is placed in the component.html file that the html originally belong to
+
+  <ng-content> can be usefull when you want to pass a chunk of html code which can have cors problems when using two way binding
+
+
+
+*******************************************************************************************
+*lifecyle hooks
+
+  ngOnChanges            => called after a bound input property changes
+  ngOnInit               => called once the component is initialized
+  ngDoCheck              => called during every change detection run
+  ngAfterContentInit     => called after content (ng-content) has been projected into view
+  ngAfterContentChecked  => called every time the projected content has been checked
+  ngAfterViewInit        => called after the component's view (and child views) has been initilized
+  ngAfterViewChecked     => called every time the view (and child views) have been checked
+  ngOnDestroy            => called once the component is about to be destroyed
+
+  lifecycle hooks are processes that are automatically ran in the background of an Angular app
+  these processes are accessable by importing them into the ts file
+
+    example: ngOnChanges, ngAfterViewInit
+
+      // parent.component.html file
+        <p #paragraph>Paragraph content</h1>
+
+      // adjacent.component.html file
+        <h1 #heading>Heading name</h1>
+
+      // adjacent.component.ts file
+
+        Import { OnChanges, SimpleChanges, OnInit, ViewChild, ComponentChild, AfterContentInit, AfterViewInit,  } from '@angular/core';
+
+        export class <componentName> implements OnInit, OnChanges, AfterViewInit, AfterContentInit {
+
+          @ViewChild('heading') heading: ElementRef;
+          @ContentChild('paragraph') paragraph: ElementRef;
+
+          ngOnInit() {
+          }
+
+          ngOnChanges(changes: SimpleChanges) {  // this is not defined but created by Angular
+            console.log(changes);                // will run/print whenever a changes is made 
+          }
+
+          ngAfterViewInit() {                    // runs after views and child views are initialized
+            console.log(this.heading.nativeElement)  // returns the element <h1>Heading name</h1> 
+          }
+
+          ngAfterContentInit() {
+            console.log(this.paragraph.nativeElement) // allows access a local reference of different component view
+          }
+
+        }
+
+
+*******************************************************************************************
+*routing
+
+  // src/index.html 
+    <head>
+      <base href="/">  
+    </head>
+
+
+  // app/app.routes.ts
+
+    import { RouterModule, Routes } from '@angular/router';
+
+    const routes: Routes = [
+      { path: '', redirectTo: 'component-one', pathMatch: 'full' },  // redirects to the full path of component-one by default
+      { path: 'component-one', component: ComponentOne },
+      { path: 'component-two', component: ComponentTwo }
+      { path: 'product-details/:id', component: ProductDetails }     // passes an id to the ProductDetails
+    ];
+
+
+  // app/app.module.ts
+
+    import { routing } from './app.routes';
+
+
+  // calling a route from html file
+
+    <a routerLink="/component-one">Component One</a>
+
+    -or-
+
+    this.router.navigate(['/component-one']);
+
+
+  // html placeholder for where the component should display
+
+    <router-outlet></router-outlet> 
+
+
+  // passing product id and route to parent component.html 
+
+    <a routerLink="/details/{{ post._id }}">{{ post.title }}</a>
+
+    -or-
+
+    <a *ngFor="let product of products"
+      [routerLink]="['/product-details', product.id]">
+      {{ product.name }}
+    </a>
+
+
+    // through the .ts file
+
+    goToProductDetails(id) {
+      this.router.navigate(['/product-details', id]);
+    }
+
+
+  // more details
+
+    https://angular-2-training-book.rangle.io/handout/routing/routeparams.html
+
+
+  // making a router link active when the link is clicked
+
+      <li routerLinkActive="active"><a [routerLink]="['/auth']">Authentication</a></li>
+
+      // "active" is the class name which you want to activate on click ('active' is a default class in bootstrap but you can create any class name"
+  
+
+
+*******************************************************************************************
+*custom pipe
+
+  example of limiting character length by a specified argument
+
+  ng g pipe length
+
+
+  export ..
+
+  transform(value: any, maxLength: number): any {           // maxLength: number is the argument
+    if (value.length > maxLength) {
+      return value.substring(0, maxLength) + '...';
+    } else {
+      return value;
+    }
+  }
+
+  <p>{{ post.description | length: 130 }}</p>               // can be access in the html and recieves and argument
+
+
+*******************************************************************************************
+*forms
+
+  // app.module.ts
+
+    import { FormsModule } from '@angular/forms';
+    imports: [FormsModule]
+
+
+  // component.html
+
+    <form (ngSubmit)="onSubmit(name) #name="NgForm">
+      <input 
+        type="text" 
+        name="user"
+        required
+        ngModel>
+        <button type="submit">submit</button>
+    </form>
+
+
+  // component.ts
+    inport { ngForm } from '@angular/forms';
+
+    export..
+    onSubmit(form: NgForm) {
+      console.log(form.value.content);
+      form.resetForm();
+    }
+

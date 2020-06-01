@@ -1,0 +1,114 @@
+****************************************************************************************************
+udemy technical interview
+
+*efficiency
+*list based collections
+
+****************************************************************************************************
+*efficiency
+
+  big O notation
+    great summary
+      https://stackoverflow.com/questions/487258/what-is-a-plain-english-explanation-of-big-o-notation
+
+    big O notation is essentially counting up the number of lines of code in a function
+
+    time efficiency and space efficiency
+      time efficiency is the amount of time calculation for a procedure to complete
+      space efficiency is the amound of space the code takes up (not as frequent in interviews)
+
+    example : O(2n + 2)
+      '+ 2' is for the result assignment and the return result
+      '2n' is for the 2 lines of code time (n) number of times 
+
+      function decode(message)
+        result = ''
+        for letter in message
+          decoded = cipher(letter)
+          result add(decoded)
+        end
+        return result
+      end
+
+      decode('..') (if the length of the string it 10
+      O(10(2) + 2)
+      O(22)
+
+      to calculate the efficiency you take (22 * 'the amount of time it takes you computer to run one line of code')
+
+      adjustment 1
+        more accuratley would probably be O(3n + 2) because the for loop requires computation)
+
+      adjustment 2
+        also we aren't accounting for the number of lines of code that the cipher may be running
+        if it is running a line of code for each leter of the alphabet
+        O(n(3 + 26) + 2)
+        O(n(29) + 2)
+
+          calculating the worst case
+            this would be the worst case senario becuase we are expecting to check all 26 letters each time
+            but not every letter is 26('z') so sometimes we will only need one check 1('a')
+
+          calculating the aproximate case
+            O(n(3 + 13) + 2)
+
+
+    O(n^2): known as Quadratic complexity
+      a loop that wraps a loop of the same size
+      even if the second loop is shorter we still calculate the worst case
+        1 item: 1 second
+        10 items: 100 seconds
+        100 items: 10000 seconds
+
+    O(n): known as Linear complexity
+      looking up each element in a list in order one by one
+        1 item: 1 second
+        10 items: 10 seconds
+        100 items: 100 seconds
+
+    O(1): known as Constant complexity
+        1 item: 1 second
+        10 items: 1 second
+        100 items: 1 second
+
+    O(log n): known as Logarithmic complexity
+      binary search (like the phonebook analogy)
+      taking an ordered list, splitting it in half, if the value is les then taking the first half and slplitting it in half again and repeat
+        1 item: 1 second
+        10 items: 2 seconds
+        100 items: 3 seconds
+        1000 items: 4 seconds
+        10000 items: 5 seconds
+
+
+****************************************************************************************************
+*list based collections
+
+  collection is a broad deffinition of any group of things
+  there are different types of collections that have specific behaviors
+
+  list 
+    type of collection that is in the order that something was added
+    no limit in length
+
+    array is an iplementation of a list (most common)
+      all arrays have an index (normally starting at 0)
+
+    python array
+      inserting into a list is O(n) because you have to move every element after the insert one space to the right
+      deleting from a list also O(n)
+
+    array vs linked list
+      elements in an array occupy an index. if an element is removed or added othere elements must be shifted O(n)
+      elements in a linked list do not need to be shifted, instead they have pointers that point to the next element
+        when adding an element to a linked list two pointers must be assigned
+          new element pointer -> the new element must point to an old element 
+          old element pointer -> an old element must point to the new element
+            *the new element must point to an old element first otherwise the link will be lost
+
+      doubly linked lists
+        a linked list that has pointers in both directions (meaning you can travers either direction through the list)
+            
+       
+
+

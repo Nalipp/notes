@@ -1,0 +1,363 @@
+*******************************************************************************************
+pluralsight_node_epxress_gulp_wiredep_passport
+*******************************************************************************************
+code/node_js/coursework/pluralsight/building_node_express_bower_gulp_wiredep_passport
+https://github.com/Nalipp/node_gulp_passport_example
+
+*bower
+*gulp
+  wiredep
+*gulp inject
+*gulp nodemon
+*templating engines
+  jade
+*express routers
+*mongo
+*passport
+
+
+*******************************************************************************************
+*bower (may not be necessary if using webpack)
+
+  bower is a package manager for the front end (npm is for the backend)
+  has a bower.json just like package.json 
+  this allows your frontend packages to be updated automatially
+
+  $ bower init
+
+  touch .bowerrc   // can be configured to install bower packages in the public directory
+    {
+      "directory": "public/lib"
+    }
+
+  $ bower install --save bootstrap
+  $ bower install --save font-awesome
+
+  you must link to the directories that were installed with bower in the html file 
+  * however this can be done with gulp (see below)
+
+    examples : 
+      <link href="lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+      <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    
+
+*******************************************************************************************
+*gulp (webpack can also do most gulp functioning but gulp may be easier to set up)
+
+  $ npm install --save-dev jshint gulp gulp-jshint gulp-jscs jshint-stylish
+
+  // gulpfile.js
+    var gulp = require('gulp');
+    var jshint = require('gulp-jshint');
+
+    var jsFiles = ['*.js', 'src/**/*.js'];   // references all the js files in src
+    
+    gulp.task('style', function() {
+      return gulp.src(jsFiles) 
+        .pipe(jshint())
+        .pipe(jshint.reporter('jshint-stylish', {
+          verbose: true
+        }))
+        .pipe(jscs());
+    });
+
+  $ gulp style
+
+
+  *******************************************************************************************
+  *wiredep (used in conjunction with gulp to inject assets)
+
+    $ npm install --save-dev wiredep
+
+    // gulpfile.js
+
+      gulp.task('inject', function() {
+        var wiredep = require('wiredep').stream;
+        var options = {
+          bowerJson: require('./bower.json'),
+          directory: './public/lib'
+        }
+
+        return gulp.src('./src/views/*.html')
+        .pipe(wiredep(options))
+        .pipe(gulp.dest('./src/views'));
+      });
+
+      // index.html (the .js resources will be automatically injected between the following after gulp inject )
+        <!-- bower:js -->
+        <!-- endbower -->
+
+    $ gulp inject
+
+    but in order to get the css file working you will need some overrides
+
+    // bower.json (after dependencies)
+
+      "overrides": {
+        "bootstrap": {
+          "main": [
+            "dist/js/bootstrap.js",
+            "dist/css/bootstrap.min.css",
+            "less/bootstrap.less"
+          ]
+        },
+        "font-awesome": {
+          "main": [
+            "less/font-awesome.less",
+            "css/font-awesome.min.css",
+            "scss/font-awesome.scss"
+          ]
+        }
+      }
+
+    to remove the '../../public'
+
+    // gulpfile.js (in gulptask inject)
+
+      ignorePath: '../../public'
+        
+          
+*******************************************************************************************
+*gulp inject
+
+  the previous injections don't include custom resourcess like main.css, this can be done with gulp inject
+
+  $ npm install --save-dev gulp-inject
+
+  // gulpfile.js
+
+    gulp.task('inject', function() {
+      var wiredep = require('wiredep').stream;
+      var inject = require('gulp-inject');
+
+      var injectSrc = gulp.src(['./public/css/*.css', 
+                                './public/js/*.js'], {read: false});
+
+      var injectOptions = {
+        ingnorePath: './public'
+      }
+
+      var options = {
+        bowerJson: require('./bower.json'),
+        directory: './public/lib',
+        ignorePath: '../../public'
+      };
+
+      return gulp.src('./src/views/*.html')
+        .pipe(wiredep(options))
+        .pipe(inject(injectSrc, injectOptions))
+        .pipe(gulp.dest('./src/views'));
+    });
+      
+
+  // index.html (this is in addition to the previous injected filetypes)
+
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- inject:js -->
+    <!-- endinject -->
+
+
+*******************************************************************************************
+*gulp nodemon (serve tasks)
+
+  allows you to watch for js changes using nodemon
+  'serve' is followed by an array of other gulp tasks in the file
+
+  $ npm install --save-dev nodemon gulp-nodemon
+
+  // gulpfile.js
+
+    var nodemon = require('gulp-nodemon');
+
+    gulp.task('style'...
+    gulp.task('inject'...
+
+    gulp.task('serve', ['style', 'inject'], function() {
+      var options = {
+        script: 'app.js',
+        delayTime: 1,
+        env: {
+          'PORT': 5000,
+        },
+        watch: jsFiles
+      };
+
+      return nodemon(options)
+        .on('restart', function(ev) {
+          console.log('restarting'); 
+        });
+    });
+
+  $ gulp server
+
+
+*******************************************************************************************
+*templating engines
+
+  // app.js (middleware)
+    app.set('views', './src/views');
+    app.set('view engine', 'pug');
+
+      *******************************************************************************************
+      *pug (at this time pug does not work with wiredep but jade does)
+
+      $ npm install --save pug;
+
+      // index.pug (must use different format for gulp inject)
+
+        head
+          //- bower:css
+          //- endbower
+          //- bower:js
+          //- endbower
+          //- inject:css
+          //- endinject
+          //- inject:js
+          //- endinject
+          title MyApp
+
+      // gulpFile.js (source must be updated for .pug format)
+
+        return gulp.src('./src/views/*.pug')
+        
+        $ gulp inject
+
+
+*******************************************************************************************
+*express routers
+
+  example : creating a new router for Books path
+
+    var bookRouter = express.Router();
+
+    ...middleware...
+
+    app.use('/Books', bookRouter);
+
+    bookRouter.route('/')            // Books is not needed
+      .get(function(req, res) {
+        res.send('requested books');
+      });
+
+  example : moving the router to a seperate router file
+          : passing an object to the router file
+
+
+      // app.js
+
+        var express = require('express');
+        var app = express();
+
+        var nav = [{
+              Link: '/Books',
+              Text: 'Books'
+            }, {
+              Link: '/Authors',
+              Text: 'Authors'
+            }]
+
+        var bookRouter = require('./src/routes/bookRoutes')(nav);   // pass in the nav object to the routes page
+
+        app.use('/Books', bookRouter);
+
+
+      // bookRoutes.js (you need to wrap the entire exportable object ( ie. 'router') before exporting it'
+
+        var express = require('express');
+        var bookRouter = express.Router();
+
+        var router = function(nav) {  // pass in the nav object
+          var books = [ 
+          ...
+
+          bookRouter.route('/')
+          ...
+                
+          return bookRouter;
+        }
+
+        module.exports = router;
+
+
+*******************************************************************************************
+*mongo
+
+  examples : adding a mongodb connection to mongo database
+
+    $ npm install --save mongodb
+    var mongodb = require('mongodb').MongoClient;
+    var url = 'mongodb://localhost:27017/libraryApp';
+
+
+    example 1 : adding multiple records to a database collection (possibly through admin)
+
+      mongodb.connect(url, function(err, db) {
+        var collection = db.collection('books'); 
+        collection.insertMany([{}, {}], function(err, result) {
+          res.render(index);
+        });
+      });
+
+
+    example 2 : retrieving all mongodb records in a collection
+
+      var collection = db.collection('books');
+        collection.findOne({}).toArray(function(err, results) {
+          res.render(index, {list: results});
+        }); 
+    
+    example 3 : retrieving a mongodb record
+
+      var ObjectId = require('mongodb').ObjectId;
+
+      var collection = db.collection('books');
+        collection.findOne({_id: ObjectId(req.params.id)}, function(err, result) {
+          res.render(index, {list: result});
+        });
+
+
+*******************************************************************************************
+*passport (middleware)
+
+    const cookieParser = require('cookie-parser');
+    const passport = require('passport');
+    const session = require('express-session');
+
+    $ npm install --save cookie-parser passport express-session passport-local
+
+    app.use(cookieParser());
+    app.use(session({secret: 'library'}));  // the session accepts a secret
+    app.use(passport.initialize());
+    app.use(passport.session());
+
+  passport configurations should be seperated out from app.js
+  src/config/passport.js
+
+   // app.js
+      (after cookie parser middleware)
+      var passport = require('./src/config/passport')(app);  // pass app into the config file
+    
+   // src/config/passport.js
+      var passport = require('passport');
+
+      module.exports = function (app) {
+        app.use(passport.initialize());
+        app.use(passport.session());
+
+        passport.serializeUser(function(user, done) {
+          done(null, user.id)
+        });
+
+        passport.deserializeUser(function(userId, done) {
+          done(null, user)
+        });
+
+        // all of the oauth strategies should not be pilled on here and should have their own strategy file
+        require('./strategies/local.strategy')();
+      }
+
+    // src/strategies/local.strategy.js
+      var passport = require('passport');
+      var LocalStrategy = require('passport-local').Strategy;
+

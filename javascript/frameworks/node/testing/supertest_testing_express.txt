@@ -1,0 +1,74 @@
+*******************************************************************************************
+supertest (for testing express apps)
+*******************************************************************************************
+
+*setup 
+*describe
+
+
+*******************************************************************************************
+*setup 
+
+  $ npm install --save-dev supertest
+  $ touch test/test.js
+
+
+  // app.js
+
+    module.exports.app = app;
+
+
+  example 1 :
+
+  // test/test.js
+
+    // you pass in the entire express app and chain methods onto it
+
+    const supertest = require('supertest');
+    const app = require('../app.js').app;
+
+    it('should return hello express! response', (done) => ) {
+      request(app)
+        .get('/')
+        .expect(200)
+        .expect('hello express!')
+        .end(done)
+    }
+
+
+  example 2 : testing the response
+
+    // test/test.js
+
+      const expect = require('expect');
+
+      it('should return hello express! response', (done) => {
+        request(app)
+          .get('/')
+          .expect(200)
+          .expect((res) => {
+
+          })
+          .end(done)
+      });
+
+
+
+*******************************************************************************************
+*describe (structuring your test for readability)
+
+example: this will make it easier to read tests that have been grouped together with the title 'users' etc
+
+describe('users', () => {
+  it('should...', (done) => {
+  });
+  it('should...', (done) => {
+  });
+});
+
+describe('classes', () => {
+  it('should...', (done) => {
+  });
+  it('should...', (done) => {
+  });
+});

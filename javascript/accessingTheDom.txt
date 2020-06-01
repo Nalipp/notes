@@ -1,0 +1,216 @@
+**************************************************************************
+DOM
+**************************************************************************
+
+*walking the dom
+*selecting elements
+*node properties and attributes
+*styling nodes
+*creating and moving nodes
+*event handlers / listeners
+*event handling delegation (capturing and bubbling)
+
+
+**************************************************************************
+*walking the dom
+
+  walk the dom with function similar to forEach()
+
+    function walk(node, callback) {
+      callback(node);  
+
+      for (var i = 0; i < node.childNodes.length; i++) {
+        walk(node.childNodes[i], callback);
+      }
+    }
+
+    walk(document.body, function(node) {                 
+      console.log(node.nodeName);                        
+    });
+
+
+**************************************************************************
+*selecting elements
+
+  document.querySelector('')                  // select first element in the document by name
+  document.querySelectorAll('')               // select all elements in the document by name (returns an array like object)
+  document.querySelectorAll('div.intro')      // uses css selector rules (selects all divs with class name intro)
+  document.querySelectorAll('').textContent   // returns text content inside selected elements 
+
+  var newArr = Array.prototype.slice.call(querySelectorResult);  // copy and create an array of the result
+
+  document.getElementsByClassName('<selector>') // select all elements by class name
+  document.getElementsByTagName('<selector>')   // returns all elements by tag name
+
+  document.getElementById('<selector>')         // not plural becuase there should only be one id element
+
+
+**************************************************************************
+*node properties and attributes
+
+  document.toString()                       // get the object type (inside the console)
+  a.constructor                             // (for anchor elements) function HTMLAnchorElement() { [native code] }
+  a.constructor.name                        // 'HTMLAnchorElement'  (tagName is easier)
+  a.tagName                                 // 'A'
+  p.constructor.name                        // 'HTMLParagraphElement'
+
+  p instanceof HTMLParagraphElement;        // access boolean value
+  p instanceof Node;                        // broader element type Node
+  p instanceof Element;                     // broader element type Element
+
+  document.nodeName                         // accessing dom propertys by name
+  document.nodeType                         // accessing dom propertys by value
+  document.nodeValue                        // null  (elements don't have values) 
+  document.childNodes[3].nodeValue          // string of text inside the <p></p> 
+
+  childNodes
+  document.childNodes                       // lists all child nodes
+  document.childNode.length                 // length of child nodes collection
+  document.firstChild                       // access first child node
+  document.childNodes[1]                    // access second child node
+  document.lastChild                        // access last child node
+  document.childNodes[document.childNodes.length -2]   // access second to last child node
+
+  div.parentNodes
+  div.firstChild                            // div.childNodes[0]
+  div.lastChild                             // div.childNodes[childNodes -1]
+  div.nextSibling                           // div.childNodes[n+1]
+  div.nextSibling                           // div.childNodes[n-1]
+
+  childElements (excludestext text nodes)
+  body.children                             // returns all elements within the parent element
+  body.children.length                      // returns element count 
+  body.firstElementChild                    // returns first child element
+  body.lastElementChild                     // returns last child element
+  body.children[0].nextElementSibling       // returns next element sibling (previousNode.children[n + 1]) 
+  body.children[0].lastElementSibling       // returns last element sibling (previousNode.children[n - 1]) 
+
+  document.textContent                      // concats all of the content in the elemtens child nodes into string
+  document.childNodes[3].textContent        // accessing the text inside a non-element node
+  document.childNodes[3].innerText          // returns visable text (textContent returns all text including hidden)
+  document.getElementById('text').value     // returns the (text)value of a selected element
+
+
+**************************************************************************
+*styling nodes
+
+  p.hasAttribute('id')                      // returns boolean value
+  p.getAttribute('id')                      // returns id name
+  p.getAttribute('id') === 'something'      // returns boolean value
+  p.setAttribute('id', 'complex');          // sets id name (in this case to 'complex')
+  p.id = 'complex'                          // alternative way to set name of id 
+  p.className                               // class is a reserved work in javascript so use className
+
+  p.classList                               // returns an array like object of all the names in a class
+  p.classList.add('simple')                 // add an aditional class name to classList
+  p.classList.remove('simple')              // remove a class name from classList
+  p.classList.toggle('complex')             // adds the class name if it not present, removes it if it is present 
+  p.classList.contains('complex')           // returns boolean value 
+  p.classList.length                        // returns length 
+
+  p.style                                   // access style properties (returns all style properties, '' if empty)
+  p.style.lineHeight                        // return style property or '' if it is empty (must use camel case)
+  p.style.background = 'green'              // set style property
+
+
+**************************************************************************
+*creating and moving nodes
+
+  para1 = document.createElement('p')             // creates an element by tag type (must be created on the document)
+  text1 = document.createTextNode('sample text')  // creates a text node (must be created on the document)
+
+  para1.appendChild(text1)                        // append text into an element <p>sample text</p>
+
+  document.body.appendChild(p1)                   // append to an element(body) in the last position
+  parent.insertBefore(node, targetNode)           // insert before (node is the new node)
+  parent.replaceChild(node, targetNode)           // replace (node is the new node)
+
+  document.body.children[1].insertAdjacentElement('afterend', para2)  // insert after specified element
+    'beforebegin'  => insert before the element
+    'afterbegin'   => insert before the first child of the element
+    'beforeend'    => insert after the last child of the element
+    'afterend'     => insert after the element
+
+  document.body.children[1].remove()              // remove a node
+  parent.removeChild(node)                        // remove a child node
+
+  p2 = p1.cloneNode(true)                         // create a copy of an element (true is deep clone) 
+
+
+**************************************************************************
+*event handlers / listeners
+
+
+  document.addEventListener('DOMContentLoaded', function() {   
+    var button = document.getElementById('alert');                  // wraping an event listener 
+    button.addEventListener('click', displayAlert);                 // around an event listener  
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {            
+    var button = document.getElementById('alert');                  // wraping an event listener
+    button.onclick = displayAlert;                                  // around a global event handler
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {        // callback after page loads
+    console.log('page loaded'); 
+  });
+
+  h1.onclick = function(event) {                                    // called by clicking on the h1 heading
+    e.preventDefault();
+    h1.style.backgroundColor = 'lawngreen';
+  }
+
+  common events
+
+    Event Type	  Example Events
+
+      Keyboard	   keydown, keyup, keypress
+      Mouse	       mouseenter, mouseleave, mousedown, mouseup, click, mousemove
+      Touch	       touchdown, touchup, touchmove
+      Window	     scroll, resize
+      Form	       submit
+
+  the event object
+
+    document.addEventListener('keypress', function(event) {
+      document.body.textContent = `
+        ${event.type}           // keypress
+        ${event.currentTarget}  // [object HTMLDocument] 
+        ${event.target}         // [object HTMLBodyElement]
+        ${event.which}          // ASCII Key code
+        ${event.shiftKey}       // boolean value (same with altKey, ctrlKey, metaKey)
+      `;
+    });
+
+
+**************************************************************************
+*event handling delegation (capturing and bubbling)
+
+  document.addEventListener('click', function(event) {
+    var target = event.target;          
+    if (target.tagName === 'BUTTON') { 
+
+    }
+  }
+
+  event.stopPropagation(); prevents bubbling (listener added to all elements but only fires on first clicked event)
+
+    document.addEventListener('click', function(event) {
+      event.stopPropagation();
+
+      var target = event.target;          
+      if (target.tagName === 'BUTTON') { 
+
+      }
+    }
+
+  event.preventDefault();
+
+    <a href="/">View page</a>
+
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelector('a').addEventListener('click', function(event) {
+        event.preventDefault();
+        alert('Following the link was prevented.');
+      });
+    })

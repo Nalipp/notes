@@ -1,0 +1,785 @@
+*******************************************************************************************
+SQL
+*******************************************************************************************
+ps -ef | grep mysql
+
+
+  start mysql
+    echo 'export PATH=$PATH:/usr/local/mysql/bin' >> ~/.bash_profile
+    mysql -u root --password
+    b*********
+
+    turn off strict setting (allows you to truncate data instead of throw an error)
+    SET @@global.sql_mode= '';     // inside the mysql shell
+
+    sql formater
+      http://www.sql-format.com/     
+
+*common questions
+*example queries
+*database general notes
+*creating tables (data types)
+*inserting data
+*CRUD
+*working with files
+*string functions
+*aggregate functions
+*logical opperators and CAST()
+*working with NULL
+
+
+*******************************************************************************************
+*common questions
+
+  ROUND(<value>, 2) => rounds to two digits 
+
+  CASE example
+    CASE
+      WHEN THEN ''
+      WHEN THEN ''
+      ELSE ''
+    end
+
+    one line CASE example
+      IF(COUNT >= 1, '<first statement>', '<second statement>') AS 'Count'
+
+
+*******************************************************************************************
+*example queries
+
+    play area and sample data
+    https://www.w3schools.com/sql/trysql.asp?filename=trysql_op_or
+
+  help;
+  show databases;
+  CREATE DATABASE <name>;
+  DROP DATABASE <name>;
+  USE <name>;
+  SELECT database();         // show what database you are using
+
+  SELECT * FROM products 
+  ORDER BY price DESC;
+  SUM(Quantity) AS "Quantity"
+  WHERE
+    SELECT * FROM users WHERE AGE >= 18;
+
+  joins
+    SELECT customerName,
+           COUNT(*) AS 'number of orders'
+    FROM customers
+    INNER JOIN orders
+          ON orders.customerID = customers.customerID
+    GROUP BY customers.customerID;
+
+
+    SELECT SupplierName, SUM(Price * Quantity) AS 'total quantity' FROM Products
+    INNER JOIN OrderDetails
+      ON Products.ProductID = OrderDetails.ProductID
+    INNER JOIN Suppliers
+      ON Products.SupplierID = Suppliers.SupplierID
+    GROUP BY ProductName
+
+
+  SELECT CONCAT(author_fname, ' ', author_lname) AS author, SUM(pages) AS 'total pages'
+  FROM books
+  GROUP BY author_fname, author_lname
+  ORDER BY SUM(pages) DESC;
+
+
+*******************************************************************************************
+*database general notes
+
+  database vs database managment system (DBMS)
+
+    A database is like a file on your computer that you can retrieve but is difficult to manipulate the data
+    a database managment system is a an interface that allows you to manipulate the data in a database
+      when people talk about databases they usually refer to the two together
+
+
+  MySql vs SQL
+    MySql is a DMBS that has different features as other DMBS (PostgreSql, SqLite etc)
+      these differences can be related to speed, security, the size of the download, user permissions etc
+    SQL is the lanauge used to talk to the database and used across all the relational DMBS
+
+  Installing
+    setting up MySql on CloudNine workspace
+      three commands
+        mysql-ctl start  installs and creates an empty database (sql runs constantly in the background)
+        mysql-ctl stop   not usually necessary to stop
+        mysql-ctl cli    runs an interactive shell
+                         to exit the shell => eixt; quit; \q; ctrl-c
+
+    installing on mac
+
+    go to the website and install the latest version and copy and save the password for later
+      root@localhost: mvo>Xx5(yCdo
+
+    set the bash file path 
+      $ export PATH=$PATH:/usr/local/mysql/bin
+
+      $ open ./.bashrc
+        (place in bash)
+        echo 'export PATH=$PATH:/usr/local/mysql/bin' >> ~/.bash_profile
+
+    entering and change the password
+
+      $ mysql -u root --password
+        enter instalation password
+
+      (change the password in the command shell)
+      ALTER USER 'root'@'localhost' IDENTIFIED BY 'b*********';
+
+
+  
+*******************************************************************************************
+*creating tables (data types)
+
+  table columns => headers
+  table rows    => data rows
+  
+  SHOW TABLES;
+  SHOW COLUMNS FROM <table name>;
+  DESC <table name>;               // same as SHOW COLUMNS FROM, stands for describe
+  DROP TABLE <table name>;
+
+  creating tables 
+    CREATE TABLE <table name>
+      (
+        column_name data_type,
+        column_name data_type
+      );
+
+
+  example
+
+    CREATE TABLE customers
+    (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      first_name VARCHAR(100) NOT NULL,
+      last_name VARCHAR(100) NOT NULL,
+      email VARCHAR(100) NOT NULL,
+    );
+
+    CREATE TABLE orders
+    (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      order_date DATE,
+      amount DECIMAL(8,2), 
+      customer_id INT,
+      FOREIGN KEY(customer_id) 
+        REFERENCES customers(id)
+        ON DELETE CASCADE 
+    );
+
+      FOREIGN KEY => locks the two keys together so that if you 
+                     try to insert into a table that has an inncorect user id it will block you or if try to 
+                     delete a user that has a coresponding entry in another table (unless you use ON DELETE CASCADE)
+                     the restraint will block you, you will recieve an error for both
+
+      ON DELETE CASCADE => allows you to delete from one table all associated data from other tables
+
+
+  example creating a table with multiple FOREIGN KEYS and adding a PRIMARY KEY() to ensure unique likes
+
+    CREATE TABLE likes (
+      user_id INT NOT NULL,
+      photo_id INT NOT NULL,
+      created_at TIMESTAMP DEFAULT NOW(),
+      FOREIGN KEY(user_id) REFERENCES users(id),
+      FOREIGN KEY(photo_id) REFERENCES photos(id)
+      PRIMARY KEY(photo_id, user_id)
+    );
+
+
+    data types
+       INT(11)      => positive or negative numbers no decimals  (max value 4.2 billion)
+       VARCHAR(100) => a string with specified length between 1 and 255 characters (can also be a string of numbers)
+                       if more than 100 characters are input then only the first 100 will be stored
+
+    NULL and NOT NULL
+      NULL does not mean zero it means unknown
+        if NULL is set to yes in the schema(this is by default), inputs are permited to be blank
+        inputs left blank will evaluate to NULL in the database
+
+      NOT NULL (prevents you from inserting NULL, empty insert will result in default only if it is changed from NULL)
+        example 
+        CREATE TABLE cats; ( name VARCHAR(20) NOT NULL,
+            age INT NOT NULL
+          );
+
+
+    DEFAULT VALUES (value used when an insert is empty, it is set to NULL automatically but can be specified)
+      CREATE TABLE cats; 
+        (
+          name VARCHAR(20) DEFAULT 'unnamed',
+          age INT DEFAULT 99 
+        );
+
+    You may want to add both NOT NULL and DEFAULT '' if you want to prevent the insertion of NULL manually
+
+
+    PRIMARY KEY
+
+      example
+        CREATE TABLE users 
+        (
+          user_id INT NOT NULL AUTO_INCREMENT,
+          email VARCHAR(255) NOT NULL,
+          password VARCHAR(255) NOT NULL,
+          PRIMARY KEY(user_id)
+        );
+
+      alternate way to do primary key
+        CREATE TABLE users
+        (
+          user_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+          email VARCHAR(255),
+          password VARCHAR(255) NOT NULL
+        );
+
+
+  data types (text, numeric, dates and time)
+
+    text
+
+      CHAR(3) => can be 0 - 255 in length
+                 has fixed length of 3 characters and does not varry if it is longer it will be truncated
+                 3 bytes will always be used regardles of input
+                 if shorted will be padded with spaces to fill out the length
+                 however when the value is retrieved the spaces are removed unless specifically specified
+                 CHAR is faster for fixed length text (state abreviations, yes or no flags)
+
+      VARCHAR(255) => can be 0 - 255 in length 
+                      will use up as much as needed with max of 255 characters, no empty spaces
+                      the number of bytes used to store the data depends ont he length of the data
+                      uses less space then CHAR and useful when you don't know the length of the data
+
+
+    numeric
+
+      INT => whole numbers
+      DECIMAL(5, 2) => accepts two arguments first(max 65) total number of digits and 
+                       second(max 35)number after the decimal points
+                       DECIMAL(5, 2) inputing 765 in this column will result 764.00
+                       DECIMAL(5, 2) inputing 12.94333 in this column will result 12.94
+                       DECIMAL(5, 2) inputing 121233 (exceeds 5 length) result 999.99
+                       DECIMAL(5, 2) inputing 990.99 result 991.00 rounds up
+                       DECIMAL(5, 2) inputing 1.99999 result 2.00 rounds up
+
+      decimal vs float vs double
+        decimal => fixed point type, calculations are exact
+                   better for financial dat a
+        float & double => floating point types, calculations are approximat
+
+        float & double can store larger numbers using less space but are less precise
+          floats have precision issues after 7 digits and take up 4 bytes in memory
+            after 7 digits zeros are stored instead of the actual number
+          doubles are twice the size of floats, have precision issues after 15 digits, take up 8 bytes of memory
+            if you don't use decimal it is usually better to use double 
+
+        overall probably best to just use decimail unless you know you are going to be working with small numbers
+
+
+    dates and time
+
+      DATETIME vs TIMESTAMP
+        both use the format of date and timestamps
+
+      DATETIME    year range 1000 - 9999
+                  better for things like birthdays
+      TIMESTAMP   year range 1970 - 2038
+                  takes half as much space as DATETIME
+                  better for marking the time something happens and storeing that information on the server
+                  timestamps shouldn't need to be changed
+
+      CREATE TABLE comments 
+      (
+        content VARCHAR(100),
+        changed_at TIMESTAMP DEFAULT NOW() ON UPDATE CURRENT_TIMESTAMP  // tracks when both created and updated
+      );
+
+      alternate
+        changed_at TIMESTAMP DEFAULT NOW() ON UPDATE CURRENT_TIMESTAMP
+
+      NOW() = CURRENT_TIMESTAMP()  (they are the same)
+                       
+
+      DATE format (YYYY-MM-DD) store values in the date format but not time (when you only need the date)
+      TIME format (HH:MM:SS) store values in time format but not date (when you only need the time)
+      DATETIME format (YYYY-MM-DD HH:MM:SS) store values in time and date format (most usefull)
+
+      example
+        CREATE TABLE people (
+          name VARCHAR(100), 
+          birthdate DATE, 
+          birthtime TIME, 
+          birthdt DATETIME
+        );
+         
+        INSERT INTO people (name, birthdate, birthtime, birthdt)
+        VALUES('Padma', '1983-11-11', '10:07:35', '1983-11-11 10:07:35'),
+              ('Larry', '1943-12-25', '04:10:42', '1943-12-25 04:10:42');
+         
+        SELECT * FROM people;
+
+      CURDATE() - gives current date  SELECT CURDATE() => gives the current date
+      CURTIME() - gives current time
+      NOW() - gives current datetime
+    
+
+!!    DATE_FORMAT()  => allows you to format the dates instead of using concat
+        https://dev.mysql.com/doc/refman/5.7/en/date-and-time-functions.html#function_date-format
+
+        SELECT DATE_FORMAT(birthdt, '%a %M - %D %Y') AS 'birthday' FROM people LIMIT 1;
+          => Fri November - 11th 1983
+
+      TIMEFORMAT() => similar to DATEFORMAT()
+
+
+      most of the following can be done more efficiently with DATEFORMAT()
+
+        DAY()
+          SELECT name, DAY(birthdate) FROM people LIMIT 1;  => Padma, 11
+
+        DAYNAME()
+          SELECT name, DAYNAME(birthdate) FROM people LIMIT 1;  => Padma, Friday
+
+        DAYOFWEEK()
+          SELECT name, DAYOFWEEK(birthdate) FROM people LIMIT 1;  => Padma, 6
+
+        DAYOFYEAR()
+          SELECT name, DAYOFYEAR(birthdate) FROM people LIMIT 1;  => Padma, 315 
+
+        MONTH()
+          SELECT name, MONTH(birthdate) FROM people LIMIT 1;  => Padma, 11
+
+        MONTHNAME()
+          SELECT name, MONTHNAME(birthdate) FROM people LIMIT 1;  => Padma, November 
+
+        HOUR()
+          SELECT name, HOUR(birthtime) FROM people LIMIT 1;  => Padma, 10
+
+        MINUTE()
+          SELECT name, MINUTE(birthtime) FROM people LIMIT 1;  => Padma, 7
+
+
+      calculating dates
+
+        DATEDIFF  => returns the different in dates (first argument subtracted from second)
+          SELECT name, DATEDIFF(NOW(), birthdate) FROM people LIMIT 1; => Padma 12246
+
+        DATE_ADD => allows you to add time to an existing time data
+                    first agrument is the time data followed by INTERVAL and increase time amount
+                    https://dev.mysql.com/doc/refman/5.7/en/date-and-time-functions.html#function_date-add
+
+          SELECT name, birthdate, DATE_ADD(birthdate, INTERVAL 1 MONTH) FROM people LIMIT 1;
+              => Padma 1983-11-11 1983-12-11
+          SELECT name, MONTHNAME(birthdt), MONTHNAME(DATE_ADD(birthdt, INTERVAL 1 MONTH)) FROM people LIMIT 1;
+              => Padma November December
+
+        +/- alternate option
+          allows you to string multiple date adds
+
+          SELECT name, birthdate, birthdate + INTERVAL 1 MONTH + INTERVAL 1 YEAR FROM people LIMIT 1;
+              => Padma 1983-11-11 1984-12-11 
+
+
+
+*******************************************************************************************
+*inserting data
+
+  INSERT INTO <table name>(column_name1, column_name2)
+  VALUES (value1, value2);
+
+  INSERT INTO <table name>(column_name1, column_name2) 
+  VALUES (value1, value2), 
+         (value1, value2), 
+         (value1, value2);
+
+  warnings
+    sometimes after inserting data you will recieve a warning
+    this may happen if the data is too long (and was automatically truncated)
+    to inspect the warning use 
+    SHOW WARNINGS;
+
+
+*******************************************************************************************
+*CRUD
+
+  CREATE => INSERT INTO <table name>(column_name) VALUES('value');
+  READ   => SELECT
+  UPDATE => UPDATE
+  DELETE => DELETE
+
+  *recomendation => before you update or delete run the where clause as practice 
+                    to visually confirm you are going to select the correct data
+
+
+  SELECT 
+  
+    WHERE vs HAVING
+      when using GROUP BY you can't use WHERE clauses because WHERE goes before GROUP BY
+      instead you can use HAVING after GROUP BY
+
+      WHERE
+        SELECT * FROM <table name> WHERE id=4;     // where arguments are not case sensitive
+        SELECT * FROM users WHERE password=name;   // arguments can also be other columns 
+        SELECT * FROM users WHERE user_id-5        // selects everything except user_id 5
+
+        example 
+
+          SELECT * 
+          FROM users
+          LEFT JOIN photos
+          ON users.id = photos.user_id
+          WHERE photos.user_id IS NULL
+          GROUP BY photos.user_id;
+
+      HAVING
+        having can even be used with aliases
+
+        SELECT users.username, 
+               COUNT(*) as total_likes
+        FROM users
+        JOIN likes
+          ON users.id = likes.user_id
+        GROUP BY users.id
+        HAVING total_likes = 257; 
+
+      Aliasis
+      SELECT user_id AS id FROM users;
+     
+  UPDATE
+
+    UPDATE users SET name='unnamed'
+    WHERE name=NULL;
+
+  DELETE
+    
+    DELETE FROM users WHERE user_id=4;
+    DELETE FROM users;                           // deletes all users without deleting the tabl e
+
+*******************************************************************************************
+*working with files
+
+  files must end with .sql
+
+  example (run file in mysql shell)
+    source file_name.sql
+
+
+*******************************************************************************************
+*string functions
+
+  CONCAT (useful for adding comma seperated values)
+    SELECT CONCAT(first_name, ' ', middle_name, ' ', last_name) 
+    AS 'full name' FROM books;                    // combine multiple rows into one 
+
+    SELECT CONCAT_WS(' ', first_name, middle_name, last_name) 
+    AS 'full name' FROM books;                    // combine multple rows and re-use the seperator
+
+  SUBSTRING / SUBSTR
+    SELECT SUBSTRING('Hello world', 1, 4)         => Hell     selects chars 1 - 4
+    SELECT SUBSTRING('Hello world', 7)            => world    selects 7 to the end
+    SELECT SUBSTRING('Hello world', -3)           => rld      selects end back 3
+
+    select all books where author name starts with 'c' or 's' using substring
+      SELECT * FROM books WHERE SUBSTR(author_lname,1,1) IN('c', 's');
+
+  combining CONCAT AND SUBSTRING
+    SELECT CONCAT
+    (
+      SUBSTRING(title, 1, 10), 
+      '...'
+    ) 
+    AS 'short title' FROM books; 
+
+  REPLACE
+    SELECT REPLACE('<original string>', '<remove string>', '<replace string>') FROM <table name>
+
+  REVERSE
+    SELECT REVERSE('string')           // 'gnirts'
+
+  CHAR_LENGTH
+    SELECT CHAR_LENGTH(title);         // returns length of the title
+    SELECT title, CHAR_LENGTH(title) AS 'title length' FROM books;
+
+  UPPER & LOWER
+    SELECT UPPER(title);               // returns upper case
+    SELECT LOWER(title);               // returns lower case
+
+  combining
+    SELECT REVERSE(UPPER('hello'));    // 'OLLEH'
+
+  DISTINCT                             // removes duplicates
+    SELECT DISTINCT(title) FROM books;
+    SELECT DISTINCT author_fname, author_lname FROM books;   // distinct with combine multiple columns
+
+  ORDER BY
+    SELECT author_lname FROM books ORDER BY author_lname DESC;
+    SELECT author_lname, author_fname, year_relased FROM books ORDER BY 2 DESC;
+      you can specify the aurgument number from the argument list instead of retyping the argument
+        2 refers to author_fname in the argument list
+
+    SELECT author_lname, author_fname, year_relased FROM books ORDER BY 2, 4 DESC;
+      you can also sort by more than one column
+
+  LIMIT  (goes at the very end)
+    SELECT title FROM books LIMIT 5;      // returns the first 5 results
+    SELECT title FROM books LIMIT 5, 4;   // returns rows 5 - 9 
+
+  LIKE
+    SELECT * FROM books WHERE title LIKE 'the';   // selects rows that have the title of 'the' (probably none) 
+    SELECT * FROM books WHERE title LIKE '%the%'; // selects rows that have 'th' in the title
+    SELECT * FROM books WHERE title LIKE 'th%';   // selects rows that start with 'th' in the title
+    SELECT * FROM books WHERE title LIKE '%e';    // selects rows that end with 'e' in the title
+
+      % means wildcard for something (or nothing)
+      _ means exactly one character (any character)
+        these can be escaped with \%, \_
+
+    SELECT * FROM books WHERE title LIKE '__________';           // selects titles that have 10 characters
+ 
+  REGEXP
+    SELECT * FROM books WHERE title REGEXP '.{20}';  // any regex can be used
+
+*******************************************************************************************
+*aggregate functions
+
+  COUNT
+    SELECT COUNT(*) FROM books; 
+    SELECT COUNT(DISTINCT author_lname) FROM books;
+    SELECT COUNT(DISTINCT author_fname, author_lname) FROM books;
+    SELECT COUNT(title) FROM books WHERE title LIKE '%the%';
+
+  GROUP BY  // combines all the rows according to the type specified
+    SELECT * FROM books GROUP BY author_lname     // returns each authors info combined into a distinct group
+                                                  // other rows will only return information from the first occurence
+    SELECT title, author_lname, COUNT(*) FROM books GROUP BY author_lname;     // count number of books by author
+                                                  // allows you to use aggregate functions like count on a group of rows
+    SELECT title, author_lname, COUNT(*) FROM books GROUP BY author_lname, author_fname; 
+                                                  // count number of books by author full
+                                                  // you don't have to use DISTINCT if you are using group by
+
+  MIN MAX & subqueries
+    SELECT MIN(released_year) FROM books;
+    SELECT MAX(pages) FROM books;
+
+      However... you can't do two columns and expect the title to match the pages
+        SELECT MAX(pages), title FROM books;  
+                 // this returns two queries the first is MAX(pages)  the second returns the all books 
+                 // but there is only space for the first one so the first on the list is displayed 
+                 // even though it dosen't match the max pages
+
+      instead we have to use subquerries (note that subquries execute two select statements so they can be slower)
+        SELECT title, pages 
+        FROM books
+        WHERE pages = (SELECT MAX(pages) FROM books);       // SELECT MAX... is the subquerie and executes first
+
+      however you can do this without executing two SELECT queries using LIMIT
+        SELECT title, pages 
+        FROM books ORDER BY pages DESC LIMIT 1;
+
+      you can also use group by to get the min of a super row (this is not the same as min of all books)
+        SELECT author_lname, author_fname, Min(released_year) AS 'author first realsed year'
+        FROM books
+        GROUP BY author_lname, author_fname;
+
+          however this is min realsed_year or each group of authors(super row) not all the books
+
+      subqueries example
+
+        SELECT (
+          (SELECT COUNT(*) FROM photos) / (SELECT COUNT(*) FROM users) 
+        ) AS avg_post;
+              
+
+*******************************************************************************************
+*logical opperators and CAST()
+             
+  != 
+    SELECT * FROM books WHERE released_year != 2016;
+      alternate
+      SELECT * FROM books WHERE released_year - 2016;
+
+  NOT LIKE
+    SELECT * FROM books WHERE title NOT LIKE '%Th%';  (selects every title that does not contain 'th')
+
+  >, >=, <, <=
+    SELECT * FROM books WHERE released_year > 2000;
+
+  true false
+    SELECT 99 > 1    => 1 (evaluates to true)
+    SELECT 99 > 100  => 0 (evaluates to false)
+
+  &&, AND   (allows you to chain opperations multiple times)
+    SELECT * FROM books WHERE author_lname = 'Harris' && released_year > 2010;
+    SELECT * FROM books WHERE author_lname = 'Harris' AND released_year > 2010;
+
+  ||, OR
+    SELECT * FROM books WHERE author_lname = 'Harris' || author_lname = 'smith';
+
+  BETWEEN..AND..
+    SELECT * FROM books WHERE released_year BETWEEN 2004 AND 2014;
+    SELECT * FROM books WHERE released_year NOT BETWEEN 2004 AND 2014;
+
+  %
+    SELECT * FROM books WHERE released_year % 2 = 0;
+
+  CAST() AS
+    CAST() allows you to convert the type of data allowing you to use it with logical opperators
+    if a date that is a string needs to be compared to a datetime you need to use CAST()
+    !! it is good habit to use cast when comparing dates even if it still works without it
+
+    SELECT CAST('2017-03-22' AS DATETIME);     => 2017-03-22 00:00:00
+
+    example
+      SELECT * FROM books WHERE timestamp 
+      BETWEEN CAST('2000-01-01' AS DATETIME) AN D
+              CAST('2010-01-01' AS DATETIME);
+
+  IN / NOT IN
+    SELECT * FROM books WHERE released_year IN(2001, 2011, 1989);
+    SELECT * FROM books WHERE released_year NOT IN(2001, 2011, 1989);
+
+    this is  a longer way to select multiple types, IN is more efficient
+      SELECT * FROM books WHERE 
+        released_year = 2001 ||
+        released_year = 2011 ||
+        released_year = 1989;
+
+  CASE
+
+    example1
+
+      SELECT title, released_year,
+        CASE 
+          WHEN released_year >= 2000 THEN 'Modern Lit'
+          ELSE '20th Century Lit'
+        END AS 'GENRE'
+      FROM BOOKS;
+
+
+    example2
+
+      SELECT title, stock_quantity,
+        CASE 
+          WHEN stock_quantity >= 200 THEN '*****'
+          WHEN stock_quantity >= 150 THEN '****'
+          WHEN stock_quantity >= 100 THEN '***'
+          WHEN stock_quantity >= 50 THEN '**'
+          ELSE '*'
+        END AS 'stock'
+      FROM BOOKS;
+
+    * when a value evaluates to NULL it moves past it, no error the same as false
+
+*******************************************************************************************
+*joins
+
+  broad overview of data relationships
+
+    one to one relationship
+      one user has one details page and
+      details page belongs to only one user
+
+    one to many relationship
+      bookstore example
+        book has many reviews but
+        review is only for one book
+
+    many to many relationship
+      bookstore example
+        a single book can have multiple authors (many)
+        and an author can have multiple books(many)
+        use a third join table to connect the books and authors
+        the join table has two foreign keys
+
+
+  see *creating tables for example of how to create and join tables
+
+  cross joins (implicit) => not very usefull because it returns each users with each order (cross multiplies)
+    SELECT * FROM customers, orders;
+
+    more usefull example
+
+    implicit inner join => can join tables without using the JOIN keyword (implicitly)
+      SELECT first_name, last_name, order_date 
+      FROM orders, customers
+      WHERE customers.id = orders.customer_id;
+
+    this way works but is less convential than using keyword JOIN
+
+
+  one to many joins
+
+    difference between INNER, LEFT, RIGHT joins
+
+    INNER JOIN => only returns matches from the joined tables
+    RIGHT JOIN => returns all data from the first specified table(right)  
+                    and returns NULL when there isn't a match in the second specified table(left)
+    LEFT JOIN => returns all data from the second specified table(left)  
+                    and returns NULL when there isn't a match in the first specified table(right)
+                    not as useful because you can just switch the order of the specified tables
+
+
+    JOIN (INNER JOIN by default)
+
+      example
+
+        SELECT * 
+        FROM customers
+        INNER JOIN orders
+        ON customers.id = orders.customer_id;
+
+
+    LEFT JOIN
+
+      example
+
+        SELECT * 
+        FROM customers
+        LEFT JOIN orders
+        ON customers.id = orders.customer_id;
+
+
+    RIGHT JOIN
+
+        SELECT * 
+        FROM customers
+        RIGHT JOIN orders
+        ON customers.id = orders.customer_id;
+
+
+  many to many joins
+    require three tables the two many to many values and a join table
+    the join table will have two foregin keys
+    many to many joins can be accessed with single or double joins
+
+    double joins example
+
+      SELECT series.title, reviews.rating, reviewers.first_name 
+      FROM reviews 
+      JOIN reviewers
+        ON reviewers.id = reviews.reviewer_id
+      JOIN series 
+        ON series.id = reviews.series_id
+        ORDER BY reviewers.first_name, reviews.rating DESC;
+
+
+*******************************************************************************************
+*working with NULL
+
+  IFNull()
+    IFNULL(SUM(amount), 0) AS 'total spent'
+      => can be used with right or left joins where the result is NULL but you would like to change the value
+         useful when you have a lot of NULL data and you want to change the NULL to a value 
+         this allows you use GROUP BY on the replaced value
+       IFNULL takes two arguments
+         1. the value you want to check for NULL
+         2. the value you want to replace it with if it is NULL
+
+  you cannot use WHERE <value> = NULL you must use IS NULL
+    WHERE <value> IS NULL;
+    
+

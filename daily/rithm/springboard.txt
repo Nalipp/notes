@@ -1,0 +1,759 @@
+
+----------------------------------------
+Tuesday
+
+  morning
+
+    Springboard :
+
+      jasmine slides and instructions edit
+
+  afternoon
+
+    Code on Elevate project with Christian
+
+    Springboard: 
+
+      work on fundamentals reveiw slides
+
+
+
+----------------------------------------
+more slides
+
+  beforeEach
+  afterEach
+
+  describe
+
+
+Hi Elie,
+
+Just wanted to give a quick overview of what I am doing today
+I will try to do this daily but who knows if I can keep it up lol
+No need to reply but if there are adjustments you would like just let me know
+
+
+Tuesday
+
+  morning
+
+    Springboard :
+
+      jasmine-tip-pool exercise
+        write rst instructions and figure out solution file zip
+
+      testing-with-jasmine slides :
+        beforeEach()
+        afterEach()
+        describe()
+        if there are more slides you would like for jasmine let me know
+
+  afternoon
+
+    Read Educative tutorial on c++: 
+      figure out difference between lower level languages and higher level languages     
+      examine approaches of instructional content delevered by Educative platform
+
+    Alex meeting : 3:00 - 3:30
+
+    Prepare for next steps in springboard fundamentals review 
+
+
+  
+
+  
+      
+  
+Wednesday
+Thursday
+Friday
+
+
+
+
+
+
+
+
+
+
+
+unit testing
+
+integration tests
+
+The idea behind Unit Testing is to test each part of the program and show that the individual parts are correct.
+The idea behind Integration Testing is to combine modules in the application and test as a group to see that they are working fine
+
+The idea behind Unit Testing is to test each part of the program and show that the individual parts are correct.
+The idea behind Integration Testing is to combine modules in the application and test as a group to see that they are working fine
+
+Unit Testing tests only the functionality of the units themselves and may not catch integration errors, or other system-wide issues
+Integrating testing may detect errors when modules are integrated to build the overall system
+
+It starts with the module specification
+It starts with the interface specification
+
+It pays attention to the behavior of single modules
+It pays attention to integration among modules
+
+Unit test does not verify whether your code works with external dependencies correctly.
+Integration tests verify that your code works with external dependencies correctly.
+
+It is usually executed by the developer
+It is usually executed by a test team
+
+Finding errors is easy
+Finding errors is difficult
+
+Maintenance of unit test is cheap
+Maintenance of integration test is expensive
+
+Unit test does not check if you code works properly with other 
+
+
+Some functions have dependencies on other functions in order to run properly
+
+
+In unit testing tester knows the internal design of the software.	In integration testing doesn’t know the internal design of the software.
+Unit testing is performed first of all testing processes.	Integration testing is performed after unit testing and before system testing.
+Unit testing is a white box testing.	Integration testing is a black box testing.
+Unit testing is basically performed by the developer.	Integration testing is performed by the tester.
+Detection of defects in unit testing is easy.	Detection of defects in integration testing is difficult.
+It tests parts of the project without waiting for others to be completed.	It tests only after the completion of all parts.
+
+
+In unit testing each module of the software is tested separately.	
+In integration testing all modules of the the software are tested combined.
+
+
+A unit test is a test written by the programmer to verify that a relatively small piece of code is doing what it is intended to do. They are narrow in scope, they should be easy to write and execute, and their effectiveness depends on what the programmer considers to be useful. The tests are intended for the use of the programmer, they are not directly useful to anybody else, though, if they do their job, testers and users downstream should benefit from seeing fewer bugs.
+
+Part of being a unit test is the implication that things outside the code under test are mocked or stubbed out. Unit tests shouldn't have dependencies on outside systems. They test internal consistency as opposed to proving that they play nicely with some outside system.
+
+An integration test is done to demonstrate that different pieces of the system work together. Integration tests can cover whole applications, and they require much more effort to put together. They usually require resources like database instances and hardware to be allocated for them. The integration tests do a more convincing job of demonstrating the system works (especially to non-programmers) than a set of unit tests can, at least to the extent the integration test environment resembles production.
+
+Actually "integration test" gets used for a wide variety of things, from full-on system tests against an environment made to resemble production to any test that uses a resource (like a database or queue) that isn't mocked out. At the lower end of the spectrum an integration test could be a junit test where a repository is exercised against an in-memory database, toward the upper end it could be a system test verifying applications can exchange messages.
+
+
+Unit testing means testing individual modules of an application in isolation (without any interaction with dependencies) to confirm that the code is doing things right.
+
+Integration testing means checking if different modules are working fine when combined together as a group.
+
+
+
+
+----------------------------------------------------------------------------------------------------
+
+
+
+
+When you submit a blog post on a website 
+  There may be multiple unit tests to verify 
+    - A function takes the form data and converts it to an object
+    - A function makes a request to the database and returns the correct status
+    - A function updates the dom with after the post is submited
+
+  A unit test may be used to verify that the entire system is functioning as we would expect
+    - When a user submits a blog post the dom is updated as expected
+
+In unit testing we test specific modules of
+
+Failing unit tests are easy to find where failing unit tests may be more difficult to detect
+
+  entire teams of quality assurance may be dedicated to maintining integration tests
+  the developer may be more focused on integration tests
+
+but does not check if a single module of code is working proplery with other modules
+
+
+
+Unit tests should not have dependencies on other functions
+
+With unit testing we are looking for the smallest possible part that we can test
+
+
+Ingegration tests are used to verify that code is working properly with other parts of code
+
+
+The complexity of integration tests is higher and more costly
+Unit testing is simpler and cheaper
+
+
+unit tests
+  when we submit a form a function generates and returns an object
+
+
+A unit test verifies that a function returns an expected value
+An integration test verifies that multple functions are working together properly
+
+when we submit a form multiple functions are called and we verify the final result of all of them
+
+Unit tests
+  They tend to be simpler and cheap
+  test individual modules of code in isolation
+  not concerted with testing the dependencies between functions
+
+Integrations tests
+  test that multiple modules are working correctly as a group
+  we are concerned with the dependencies between functions
+  They tend to be more complex and costly
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+**************************************************
+jasmine
+
+
+today
+  improve slide
+  make makefile, solution, and rst file
+
+
+
+
+
+unit tests vs integration tests
+
+The tests we have seen so far have been pretty simple
+
+Test a function by passing it an argument and then verify the return value 
+
+Testing a single component or function is refered to as a unit test
+
+When we test a single function that is not dependent on other functions, this is known as a unit test
+
+
+
+
+
+hey! took a quick look at the Jasmine exercise so far and it’s fantastic
+something that I think would be super helpful - would be to add some more to the Jasmine slides around testing things in the DOM
+because right now we just have unit tests
+so it would be really cool if we could define a “small” integration test and use jasmine to do things like when a form is submitted expect many things (new updates to the DOM, length changes etc) (edited) 
+
+
+
+
+
+
+xalways listen for a “submit” for forms instead of a click on the button (if someone presses the enter key inside your form it refreshes the page because that is a submit and not a click which we don’t want)
+xuse addEventListener instead of onclick bc it’s more flexible and we don’t want to mix too much HTML/JS (until we get to React :slightly_smiling_face: ) 
+
+xSee if you can refactor calculateTipTotal, calculateBillTotal and calcualteTipPercentAverage to use one internal helper function - there’s lots of repetition with the allPayments.reduce.... 
+
+xwhen writing these solutions, always try to put detailed comments (as joel would say “docstrings” above your functions so they are a bit more detailed)
+
+xLet’s add a little validation on the Tip Amount and Bill Amount inputs so that they cannot go under 0
+
+xMake sure to put the percent sign to the right of then numbers (10% not %10)
+
+xFunctions like resetServerForm are a bit too small, let’s just put that directly into submitServerInfo - same with resetPmtForm - you can always just call form.reset() instead of setting each input to ''
+
+Instead of clearing the HTML each time can we instead just update properties in the DOM? You have a data structure allServers in memory with an object for  the server name. Can we also add a key of tipAmount that starts at 0 and when we update the object, we update the DOM? (this is kind of like the connect four  where we have a board data structure and we change the DOM based off of changes to that data structure) - happy to chat more through this kind of design pattern
+
+
+Make sure that whenever you make an exercise, you create an index.rst, `solution/index.rst` and symlink to the Makefile (ln -s ../Makefile` ) in the root of jasmine-tip-pool` 
+
+
+
+
+
+
+
+
+
+
+
+
+
+**************************************************
+Boolean logic
+
+  notes after presenting to seung min
+
+  3.4 'x' is no longer on the slide
+
+  4.8 somewhere here we need to develop the difference between strict and lienent comparison opperators
+      break this slide out into another one
+
+  4.10 'not a' should not be hard coded into the example
+
+  4.12 give the fourth example
+  4.15 give the fourth example
+
+  5.2 this example requires that they have learned arrays which they maybe have not
+  5.3 this example is good so maybe we can just give them a few possible user examples without the complex 5.2 code
+
+  5.5 the terinary example may be too breif, can we give more examples
+
+  general though
+    seems a little heavy to learn switch and terinary opperators even before they learn arrays, functions, loops ect
+    should these be broken out into a mini lecture slide that can be inserted somewhere later?
+  
+
+
+
+
+**************************************************
+
+next week
+
+  web fundamentals reviews
+    loops
+    arrays
+
+  jasmine
+
+
+
+**************************************************
+
+js-customer-higher-order-fns
+  flesh out what is a HOF
+  use code in playground.js
+
+
+js-callback-fns
+  edit
+    line 246 in anonymous function section
+    is it possible to put the declaratie code to the left and the refactor to the right
+
+    gotcha
+      if you invoke the function in the argument space you will have an error
+      the parent function is expectig the argument passed to it to be a function
+
+  place hof in js-callback-fns
+
+
+js-async folder
+  move the async slide from js-timers folder 
+  relation between callbacks and async code
+
+
+
+
+**************************************************
+procedure
+
+  xcreate a js-callback-fns folder
+    (tomorrow) write curric for what is a funciton
+    (tomorrow) make some basic examples of cb functions
+    move timers content into js-callback-fns
+
+  xcreate a js-async folder
+    move the async slide from js-timers folder 
+    (tomorrow) flesh out the async slides
+      relation between callbacks and async code
+
+  use the existing js-higher-order-fns folder 
+    (tomorrow) flesh out what is a HOF
+    **existing array methods go next**
+
+  xcreate js-custom-higher-order-fns folder
+    (goes after array methods)
+
+    
+
+  cleanup
+    delete the js-timers folder (should be empty)
+
+
+  js-callback-fns, js-async, js-higher-order-fns
+  are work in progress, the goals are updated and explain what each unit will have
+
+
+**************************************************
+
+
+js-arrays (not related to cbs)
+  more on arrays
+  for of loops (need for in?)
+  common built in array methods
+    indexOf, includes, push, pop ...
+
+Array methods
+  advanced methods
+
+itermediatejs-2
+  reviews array methods so needs to go after advanced array methods
+
+itermediatejs-1
+  no reference to cbs
+itermediatejs-2
+  reviews array methods so needs to go after advanced array methods
+
+
+Higher Order Functions 
+JavaScript Timers 
+
+
+4 Higher Order Functions 
+
+4 JavaScript Timers 
+
+13 Asynchronous Code
+
+js-array-methods-filter/
+js-array-methods-find-findindex/
+js-array-methods-forEach/
+js-array-methods-map/
+js-array-methods-reduce/
+js-array-methods-some-every/
+
+
+js-higher-order-fns
+  callbacks
+  math example
+  could maybe show more advanced patterns that come after array methods
+
+js-timers
+  timers
+  asyncronous code
+
+
+
+
+
+
+
+**************************************************
+callbacks
+  what is a function in js
+  basic examples of cb functions
+  timers
+
+
+custom higher order functions
+  what are they why are they useful
+  map, filter, reduce
+  custom higher order functions
+
+
+asyncronous code
+
+
+
+
+
+
+
+intro to higher order functions
+
+array methods
+
+higher order functions
+
+callbacks, as a part of timers
+
+
+
+
+
+common array methods
+
+
+
+
+testing with jasmine
+  setup 
+  screenshots pictures
+  demo code
+
+
+higher order functions
+
+  functional programming
+  first-class functions
+
+  this is possible because under the hood functions are actually objects
+
+  a deeper look at what is a function
+
+    comparison to variables
+      instead of retreiving a single value stored at an address in memory
+      we retreive a block of code stored in memory 
+       a set of instructions stored in memory
+       we can pass values to this code and recieve output from these instructions
+
+  in js functions are actually objects
+    this means that we can pass functions as parameters just as we would with objects
+    example of treading a function like an object
+ 
+
+
+****************************************************************************************************
+html and css prework
+
+HTML
+HTML Fundamentals
+What is HTML
+How to write HTML
+Basic HTML Tags
+HTML Exercise
+Semantic HTML
+Semantic HTML tags
+
+Tables and Forms
+Semantic HTML Exercise
+
+CSS
+CSS Fundamentals
+What is CSS
+Basic CSS styling
+CSS selectors and specificity
+The Box Model
+Margin, padding, border
+box-sizing
+CSS Layout and Design
+
+Positioning
+Flexbox
+Transitions
+Responsive Design
+Exercise - CSS mockups
+
+Twitter Bootstrap
+Typography, buttons, forms
+Grid system
+Bootstrap Mocks exercise
+Exercise - build your personal web site!
+
+
+
+****************************************************************************************************
+javascript prework
+
+JavaScript Fundamentals 
+What is JavaScript
+
+Variables and Data Types
+Variables
+Data types
+Data types Exercise
+
+Conditionals
+Conditional operators
+If / else / switch
+
+Arrays
+Creating arrays
+Iterating over arrays
+Common array methods
+Arrays exercise
+
+Objects
+Creating objects
+Iterating over objects
+Common object methods
+Objects exercise
+
+Functions 
+What is a function / returning output
+Parameters and arguments
+Functions exercise
+Debugging
+Different kinds of errors in JS
+Debugging process
+Using the Chrome Dev Tools
+
+
+js-intro-history/
+  right now has links to show some cool things with js
+  ideas
+    write of short history of js
+    breif intro to what a progarming language does
+    short write up of what is js used for most commonly
+
+js-variables-data-types/
+  2.5 (seems like showing objects here is out of place)
+
+  goals
+  primitives
+  variables
+    let
+    const
+  strings
+  numbers
+  Math
+  booleans (intro)
+    
+  checking variable types
+  
+
+js-boolean-logic/
+
+js-arrays/
+
+js-object-enhancements/
+js-objects/
+
+js-functions-1/
+js-functions-2/
+
+js-loops/
+js-newer-methods-features/
+
+
+
+js-array-methods-filter/
+js-array-methods-find-findindex/
+js-array-methods-forEach/
+js-array-methods-map/
+js-array-methods-reduce/
+js-array-methods-some-every/
+js-oop/
+js-promises/
+js-rest-spread/
+js-symbols-iterators/
+js-timers/
+js-nested-data-structures/
+js-maps-sets/
+js-modules/
+js-local-storage/
+js-arrow-functions/
+js-async-await/
+js-debugging-errors/
+js-destructuring/
+js-dom-events/
+js-dom-intro-selecting/
+js-dom-modifying/
+js-es2015-introduction/
+js-generators/
+js-let-const/
+
+
+
+
+
+
+bootstrap/
+css-box-model/
+css-display-positioning/
+css-intro/
+css-selectors-specificity/
+es-next-class-fields/
+es-next-newer-functions-methods/
+es-next-nullish-coalescing/
+es-next-optional-chaining/
+es-next-tc-39-babel-modules/
+git-branching/
+git-cloning-pushing/
+git-commands-intro/
+git-common-issues/
+git-conflicts/
+git-diffs/
+git-fork-pull-requests/
+git-github-intro/
+git-professional-github/
+git-rebasing/
+git-remotes/
+git-reverting/
+git-stashing/
+git-undoing-changes/
+graphql-backend-intro/
+graphql-fe-apollo-intro/
+graphql-fe-apollo-mutations/
+graphql-fe-apollo-patterns/
+graphql-fe-apollo-query/
+graphql-fe-intro/
+graphql-fe-mutation/
+graphql-fe-query/
+graphql-fe-subscriptions/
+history-of-react/
+hooks-use-context/
+hooks-use-reducer/
+html-intro/
+html-semantic/
+html-tables-forms/
+intermediate-js/
+intermediate-js-2/
+jsx-props/
+pro-coding/
+react-cra/
+react-custom-hooks/
+react-effects/
+react-events/
+react-forms/
+react-intro/
+react-performance/
+react-redux-disp-props/
+react-redux-intro/
+react-state/
+react-state-patterns/
+redux-intro/
+redux-thunk/
+terminal-environment-config/
+terminal-files-and-folders/
+terminal-files-intro/
+terminal-finding-searching/
+terminal-intro/
+terminal-links/
+terminal-permissions/
+terminal-piping/
+terminal-processes/
+terminal-redirection/
+terminal-shell-scripting/
+terminal-useful-commands/
+testing-with-jasmine/
+web-fundamentals-refresher/
+
+
+****************************************************************************************************
+compare example
+
+.. newslide::
+
+.. container:: compare
+
+  .. container:: one-incremental
+
+    .. code-block:: javascript
+
+      function playTicTacToe() {
+        // ...
+        let winner = checkForWinner();
+      }
+
+      function checkForWinner() {
+        // code for checking board here...
+        if (winner) {
+          alert(winner + " wins!");
+        }
+        return winner;
+      }
+
+  .. container:: one-incremental
+
+    .. code-block:: javascript
+
+
+      function playTicTacToe() {
+        // ...
+        let winner = checkForWinner();
+        if (winner) {
+          announceWinner(winner);
+        }
+      }
+
+      function checkForWinner() {
+        // code for checking board here...
+        return winner;
+      }
+
+      function announceWinner(winner) {
+        alert(winner + " wins!");
+      }
+

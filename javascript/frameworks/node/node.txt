@@ -1,0 +1,331 @@
+*************************************************************
+Node Js
+*************************************************************
+
+udemy bootcamp
+  *setup
+  *basic file structure
+  *route parameters / route variables
+  *npm 
+  *ejs
+  *partials
+  *body parser
+  *search using get requests
+
+
+
+*************************************************************
+*setup
+
+  npm init => creates a package json file
+
+  example app 
+
+    var express = require('express');
+    var app = express();
+
+    app.use(express.static('public'));  // middleware for serving public files including css and javascript
+
+    app.get("/", function(req, res) {
+      res.send('home')
+    });
+
+    app.get("*", function(req, res) {  // wildcard redirects to root page, this must be the last request
+      res.redirect("/");
+    });
+
+    app.listen(3000, function() {
+      console.log('listening on localhost: 3000');
+    });
+
+
+*************************************************************
+basic file structure
+
+  public
+    stylesheets
+      main.css
+    scripts
+      common.js
+    images
+  src
+    partials
+      header.js
+      footer.js
+    collections
+      users
+        models
+          Users.js
+        tests
+          modelValidations.tests.js
+          model.tests.js
+        views
+          index.pug
+          show.pug
+          new.pug
+          edit.pug
+      slips
+        models
+          Slips.js
+        tests
+          modelValidations.tests.js
+          model.tests.js
+        views
+          index.pug
+          show.pug
+          new.pug
+          edit.pug
+  database_config.js
+  app.js
+  README.MD
+
+*************************************************************
+*route parameters / route variables
+
+    http://rooname.com/files/popcorn
+
+    app.get("/files/:filename", function(req, res) {
+                                          // filename is designated as a route parameter using the ':' 
+                                          //in this instance the value is 'popcorn'
+      console.log(req.params.filename);   // allows you to access the route params 'popcorn'
+    })
+  
+
+*************************************************************
+*npm 
+  npm init                         => creates a package.json file
+  npm install --save <filename>    => installs the package and dependencies locally
+  npm install --global <filename>  => installs the package and dependencies globally 
+                                      (find with $ find ~/ -name "file_name")
+
+  npm install --save express
+  npm install --save ejs
+
+*************************************************************
+*ejs
+
+  npm install --save ejs
+  app.set('view engine', 'ejs');  // middleware
+
+  put html file in views folder with extension .ejs
+  pass to the file from the get request {key: value} and access in the html file with <%= key %>
+    key   => is the value placed in the template
+    value => the value passed in from the route block
+
+*************************************************************
+*partials
+
+  create a partials folder inside of the views directory
+  link to a partials with : 
+    <% include partials/<file name> %> 
+
+  example 
+    views/partials/header.ejs
+    <% include partials/header %>   // link to the header partial file
+
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <title>Puppies</title>
+        <link rel="stylesheet" href="/app.css">
+      </head>
+      <body>
+
+    views/partials/footer.ejs
+    <% include partials/footer %>   // link to the footer partial file
+
+      </body>
+    </html>
+
+*************************************************************
+*body parser
+
+  var bodyParser = require('body-parser');
+
+  app.use(bodyParser.urlencoded({extended: true}));
+
+
+
+*************************************************************
+*search using get requests
+
+  you can pass a search query to the url using a form with method="GET" 
+  www.movies.com/title_search?search=happy
+
+  this can be accessed from the routes file with
+  req.query.search
+
+
+*************************************************************
+learn Teach Code
+
+
+*************************************************************
+*common modules
+*read write files
+*basic routing and file serving (without express)
+*issues we ran into with todo app
+
+*************************************************************
+
+// download dependencies
+npm install
+
+// start server
+npm run dev
+
+// run tests
+mocha test.js
+
+
+// *************************************************************
+// *common modules
+
+// import file system
+  var fs = require('fs');
+
+// nodemon (used for continuous development
+  npm install -g nodemon
+
+// listen to a server
+  server.listen(3000, () => console.log('running on 3000'));
+
+// convert a string to JSON
+  JSON.parse('')
+
+// convert JSON to a string
+  JSON.stringify('')
+
+// *************************************************************
+// *read write files
+
+// read file (asyncronously)
+  fs.readFile('<file_name>', function(err, text) {
+    if (err) console.log(err);
+    console.log(text.toString());
+  })
+
+// write file (asyncronously)
+  fs.writeFile('<file_name>', "input data", function(err) {
+    if (err) console.log(err);
+  });
+
+// copy file (ascyncronously)
+  fs.readFile('data.txt', function(err, data) {
+    if (err) console.log(err);
+    fs.writeFile('copied-data.txt', data, function(err) {
+      if (err) console.log(err);
+    });
+  });
+
+// copy file (ascyncronously) with modular code
+ function copyFile(oldFile, newFile) {
+   fs.readFile(oldFile, function doneReading(err, fileContents) {
+     if (err) console.log('Problem reading file ' + err);
+     writeFileData(newFile, fileContents)
+   })
+ }
+
+ function writeFileData(fileName, fileContents) {
+   fs.writeFile(fileName, fileContents, function doneWriting(err) {
+     if (err) console.log('Problem writing file ' + err);
+   })
+ }
+
+ copyFile('oldFile', 'newFile')
+
+
+// write file (ascyncronously)
+
+  try {
+    fs.writeFileSync('fileName', newData);
+  } catch (err) {
+    if (err) console.log(err )
+  }
+
+
+// *************************************************************
+// *basic routing and file serving (without express)
+
+
+var http = require('http');
+var fs = require('fs');
+
+var server = http.createServer((req, res) => {
+  if (req.url === '/') {
+    serveStatic('/index.html', res);
+  } else {
+    serveStatic(req.url, res);
+  }
+});
+
+server.listen(3000, () => console.log('running on 3000'));
+
+function serveStatic(path, res) {
+  fs.readFile('static' + path, (err, data) => {
+    if (err) pageNotFound(res);
+    res.end(data);
+  });
+}
+
+function pageNotFound(res) {
+  console.console.log("Page not found");
+  res.statusCode = 404;
+  res.end('Page not found');
+}
+
+
+// *************************************************************
+// *issues we ran into with todo app
+//
+//
+// problem
+//   we had a file with an array of JSON data but when we read the file we recieved string format instead of array format
+//
+// solution
+//   in order to read JSON files you need to parse them as JSON
+//     JSON.parse(data)
+//   in order to write to a JSON file you need to convert to JSON
+//     JSON.stringify(data)
+//
+//
+// problem
+//   the standard javascript linter was recocgnizing '$' from jQuery as a global variable as well as others
+//
+// solution
+//   add the following to package.json (see documentation)
+//   "standard": {
+//     "globals": [ "$", "describe", "it" ]
+//   },
+//
+//
+//
+// problem
+//   when making agax calls using jQuery we were using shorthand for $.get and $.post
+//     $.get('http://localhost:3000/tasks')
+//       .done(data => {
+//         window.alert(data)
+//
+//     $.post('http://localhost:3000/tasks', <data to post>)
+//       .done(data => {
+//         populate()
+//
+//   this was fine until we needed to delete which doesnt follow the same format, the delete method must be posted out manually
+//
+// solution
+//     $.ajax({
+//       url: 'http://localhost:3000/tasks',
+//       method: 'DELETE',
+//       data: id
+//     })
+//
+//
+// problem
+//   when trying to create a new todo, write it to the database and then display it back on the page
+//   todo item apeared on the page but as [object, Object] and wrote {"type":"Buffer","data":[102,102]} to the file
+//
+// solution
+//   when making a ajax post request the data passed was a buffer in object format and the encoding needs to be set
+C

@@ -1,0 +1,36 @@
+****************************************************************************************************
+postman
+
+  postman allows you to create the backend without creating things in the the frontend like forms
+
+  how to post a json object (such as one posted in a form) to a route using postman
+  
+    in the app.js 
+      create a get.post() route
+
+    in postman
+      change method to post
+      provide the url
+      select the following
+        body
+        raw
+        JSON (application/json)
+        response can be set to pretty
+      input a dummy json object that mimicks the object that would be the result of a submitted form
+
+    example:
+
+      // app.js
+
+      app.post('/todos', (req, res) => {
+        console.log(req.body); 
+        var todo = new Todo({
+          text: req.body.text
+        });
+
+        todo.save().then((doc) => {
+          res.send(doc);
+        }, (e) => {
+          res.status(400).send(e);
+        });
+      });

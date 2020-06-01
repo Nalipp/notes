@@ -1,0 +1,41 @@
+****************************************************************************************************
+*request (does not support promisses)
+*axios   (supports promisses)
+
+
+****************************************************************************************************
+*request
+
+  make api requests and cleanly embed them in a web node web app using npm request
+
+  // request accepts an options object that allows you to convert the body to json
+  // request accepts three arguments in a function arugment following the options object (error, response, body)
+
+  example:
+
+    request({
+      url: 'https://api.korbit.co.kr/v1/ticker',
+      json: true
+      }, function (error, response, body) {
+      if (error) {
+        console.log('there was an error with your request');
+      } else if (response && response.statusCode === 200) {
+        // console.log(response);
+        console.log('body:', body);
+        var parsedData = JSON.parse(body);
+      } else {
+        console.log('you have been redirected'); 
+      }
+    });
+
+
+****************************************************************************************************
+*axios
+
+  example:
+
+    axios.get(geoUrl).then((response) => {
+      console.log(response.data);
+    }).catch((error) => {
+      console.log(error); 
+    });

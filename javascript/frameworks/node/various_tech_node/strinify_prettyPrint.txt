@@ -1,0 +1,5 @@
+if you take a json object (such as one returned from the npm request api call with the flag set to json: true)
+you can see the nested [Objects] inside the object using strinify
+to make the objeject more readable you can spedify the spaces such as the following
+
+console.log(JSON.stringify(body, undefined, 2));

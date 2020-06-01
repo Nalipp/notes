@@ -1,0 +1,233 @@
+****************************************************************************************************
+Mocha Chai and mjackson expect
+****************************************************************************************************
+
+notes
+
+
+  server/_config.js   => allows you to specify a different database for tests
+  server/app.js       => config.mongoURI[app.setting.env] reads and configures appropriate database
+  test/test-server.js => process.env.NODE_ENV = 'test' signals the config file to use the test database
+
+  this setup comes from the following blog post
+    http://mherman.org/blog/2015/09/10/testing-node-js-with-mocha-and-chai/#.WVTVaBN96Rt
+
+  for more exaustive testing examples
+    https://scotch.io/tutorials/test-a-node-restful-api-with-mocha-and-chai
+
+  route examples below
+    it('should list ALL blobs on /blobs GET');
+    it('should list a SINGLE blob on /blob/<id> GET');
+    it('should add a SINGLE blob on /blobs POST');
+    it('should update a SINGLE blob on /blob/<id> PUT');
+    it('should delete a SINGLE blob on /blob/<id> DELETE');
+
+
+
+****************************************************************************************************
+npm install chai chai-http --save-dev
+npm install mocha (if not already installed on your machine)
+
+// package.json
+
+  "scripts": {
+    "test": "mocha"
+  }
+
+  alternative option
+    this allows you to test every file that ends in test.js
+
+    "scripts": {
+      "test": "mocha **/*.test.js",
+      "test-watch": "nodemon --exec 'npm test'"
+    }
+
+
+    you can also use a minimized test result summary 
+    "test": "mocha **/*.test.js -R min",
+  
+
+  npm test
+  -or-
+  nodemon --exec 'npm test'
+  -or-
+  npm run test watch
+
+
+// server/_config.js
+
+  var config = {};
+
+  config.mongoURI = {
+    development: 'mongodb://localhost/production-database',
+    test: 'mongodb://localhost/test-database'
+  };
+
+  module.exports = config;
+
+
+
+// server/app.js
+
+  // *** config file *** //
+  var config = require('./_config');
+
+  // *** mongoose *** ///
+  mongoose.connect(config.mongoURI[app.settings.env], (err, res) => {
+    if(err) {
+      console.log('Error connecting to the database. ' + err);
+    } else {
+      console.log('Connected to Database: ' + config.mongoURI[app.settings.env]);
+    }
+  });
+
+
+
+// test/test-server.js
+  
+  process.env.NODE_ENV = 'test';
+
+  const chai = require('chai');
+  const chaiHttp = require('chai-http');
+  const mongoose = require('mongoose');
+
+  const server = require('../server/app');
+  const Blob = require('../server/models/blob');
+
+  const should = chai.should();
+  chai.use(chaiHttp);
+
+  describe('Blobs', () => {
+
+    Blob.collection.drop();
+
+    beforeEach( (done) => {
+      let newBlob = new Blob({
+        name: 'Bat',
+        lastName: 'Man'
+      });
+      newBlob.save( (err) => {
+        done();
+      });
+    });
+
+    afterEach( (done) => {
+      Blob.collection.drop();
+      done();
+    });
+
+    it('should list ALL blobs on /blobs GET', (done) => {
+      chai.request(server)
+        .get('/blobs')
+        .end( (err, res) => {
+          res.should.have.status(200);
+          res.should.be.json;
+          res.body.should.be.a('array');
+          res.body[0].should.have.property('_id');
+          res.body[0].should.have.property('name').eql('Bat');
+          res.body[0].should.have.property('lastName').eql('Man');
+          res.body.length.should.be.eql(1);
+          done();
+        });
+    });
+
+    it('should list a SINGLE user on /blob/<id> GET', (done) => {
+      let newBlob2 = new Blob({
+        name: 'Super',
+        lastName: 'Hero'
+      });
+      newBlob2.save( (err, data) => {
+        chai.request(server)
+          .get('/blob/' + data.id)
+          .end( (err, res) => {
+            res.should.have.status(200);
+            res.should.be.json;
+            res.should.be.a('object'); 
+            res.body.should.have.property('name').eql('Super');
+            res.body.should.have.property('lastName').eql('Hero');
+            res.body.should.have.property('_id').eql(data.id);
+            done();
+          });
+      });
+    });
+
+    it('should add a SINGLE user on /signup POST', (done) => {
+      chai.request(server)
+        .post('/blobs')
+        .send({name: 'Nate', lastName: 'Lipp'})
+        .end( (err, res) => {
+          res.should.have.status(200);
+          res.should.be.json;
+          res.body.should.be.a('object');
+          res.body.should.have.property('SUCCESS');
+          res.body.SUCCESS.should.have.property('name').eql('Nate');
+          res.body.SUCCESS.should.have.property('lastName').eql('Lipp');
+          done();
+        });
+    });
+
+    it('should update a SINGLE user on /blobs/<id> PUT', (done) => {
+      chai.request(server)
+        .get('/blobs')
+        .end( (err, res) => {
+          chai.request(server)
+            .put('/blob/' + res.body[0]._id)
+            .send({ name: 'Super', lastName: 'Duper' })
+            .end( (err, res) => {
+              res.should.have.status(200);
+              res.should.be.json;
+              res.body.should.be.a('object');
+              res.body.should.have.property('UPDATED');
+              res.body.UPDATED.should.have.property('name').eql('Super');
+              res.body.UPDATED.should.have.property('lastName').eql('Duper');
+              done();
+          });
+        });
+    });
+
+    it('should delete a SINGLE user on /<id>/delete/ DELETE', (done) => {
+      chai.request(server)
+        .get('/blobs')
+        .end( (err, res) => {
+          let id = res.body[0]._id;
+          chai.request(server)
+            .delete('/blob/' + id)
+            .end( (err, res) => {
+              res.should.have.status(200);
+              res.should.be.json;
+              res.body.should.be.a('object');
+              res.body.should.have.property('REMOVED');
+              res.body.REMOVED.should.have.property('_id').eql(id);
+              res.body.REMOVED.should.have.property('name').eql('Bat');
+              res.body.REMOVED.should.have.property('lastName').eql('Man');
+              done();
+            });
+        });
+    });
+
+  });
+
+
+*******************************************************************************************
+mjackson expect
+
+  npm install expect --save-dev
+
+  examples 
+
+    var res = utils.add(1, 2);
+
+    expect(res).toBe(3)
+      .toBeA('number');  // passes
+
+    expect({name: 'nate'}).toBe({name: 'nate'});  
+           // fails because is the same comparision as strict equality where pointing to different objects
+           // instead us toEqual
+
+    expect({name: 'nate'}).toEqual({name: 'nate'});   // passes
+
+    expect([1, 2, 3]).toInclude(2)                    // passes 'exclude' is the opposite
+    
+
+
+    

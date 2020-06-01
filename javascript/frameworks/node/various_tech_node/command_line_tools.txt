@@ -1,0 +1,39 @@
+command line tools
+*******************************************************************************************
+  *passing arguments
+  *yargs
+
+
+*******************************************************************************************
+*passing arguments
+  
+  // command line
+
+    $ node app.js argrument
+
+
+  // app.js
+    
+    console.log(process.argv);
+    console.log(process.argv[2]);
+
+*******************************************************************************************
+*yargs
+
+  main advantage is that is allows you to pass key value pairs as arguments
+
+  npm install --save yargs
+
+  // command line
+  
+    $ node app.js add --key1=value1 --key2=value2  // passing in two key value pairs and command 'add'
+
+  // app.js
+
+    const argv = yargs.argv;
+
+    console.log(yargv);
+    console.log(yargv._);       // 'add' you can also pass a command and access it with '_'
+    console.log(yargv.key1);    // 'value1'
+    console.log(yargv.key2);    // 'value2'
+

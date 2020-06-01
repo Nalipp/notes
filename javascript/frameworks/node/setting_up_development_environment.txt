@@ -1,0 +1,560 @@
+********************************************************************************
+JS development environment from pluralsite
+********************************************************************************
+
+Npm Start
+  *github
+  *.editorconfig
+  *package managment
+  *buildScrips
+  *sharing your dev environment without deployment
+  *scripts
+  *transpilers
+  *bundling
+  *linting
+  *testing & continuous integration
+  *http requests
+  *mock http with fetch
+  *mock api data
+
+Production build
+  *production build
+  *bundle splitting (necessary for large apps)
+  *cache busting
+  *extracting css for cache busting
+  *error tracking
+
+Npm run deploy
+  *hosting 
+  *maintining a starter kit
+
+
+********************************************************************************
+*github
+  
+  when creating a new repo instead of pushing the initial commit to the repo adress
+    initialize the repo with .gitignore file and clone the repo
+
+
+********************************************************************************
+*.editorconfig
+
+  allows all team members to use the same editor configuration files regardless of text editor
+  some editors need to have a plugin installed which can be found at the following site
+    http://editorconfig.org/#download
+
+  example :
+    // .editorconfig
+
+      # editorconfig.org
+      root = true
+
+      [*]
+      indent_style = space
+      indent_size = 2
+      end_of_line = lf
+      charset = utf-8
+      trim_trailing_whitespace = true
+      insert_final_newline = true
+
+      [*.md]
+      trim_trailing_whitespace = false
+
+
+********************************************************************************
+*package managment
+
+    package.json
+
+    example : bit.ly/jsdevpackagejson
+
+
+  ****************************************************************
+  security
+
+    it is good practice to check your package.js file for insecure packages
+
+    example : node security project manual check
+
+      npm install --global nsp
+      nsp check
+
+
+********************************************************************************
+*buildScrips
+
+  buildScripts folder can be generated at the root of the project and used to run all scripts at once
+
+  // buildScripts
+
+    // srcServer.js
+      this is the server file where servers like express can be generated and listened to
+
+********************************************************************************
+*sharing your dev environment without deployment
+
+  examples :
+
+    localtunnel : punches a hole in your firewall and is only available when you machine is running
+    ngrok       : punches a hole in your firewall and more functionality that localtunnel but must signup 
+    now         : no firewall hole and hosting persists when the server is off supports nodejs projects
+    surge       : no firewall hole and hosting persists when the server is off but only serves static files and javascript
+
+    example : localtunnel
+
+      npm install -g localtunnel
+
+      lt --port 3000 --subdomain natelipp
+
+
+********************************************************************************
+*scripts
+
+  npm start -s
+  
+  "scripts" : {
+    "prestart": "node buildScripts/startMessage.js",
+    "start": "npm-run-all --parallel security-check open:src",
+    "open:src": "node buildScripts/srcServer.js",
+    "security-check": "nsp check",
+    "localtunel": "lt --port 3000"
+  },
+
+  // buildScripts/startMessage.js
+    var chalk = require('chalk')       // allows you to color code you messages
+    console.log(chalk.green('Starting app in dev mode'));
+      
+
+********************************************************************************
+*transpilers
+
+  babel      -> allows you to write es6 javascript and then complie it down to es5 for production
+  typeScript -> compile from typescript to javascript for stricter and saver development
+  elm        -> seperate language that comples down to js, cleaner syntax and functional programming based
+
+  example : transpiling with babel (find the babel related packages in the package.json file
+
+    // .babelrc   (or you can add it to your package.json file
+      {
+        "presets": [
+          "latest"
+        ]
+      }
+
+  "babel": {
+    "presets": [
+      "latest"
+    ]
+  },
+
+   // package.json  
+
+      -> add babel before scripts
+      "babel": {
+        "presets": [
+          "latest"
+        ]
+      },
+      "scripts": ...
+
+      -> add babel- to all instances of node in scripts
+      "prestart": "babel-node buildScripts/startMessage.js",
+
+
+********************************************************************************
+*bundling
+
+  allow you to minify you code files
+
+  example : webpack   (check package.json for webpack dependencies)
+
+
+  // webpack.config.dev.js 
+
+    import path from 'path';
+
+    export default {
+      debug: true,
+      devtool: 'inline-source-map',
+      noInfo: false,
+      entry: [
+        path.resolve(__dirname, 'src/index')
+      ],
+      target: 'web',
+      output: {
+        path: path.resolve(__dirname, 'src'),
+        publicPath: '/',
+        filename: 'bundle.js'
+      },
+      plugins: [],
+      module: {
+        loaders: [
+          {test: /\.js$/, exclude: /node_modules/, loaders: ['babel']},
+          {test: /\.css$/, loaders: ['style','css']}
+        ]
+      }
+    }
+
+
+  // srcServer.js
+
+    import webpack from 'webpack';
+    import config from '../webpack.config.dev';
+   
+    const compiler = webpack(config);
+
+    app.use(require('webpack-dev-middleware')(compiler, {
+      noInfo: true,
+      publicPath: config.output.publicPath
+    }));
+
+
+  // src/index.html         -> index.html, index.js, index.css must all be in the src file specified by webpack.config
+    <script src="bundle.js"></script>
+
+  // src/index.css
+
+  // src/index.js
+     import './index.css';  // this bundles the css and injects it onto the page
+     console.log('hello')
+
+
+********************************************************************************
+*linting
+
+  example : eslint  (requires multiple packages in packagage.json)
+
+    // eslint.json
+      {
+        "root": true,
+        "extends": [
+          "eslint:recommended",
+          "plugin:import/errors",
+          "plugin:import/warnings"
+        ],
+        "parserOptions": {
+          "ecmaVersion": 7,
+          "sourceType": "module"
+        },
+        "env": {
+          "browser": true,
+          "node": true,
+          "mocha": true
+        },
+        "rules": {
+          "no-console": 1    // 0 -> off, 1 -> warning, 2 -> error 
+        }
+      }
+
+    // package.json (updates start and scripts)
+
+      "start": "npm-run-all --parallel security-check open:src lint-watch",
+
+      "scripts" : {
+        "lint": "esw webpack.config.* src buildScripts --color",
+        "lint-watch": "npm run lint -- --watch",
+      },
+
+
+********************************************************************************
+*testing & continuous integration
+
+  example : mocha, jsDom (test files located next to files to be tested not in seperate test folder)
+
+    // buildScripts/testSetup.js
+
+      // This file isn't transpiled so must use CommonJS and ES5
+      // Register babel to transpile before our tests are run
+      require('babel-register')();
+
+      // Disable webpack features that Mocha doesn't understand
+      require.extensions['.css'] = function() {};
+
+    // package.json
+      "start": "npm-run-all --parallel security-check open:src lint-watch test-watch",
+
+      "test": "mocha --reporter progress buildScripts/testSetup.js \"src/**/*.test.js\"",
+      "test-watch": "npm run test -- --watch"
+
+    // src/index.test.js
+      import {expect} from 'chai';
+      import jsdom from 'jsdom';
+      import fs from 'fs';
+
+      (jsDom example test)
+      describe('jsDom test', () => {
+        it('should have Hello! in html', (done) => {
+          const index = fs.readFileSync('./src/index.html', 'utf-8');
+          jsdom.env(index, function(err, window) {
+            const h1 = window.document.getElementsByTagName('h1')[0];
+            expect(h1.innerHTML).to.equal('Hello!');
+            done();
+            window.close();
+          });
+        });
+      });
+            
+
+  example : travis
+
+    signin in with github
+      https://travis-ci.org/
+      + new repository
+      select and turn on repo from the list
+
+    // .travis.yml
+      language: node_js
+      node_js:
+        - "6"
+
+
+********************************************************************************
+*http requests
+  
+  example : fetch
+
+    // src/api/userApi.js
+
+      import 'whatwg-fetch'
+
+      export function getUsers() {
+        return get('users');
+      }
+
+      function get(url) {
+        return fetch(url).then(onSuccess, onError);
+      }
+
+      function onSuccess(response) {
+        return response.json();
+      }
+
+      function onError(error) {
+        console.log(error) // eslint-disable-line no-console
+      }
+
+    // src/index.js
+
+      import {getUsers} from './api/userApi';
+
+      // Populate table of users via API call.
+      getUsers().then(result => {
+        let usersBody = "";
+
+        result.forEach(user => {
+          usersBody += `<tr>
+            <td><a href="#" data-id="${user.id}" class="deleteUser">Delete</a></td>
+            <td>${user.id}</td>
+            <td>${user.firstName}</td>
+            <td>${user.lastName}</td>
+            <td>${user.email}</td>
+            </tr>`
+        });
+
+        global.document.getElementById('users').innerHTML = usersBody;
+      });
+
+    // src/index.html
+        <body>
+          <h1>Users</h1>
+          <table>
+            <thead>
+              <th>&nbsp;</th>
+              <th>Id</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Email</th>
+            </thead>
+            <tbody id="users">
+
+            </tbody>
+          </table>
+        </body>
+
+    // srcServer.js
+      app.get('/users', (req, res) => {
+        res.json([
+          {"id": "1", "firstName": "nate", "lastName": "lip", "email": "m@m.c"},
+          {"id": "2", "firstName": "dale", "lastName": "seo", "email": "m@m.c"},
+          {"id": "3", "firstName": "ben", "lastName": "sdck", "email": "m@m.c"}
+        ]);
+      });
+          
+
+********************************************************************************
+*mock http with fetch
+
+  https://github.com/Nalipp/js_dev_environment/commit/b49bfe0a2848b6eb232963325531dac324ea807f
+
+  example: JSON schema faker (faker change regexp)
+           JSON server
+
+    // buildScripts/mockDataSchema.js
+
+        fake data schema example -> bit.ly/ps-mock-data-schema
+
+
+    // buildScripts/generateMockData.js
+
+        /* generate random mock data without making an actual API call*/
+
+        /* eslint-disable no-console */
+
+        import jsf from 'json-schema-faker';
+        import {schema} from './mockDataSchema';
+        import fs from 'fs';
+        import chalk from 'chalk';
+
+        const json = JSON.stringify(jsf(schema));
+
+        fs.writeFile("./src/api/db.json", json, function (err) {
+          if (err) {
+            return console.log(chalk.red(err));
+          } else {
+            console.log(chalk.green("Mock data generated."));
+          }
+        });
+
+    // package.json
+        
+        "start": "npm-run-all --parallel security-check open:src lint-watch test-watch start-mockapi",
+
+        "generate-mock-data": "babel-node buildScripts/generateMockData"
+        "pre-start-mockapi": "npm run generate-mock-data",
+        "start-mockapi": "json-server --watch src/api/db.json --port 3001"
+
+
+********************************************************************************
+*mock api data
+
+  setting up a mock api data and creating dev environment
+
+  https://github.com/Nalipp/js_dev_environment/commit/d4e758ce65e884f12123f133ed5d6abd819367c0
+
+
+********************************************************************************
+*production build
+
+  video suggested using gzip for production
+
+  minification : removes all the things that humans care about like comments and unnecisary spaces and leaves only what computer need
+    npm run build -s  // creates the build file
+
+  this example will allow you to use the following query string to switch to the mock data instaed of the database
+    http://localhost:3000/?useMockApi=true
+
+  https://github.com/Nalipp/js_dev_environment/commit/452f840ce0807a06b978cfa91ac227502d373708?diff=unified
+
+
+********************************************************************************
+*bundle splitting (necessary for large apps)
+
+  allows you to bundle assests seperatley so that the user only re-downloads a resource if that resource has changed
+  instead of all the resources of the entire application
+
+  https://github.com/Nalipp/js_dev_environment/commit/e45838743da57267fcc449d38d19ae85c5d87d8a
+
+
+********************************************************************************
+*cache busting
+
+  alows you to set the experation headers up to a year in the future so that the user dosen't have to request assets each visit
+  in order to ensure that updated assets are downloed instead of the cached version the name of the resource must be changed
+  with the example code file names will have hashes placed in them to ensure users get updated assets
+ 
+  https://github.com/Nalipp/js_dev_environment/commit/a61acb8887482b88d5c9defaaf7054dfd1625594
+
+
+********************************************************************************
+*extracting css for cache busting
+
+  css is currently being injected to the bundle with javascript
+  if it is extracted cache busting techniques can be used
+
+  https://github.com/Nalipp/js_dev_environment/commit/a31391b3f72c3c01f49414644e469a16c8c6d031
+
+
+********************************************************************************
+*error tracking
+
+  example : track.js
+    
+    requires signup and copy and paste script into header with token 
+      re-run build
+
+    then in client console paste
+      trackJs.track('ahoy trackjs!');
+    
+    error data can be viewed on their website
+
+    also it is possible to only add the header script when defined in webpack config (which can be left blank in development)
+    this way error tracking is only bundled in production
+    ejs is used for the if statement but other templating languages can be used
+    this also allows you to move the access token from the htlm script into webpack config
+    once the file is changed to ejs it may be better not to change the file extention from html because it will remove html color coding
+
+
+********************************************************************************
+*hosting 
+
+  it is a good idea to host the api and ui seperatley
+
+  example api hosting with heroku
+
+      the starter app should be forked from github
+        https://github.com/coryhouse/js-dev-env-demo-api
+        you need to change the repo in package.json to reference the forked repo
+
+      heroku login
+      heroku create
+      
+      heroku git:remote -a <heroku site name>
+      git push heroku master
+
+    now you can use the production heroku site as your production for the previous app that was created above
+      don't forget the trailing / at the end of you site name
+
+      // baseUrl.js (backend project)
+          export default function getBaseUrl() {
+            return getQueryStringParameterByName('useMockApi') ? 'http://localhost:3001/' : '<heroku site name>/';
+          }
+
+      // distServer.js (will now be hitting heroku so route requests can be removed from backend project)
+
+          xremove  app.get('/users', (req, res) => {
+            xremove  res.json([
+              xremove  {"id": "1", "firstName": "nate", "lastName": "lip", "email": "m@m.c"},
+              xremove  {"id": "2", "firstName": "dale", "lastName": "seo", "email": "m@m.c"},
+              xremove  {"id": "3", "firstName": "ben", "lastName": "sdck", "email": "m@m.c"}
+            xremove  ]);
+          xremove  });
+
+
+  example hosting static front end ui on surge
+
+    // package.json (backend project)
+      "deploy": "surge ./dist"
+
+    npm run build -s
+      if everythin is working as expected
+      ctr-c
+    npm run deploy
+
+
+********************************************************************************
+*maintining a starter kit
+
+  yoman  -> can be used to re-create starter kits and even update existing projects
+  github -> can also be used by making a starter kit and then forking it for new projects  
+  npm    -> another option is to wrap the starter kit in an npm package
+            this allows you to update the package to allow older projects to recieve the changes
+            a hybrid aproach of packagaing some of the centralized app components 
+            while still requiring configureation of more decentralized components can be used
+
+            centrailzded componnets     |   decentralized components
+            --------------------------------------------------------------------
+            build scripts               |   .edtorconfig
+            Scripts in package.json     |   .bablerc
+            webpack.config              |   ci config (.travis.yml Appvevor.yml)
+            .eslintrc                   |   package references in package.json
+

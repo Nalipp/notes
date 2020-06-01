@@ -1,0 +1,150 @@
+*******************************************************************************************
+rxjs
+*******************************************************************************************
+*setup
+*example api call
+*what is rxjs/reactive programing?
+*creating an observable (api call)
+*concatAll()
+
+
+*******************************************************************************************
+*setup
+
+  npm init
+  npm install --save rxjs
+
+  var Rx = require('rxjs/Rx');
+  var Observable = Rx.Observable;
+
+  or use the cdn's
+
+    option 1
+      <script src="https://code.jquery.com/jquery-1.7.2.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/5.3.0/Rx.js"></script>
+
+    option 2
+      <script src="https://unpkg.com/@reactivex/rxjs@5.0.0-beta.1/dist/global/Rx.umd.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    option 3
+      <script src="http://cdnjs.cloudflare.com/ajax/libs/rxjs/2.2.26/rx.js"></script>
+      <script src="http://cdnjs.cloudflare.com/ajax/libs/rxjs/2.2.26/rx.async.js"></script>
+      <script src="http://cdnjs.cloudflare.com/ajax/libs/rxjs/2.2.26/rx.coincidence.js"></script>
+      <script src="http://cdnjs.cloudflare.com/ajax/libs/rxjs/2.2.26/rx.binding.js"></script>
+      <script src="http://cdnjs.cloudflare.com/ajax/libs/rxjs/2.2.26/rx.time.js"></script>
+      <script src="http://cdnjs.cloudflare.com/ajax/libs/rxjs-dom/2.0.7/rx.dom.js"></script>
+      <script src="script.js"></script>
+
+    var Observable = Rx.Observable;
+    console.log(Observable); 
+
+
+*******************************************************************************************
+*example api call
+
+
+var endpoingArr = [];
+
+var url = '';
+
+var requestStream = Rx.Observable.of(url);
+
+var responseStream = requestStream
+  .flatMap(requestUrl =>
+    Rx.Observable.fromPromise(jQuery.getJSON(requestUrl))
+    .map(x => x)
+  );
+
+responseStream.subscribe(response => {
+  console.log(response);
+});
+
+
+*******************************************************************************************
+*what is rxjs/reactive programing?
+
+  reactive programming is programming with event streams
+  rxjs is a javascript library for reactive programing, there are other langauges that use reactive programing
+
+  *******************************************************************************************
+  https://gist.github.com/staltz/868e7e9bc2a7b8c1f754
+
+    Reactive programming is programming with asynchronous data streams.
+      event streams are a sequence of events that can happen over time
+        can be thought of as an asyncronous array
+
+    anything can be a stream: variables, user inputs, properties, caches, data structures, etc.
+
+
+   A stream can be used as an input to another one.
+   Even multiple streams can be used as inputs to another stream. 
+   You can merge two streams. 
+
+   each stream has functions attached to it sucha as map, filter, scan
+    When you call one of these functions, such as clickStream.map(f), 
+      it returns a new stream based on the click stream.
+    It does not modify the original click stream in any way. (immutable)
+
+   Observer design pattern
+     The "listening" to the stream is called subscribing.
+     The functions we are defining are observers.
+     The stream is the subject (or "observable") being observed. 
+
+   you can have multiple observer functions subscribing a string such as (click, double click, tripple click)
+   http://jsfiddle.net/staltz/4gGgs/27/
+
+
+   with rxjs everything can be a stream(almost)
+   stream => Observable
+
+   request a string (an api call) / creating an Observable
+     1. doing a requst
+     2. getting a response
+     3. rendering the response
+
+
+*******************************************************************************************
+*creating an observable (api call)
+
+  example
+    var requestStream1 = Rx.Observable.of('https://api.github.com/users');
+    var requestStream2 = Rx.Observable.of('https://api.github.com/users');
+
+    var responseStream = requestStream1.merge(requestStream2)
+      .flatMap(requestUrl =>
+        Rx.Observable.fromPromise(jQuery.getJSON(requestUrl))
+      );
+
+    responseStream.subscribe(response => {
+      console.log(response);
+    });
+
+
+*******************************************************************************************
+*concatAll()
+
+  custom built in method that can be added to a project to return nested data in a one dimentional array
+  generally used with .map()
+
+
+  Array.prototype.concatAll = function() {
+    var results = [];
+    
+    this.forEach(function(subArray) {
+      subArray.forEach(function(item) {
+        results.push(item);
+      });
+    });
+    return results;
+  };
+
+  example
+
+    var responseStream = requestStream1.merge(requestStream2)
+      .flatMap(requestUrl =>
+        Rx.Observable.fromPromise(jQuery.getJSON(requestUrl))
+        .map(job => job.results)
+      ).concatAll();
+
+

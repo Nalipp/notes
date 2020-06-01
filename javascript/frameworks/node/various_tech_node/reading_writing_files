@@ -1,0 +1,33 @@
+*******************************************************************************************
+reading and writing to files with node.js
+
+ example:
+   
+   // file.json    => a path does not need to specified to access the file in the same directory
+
+   // app.js
+
+     const fs = require('fs');
+
+     let title = 'super';
+     let content = 'best content ever';
+
+     let obj = {
+       [title]: content 
+     }
+
+     let strObj = JSON.stringify(obj);    => first turn the object into a string in order to write it to the file
+
+     fs.writeFileSync('file.json', strObj);   => arg1 is file name arg2 is stringified obj
+
+     let fileContents = fs.readFileSync('file.json');
+     
+     let parsedContents = JSON.parse(fileContents);
+
+     console.log(parsedContents);
+
+
+
+
+
+

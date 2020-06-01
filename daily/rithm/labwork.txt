@@ -1,0 +1,39 @@
+Labwork
+
+************************************************************
+hack-or-snooze
+  part 1, 2
+    quiz students on
+      -The difference between a static and instance methods
+      -Understand how local storage is being used
+
+    implement post storyList.addStory(currentUser, newStory)
+      -Understand where currentUser comes from
+        -should post the user token found on the instance of the currentUser
+      -The new story should be added in two places
+        -this.stores
+        -user.ownStores
+      -the story should also be returned to the call site in api-classes.js so that it can be used to update the dom
+
+  part 3
+    quiz students on
+      -Before implementing the like feature, how does the current code keep track of a users favorites
+      -How does your 
+
+
+************************************************************
+connect-four-oo
+
+Question about the labwork relating to the alert appearing before the user piece (dom element) is updated
+
+They fixed it using setTimeout() but had questions on why
+
+Here is a link on the setTimeout and alert issue. It is related to the DOM update happening after the JS call stack has finished executing. It is a pretty tricky topic and something that web frameworks like React will free us from. 
+
+helpful links
+  https://stackoverflow.com/questions/41985247/why-do-dom-updates-and-alert-execute-out-of-sequence-in-chrome
+
+
+
+
+

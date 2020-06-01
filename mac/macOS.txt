@@ -1,0 +1,29 @@
+### remove swap files
+find . -type f -name "*.sw[klmnop]" -delete
+
+### remove .DS_Store files
+  find . -name '.DS_Store' -type f -delete
+
+find all instances of mysql running on machine
+  $ ps -ef | grep mysql
+
+command-shift-4       take a photo (or use it to measure pixels)
+
+option-space          open spotlight
+
+quicktime player
+  increase playback       //  alt-click on >>
+
+access zshrc file
+  open ./.zshrc
+
+access bashrc file
+  open ./.bashrc
+
+find ~/ -name "file_name"  // find a file on your computer
+find / -iname "*.jpg"      // search wildcard
+
+open multiple files (handy for preivew and pdf files)
+  $ open -n <filename>
+
+

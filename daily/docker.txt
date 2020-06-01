@@ -1,0 +1,14 @@
+run busybox image
+  $ docker pull busybox
+
+run a docker instance of busybox
+  $ docker run -it busybox sh
+
+find running docker instances
+  docker ps -a
+
+kill running docker instance
+  $ docker rm <CONTAINER ID>
+
+kill all running docker instances
+  $ docker rm $(docker ps -a -q -f status=exited)

@@ -1,0 +1,113 @@
+alternate (better) example : (from scotch.io, includes bcrypt)
+https://github.com/Nalipp/node_passport_authentication/commit/eeba9cd7653236e56149b78479076edcb7892c31
+
+following example if from developer bootcamp?
+  or possibly pluralsight
+no passport config
+no bcript hashing 
+
+****************************************************************************************************
+npm installs 
+
+
+  npm install mongoose express body-parser ejs --save
+  npm install passport passport-local passport-local-mongoose express-session --save
+
+
+****************************************************************************************************
+package require
+
+
+  var express = require('express'),
+      mongoose = require('mongoose'),
+      bodyParser = require('body-parser'),
+      User = require('./models/user'),
+      ejs = require('ejs')
+      passport = require('passport'), 
+      localStrategy = require('passport-local'), 
+      passportLocalMongoose = require('passport-local-mongoose'), 
+      expressSession = require('express-session'),
+
+  mongoose.connect('mongodb://localhost/auth_demo');
+  var app = express()
+  app.set('view engine', 'ejs')
+
+  app.use(require('express-session')({
+    secret: "Hyeonu is my favorite baby boy",
+    resave: false,
+    saveUninitialized: false
+  }));
+
+  app.use(passport.initialize());
+  app.use(passport.session());
+
+  passport.use(new LocalStrategy(User.authenticate()));
+  passport.serializeUser(User.serializeUser());
+  passport.deserializeUser(User.deserializeUser());
+
+
+
+****************************************************************************************************
+user model
+
+
+  // models.user.js
+
+    var mongoose = require('mongoose');
+    var passportLocalMongoose = require('passport-local-mongoose');
+
+    var UserSchema = new mongoose.Schema({
+      username: String,
+      password: String
+    });
+
+    UserSchema.plugin(passportLocalMongoose);
+
+    module.exports = mongoose.model("User", UserSchema);
+
+
+****************************************************************************************************
+example routes
+
+
+  app.get('/users/signup', (req, res) => {
+    res.render('signup');
+  });
+
+  app.post('/users/signup', (req, res) => {
+    User.register(new User({username: req.body.username}), 
+      req.body.password, (err, user) => {
+        if(err) {
+          console.log(err)
+          return res.render('signup');
+        } else {
+          passport.authenticate('local')(req, res, () => {
+            res.redirect('/secret');
+          });
+        }
+    });
+  });
+
+  app.get('/users/signin', (req, res) => {
+    res.render('signin');
+  });
+
+  app.post('/users/signin', passport.authenticate('local', {
+    successRedirect: '/secret',
+    failureRedirect: '/users/signup'
+  }), (req, res) => {
+  });
+
+  app.get('/users/logout', (req, res) => {
+    req.logout();
+    res.redirect('/');
+  });
+
+  app.get('/secret', isLoggedIn, (req, res) => {
+    res.render('secret');
+  });
+
+  function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) return next();
+    res.redirect('users/signin');
+  }

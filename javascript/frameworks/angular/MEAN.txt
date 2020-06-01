@@ -1,0 +1,398 @@
+****************************************************************************************************
+MEAN stack setup
+
+*File structure and npm installs
+*Angular
+*Node (server.js)
+*mongo
+*mLab
+*Mongoose api (api.js, collection-name.js)
+*communicating with the api
+*manually creating app-routing.module and 
+  creating details page
+*form post request
+
+****************************************************************************************************
+*File structure and npm installs
+
+  npm install --save express
+  npm install --save body-parser
+  npm install --save mongoose
+
+  create folders and files in the root of the angular project
+    mkdir server
+    mkdir server/routes
+    mkdir server/models
+
+    touch server/routes/api.js
+    touch server/models/<collection name singular>.js
+    touch server.js
+
+****************************************************************************************************
+*Angular
+
+  ng new <project name>  
+
+    possible flags
+      --spec false
+      --routing 
+      --stylesheet=scss
+
+    ng build  // allows you to re-create the dist folder
+
+
+  routing 
+
+    // app.module.ts
+
+      import { BrowserModule } from '@angular/platform-browser';
+      import { HttpModule } from '@angular/http';                
+      import { AppRoutingModule } from './app-routing.module';
+
+    // app-routing.module.ts
+      import { NgModule } from '@angular/core';
+      import { Routes, RouterModule } from '@angular/router';
+      import { HomeComponent } from './home/home.component';
+      import { DetailsComponent } from './details/details.component';
+
+      const routes: Routes = [
+        {path: '', component: HomeComponent },
+        {path: 'details/:id', component: HomeComponent }
+      ];
+
+      @NgModule({
+        imports: [RouterModule.forRoot(routes)],
+        exports: [RouterModule]
+      })
+
+    // server/routes/api.js
+
+      example : getting the details of a specific post
+
+      const express = require('express');
+      const router = express.Router(); 
+      const mongoose = require('mongoose');
+
+      const db = 'mongodb://localhost:27017/code-post';
+
+      mongoose.Promise = global.Promise;
+
+      mongoose.connect(db, function(err) {
+          if (err) console.log('connection error')
+        });
+
+      router.get('/posts', function(req, res) {
+        console.log('requesting post')                 
+        Post.find({})
+          .exec(function(err, posts) {
+            if (err) {
+              console.log('error getting the posts')
+            } else {
+              res.json(posts);
+            }
+          })
+        });
+
+
+  bootstrap
+
+    npm install --save bootstrap  
+    // angular-cli.json
+
+    "styles": [
+      "../node_modules/bootstrap/dist/css/bootstrap.min.css",
+      "styles.css"
+    ],
+
+
+****************************************************************************************************
+*Node (server.js)
+
+  ng build    // after creating the server.js file you need to run to create the 'dist' folder
+
+  // server.js
+    const express = require('express');
+    const bodyParser = require('body-parser');
+    const path = require('path');
+    const http = require('http');
+    const app = express();
+
+    //const api = require('./server/routes/api.js');    // this needs to be created before runing the server, it prefaces all routes with api
+
+    // parsers
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: false }));
+
+    // serve static files
+    app.use(express.static(path.join(__dirname, 'dist')));
+
+    // set up api routes
+    //app.use('/api', api);                             // this needs to be created before runing the server
+
+    // return other routes to angular index file
+    app.get('*', (req, res) => {
+      res.sendFile(path.join(__dirname, 'dist/index.html'));
+    });
+
+    // set port
+    const port = process.env.PORT || '3000'
+    app.set('port', port);
+
+    // create http server
+    const server = http.createServer(app);
+    server.listen(port, () => console.log(`Runnin on localhost:${port}`));
+
+
+****************************************************************************************************
+*mLab
+
+  after signup 
+  create a database
+  create a collection
+  add a user and password
+  create new document
+
+  id is added automatically
+  find the connection information on the Database:name page
+  and past it into the server.js file (below)
+    mongodb://<dbuser>:<dbpassword>@ds127872.mlab.com:27872/code-post
+
+
+****************************************************************************************************
+*Mongoose api (api.js, collection-name.js)
+
+// server/routes/api.js
+
+  const express = require('express');
+  const router = express.Router(); 
+  const mongoose = require('mongoose');
+  const post = require('../models/post');
+
+  const db = 'mongodb://localhost:27017/db name';
+
+  Mongoose.Promise = global.Promise;
+  mongoose.connect(db, function(err) {
+      if (err) console.log('connection error')
+    });
+
+  router.get('/posts', function(req, res) {        // posts should be the collection name (these will be prefaced with api/ 
+    console.log('requesting post')                 
+    Post.find({})
+      .exec(function(err, posts) {
+        if (err) {
+          console.log('error getting the post')
+        } else {
+          res.json(posts);
+          console.log(posts);
+        }
+      })
+    });
+
+  module.exports = router;
+
+// server/model/<collection name singular>.js
+
+  const mongoose = require('mongoose');
+  const Schema = mongoose.Schema; 
+
+  const postSchema = new Schema({       // post is the <collection name singular>
+    title: String,                    // example
+    url: String,                      // example
+    description: String               // example
+  });
+
+  module.exports = mongoose.model('post', postSchema); 
+
+
+
+
+****************************************************************************************************
+*communicating with the api
+
+  in order to communicate with the api you need a service
+
+  ng g service Post
+
+    example : fetching data through api
+
+    // post.services.ts
+
+      import { Http } from '@angular/http';                      
+      import 'rxjs/add/operator/map';       // this is the reactive extensions map opperator which transforms the result from the api to json
+
+      export...
+
+      result:any;
+
+      constructor(private _http: Http) { }    // instance of the http function
+
+      getPosts() {                                       
+        return this._http.get('api/posts')                 
+          .map(result => this.result = result.json());  
+      }                                               
+
+    // app.module.ts
+
+      import { PostService } from './post.service';
+
+      providers: [PostService], 
+      
+
+    ng generate class Post  
+    // post.ts 
+
+      export class Post {
+        _id: string;
+        title: string;
+        url: string;
+        description: string;
+      }
+
+      => this allows you to access the Post class you don't need to export it but you need to import it each time you use it
+
+      // home.componets.ts
+
+        import { PostService } from '../post.service';
+        import { Post } from '../post';
+
+        export..
+        
+        posts: Array<Post>;    // you also need to define the Post class
+
+        constructor(private _postService: PostService) { }    // through dependency injection we create an instance of our post service
+
+        ngOnInit() {
+          this._postService.getPosts()             // getPosts() is found in the post.service.ts file
+            .subscribe(res=> this.posts = res);
+        }
+
+
+****************************************************************************************************
+*manually creating app-routing.module and details page
+
+  // src/app/app-routing.module.ts
+
+    import { NgModule } from '@angular/core';
+    import { Routes, RouterModule } from '@angular/router';
+    import { HomeComponent } from '@angular './home/home.component';
+    import { DetailsComponent } from '@angular './details/details.component';
+
+    const routes: Routes = [
+      {path: '', component: HomeComponent},
+      {path: '/details/:id', component: DetailsComponent}
+    ];
+
+    @NgModule({
+      imports: [RouterModule.forRoot(routes)],
+      exports: [RouterModule]
+    })
+    export class AppRoutingModule { }
+
+  // home.component.html
+      <a routerLink="/details/{{ post._id }}">{{ post.title }}</a>
+
+
+  // server/routes/api.js
+    router.get('/details/:id', function(req, res) {     
+      console.log('requesting post details')                 
+      Post.findById(req.params.id)
+        .exec(function(err, post) {
+          if (err) {
+            console.log('error getting the post')
+          } else {
+            res.json(post);
+          }
+        })
+      });
+
+
+  // app.post.service.ts
+
+      getPost(id) {                                       
+        return this._http.get('/api/details/' + id)                 
+          .map(result => this.result = result.json());  
+      }                                               
+
+  // details.components.ts
+
+      import { Component, OnInit } from '@angular/core';
+      import { PostService } from '../post.service';
+      import { Post } from '../post';
+      import { Router, ActivatedRoute } from '@angular/router';    // this allows us to grap the id from the url
+
+
+      export class DetailsComponent implements OnInit {
+
+        post: Array<Post>;
+
+        constructor(private _postService: PostService, private router: ActivatedRoute) { }
+
+        ngOnInit() {
+          this.router.params.subscribe((params) => {           // allows you to access the params
+
+          let id = params['id'];
+
+          this._postService.getPost(id)
+            .subscribe(res=> this.post = res);                 // and then you can pass the id to the url
+          )}
+        }
+      }
+
+  // details.components.ts
+
+    <div *ngIf="post">   // this is needed to prevent an error if there is no post
+     --> html goes here
+    </div>
+
+
+****************************************************************************************************
+*form post request
+
+  ng g c post
+
+
+  // src/app/app-routing/.module.ts
+
+    import { PostComponent } from './post/post.component';
+
+    {path: 'post', component: PostComponent }
+
+
+  // server/routes/api.js
+
+    router.post('posts', function(req, res) {
+      console.log('creating a new post')                 
+        let newPost = new Post();
+        newPost.name = req.body.name;
+        newPost.url = req.body.url; 
+        newPost.description = req.body.description; 
+        newPost.save(function(err, addedPost) {
+          if (err) {
+            console.log('error adding a new post') 
+          } else {
+            console.log('new post added successfully') 
+            res.json(addedPost);
+          }
+        });
+      });
+
+
+  // src/app/post.service.ts
+
+    import { Http, Headers, RequestOptions } from '@angular/http';           // add Headers and RequestOptions
+    import { Post } from './post';       
+
+    export..
+
+    insertPost(post: Post) { 
+      let headers = new Headers({ 'Content-Type': 'application/json'});
+      let options = new RequestOptions({ headers: headers });
+
+      return this._http.post('/api/posts', JSON.stringify(post), options)
+        .map(result => this.result = result.json());
+    }
+    
+
+  // src/app/post/post.component
+
+

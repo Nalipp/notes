@@ -1,0 +1,9 @@
+
+$ ps -ef | grep mysql
+    -> find all instances of mysql running on machine
+
+$ tree              
+    -> list all files and subfiles in the directory
+
+$ tree -I node_modules
+    -> list all files and subfiles in the directory excluding node_modules

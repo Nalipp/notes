@@ -1,0 +1,6 @@
+a bash file has the extension of .sh
+  example.sh
+to run a bash file
+  ./example.sh
+to resole permission error
+chmod 500 example.sh; ./example.sh

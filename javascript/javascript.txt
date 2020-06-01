@@ -1,0 +1,2161 @@
+********************************************************************************
+JavaScript
+********************************************************************************
+
+*running js in a html file
+*data types ( typeof() )
+  *number ( NaN() rounding )
+  *string ( 'str'.charAt() / str[n], 'str'.length, joining multiple line strings, console line break,
+             'str'.charCodeAt(), String.fromCharCode(), substring and substr )
+*immutable values ( passed by value, passed by reference )
+*variables ( declaration, assignment, initialization assignment, single / multiple declaration )
+*dynamic typing
+*operators and operands ( remainder % operand )
+*#comparison operators ( type-converting comparison, strict comparison, comparing strings )
+*#expressions and statements
+*operator precedence, and incrementing operators
+*prompt (collecting user information)
+*Analogous arithmetic assignment operators
+*Logical operators ( &&, ||, !, !! )
+*#Converting explicit primitive type conversions  ( Strings to numbers, Numbers to strings )
+  *Checking for truthy or falsy  ( Boolean(), !!() )
+*Converting implicit primitive type coercions ( Strings to numbers, Numbers to strings )
+*Conditionals ( if/else, switch )
+*Looping and iteration ( break, return )
+//
+*functions ( parameters vs arguments, invocations, passing arguments )
+*functional scopes and lexical scoping ( function's scope, closures, lexical scoping, variable assignment )
+*functions and closures ( video notes https://www.youtube.com/watch?v=hQVTIJBZook )
+*hoisting ( hoisting variable declarations, hoisting functions, hoisting rules )
+*function declarations ( function statements, function expressions, named function expressions)
+//
+*regex (replace, test, match)
+*arrays ( Array.isArray(), arr.sort(), arr.reduce() .slice() .splice(deleting with) .splice(adding with) )
+*arrays and operators
+//
+*objects ( standard built in objects, custom objects, properties, methods )
+*arrays and objects ( arrays are actually object, arrays and the length property )
+*mutability of values and objects
+*pure functions and side affects
+*math and date objects ( round(), random(), getFullYear(), max and min )
+*working with the function arguments object
+//
+*errors ( ReferenceError, TypeError, SyntaxError, try / catch / finally )
+
+*****                              first quiz                             ******
+
+*passing functions as arguments
+*declarative programing with abstractions
+*built in array list processing
+*Functional Abstractions on Objects
+//
+*string processing
+*regex book revisit (character classes, anchors, quantifiers, greedy and lazy, regex splitting sentences on match)
+//
+*problem solving approach (steps to solve each problem)
+*problem solving lessons learned
+
+
+
+********************************************************************************
+*running js in a html file
+
+you can either link to a javascript file in the head section of a html document using src="" or
+add script tags just before the closing body </body> tag
+
+
+********************************************************************************
+*data types
+
+  typeof() is used to access the datatype of a value
+
+  there are #5 primitive data types and 1 compound data type
+    primitive => number, string, boolean, null, undefined  (primitives are immutable)
+    compound  => object  (compound data type is one that holds multiple independent values)
+
+    #object literal notation example
+      obj = {a: 'a', b: 'b'}
+
+
+  *number ( NaN() rounding )
+
+    #difference between whole numbers, integers, and absolute value
+      whole numbers and integers are not fractional / decimal numbers
+        whole numbers include 0 and positive numbers only
+        integers include negative numbers and positive numbers
+        absolute value is a numbers distance between itself and 0 (so always positive)
+
+    number = 2.4944444444444445
+    Math.round()              //  2       rounds to an integer (no fraction)
+    number.toFixed(3);        //  '2.494' rounds to a specified decimal place in string format
+    Number(number.toFixed(3)) //  2.294   in number format
+
+    check if a value is not a number (es6 uses Number.NaN();)
+      isNaN('a')    //  true
+      isNaN(9)      //  false
+      isNaN('9')    //  false    careful numbers strings are converted to numbers
+
+
+    64 bits(bits are I's and O's) are used to store numbers
+    double precision floats
+
+    largest safe integer to store => 9,007,199,254,740,991 (Number.MAX_SAFE_INTEGER)
+    largest integer to display    => 1.7976931348623157e+308 (Number.MAX_VALUE)
+    anything beyond that is represented as infinity
+
+    floating point numbers are unable to precisely store fractional numbers
+    (this is common in other programing languages)
+      0.1 + 0.2;   // returns 0.30000000000000004, not 0.3!
+      it is better to avoid using #fractional numbers
+        instead of 1.5 dollars you can store 1dollar 50cents or
+        minutes / seconds instead of fractional hours
+
+    special numbers
+      Infinity  => greater than all numbers
+      -Infinity => less than all numbers
+      NaN       => not a number / error
+
+      a > Infinity  // false
+
+  *string ( 'str'.charAt() / str[n], 'str'.length, joining multiple line strings, console line break,
+             'str'.charCodeAt(), String.fromCharCode(), substring and substr )
+
+    no limit to store strings
+    you cannot mutate a string
+
+    common escaped characters
+      \n escaping a 'n' is used for multi lines within a string
+      \t (tab), \c (carriage return), \v (vertical tab), \b (backspace)
+
+    'str'.charAt(1); => 't' (uses 0 based indexing)
+    'str'[1]         => 't'
+    'str'.length     => 3
+
+    #joining multiple line strings
+      there are two options but '+' is probably better because it doesn't preserve spaces'
+
+      longString = 'strings that span more than one line can be broken up by placing \
+      closing the string with a quotation mark and placing a + at the end of the line \
+      or by not closing the string with a quotation and adding a forward slash';
+      (causes unwanted space before 'closing' and 'or')
+
+      longString = 'strings that span more than one line can be broken up by placing' +
+                   'closing the string with a quotation mark and placing a + at the end of the line' +
+                   'or by not closing the string with a quotation and adding a forward slash';
+      (no unwanted space)
+
+    console line break
+      console.log(str + '\n');
+
+    'str'.charCodeAt(), String.fromCharCode()
+      var string = 'A'
+      asciiNumeric = string.charCodeAt(0);                 // 65
+      asciiNumeric += 32;                                  // 97
+      string = String.fromCharCode(asciiNumeric);          // "a", converted to lower case
+
+    substring and substr
+      #difference between substring and substr
+
+      The main difference is that
+        substr() allows you to specify the maximum length to return
+        substring() allows you to specify the indices and the second argument is NOT inclusive
+
+      TLDR, Which is better?
+      probably better to use substr because you don't have to process substrings non-inclusive end element
+      also substring could cause bugs because it may unintentionally reverse the order of the arguments
+        if the second arguments is smaller that the first
+      also all negative nubmers are converted to 0 in substring
+
+      'greetings'.substr(2, 2)     // 'ee'  how many elements do you want?
+      'greetings'.substring(2, 4)  // 'ee'  what indexs should I give you (0 based not including the last)
+
+      there are some additional subtleties between substr() and substring()
+        related to the handling of equal arguments and negative arguments
+
+      length vs indices
+        "string".substr(2, 4);     // returns "ring" (from, length) length is the maximum length to return
+        "string".substring(2, 4);  // returns "ri"   (from, to) indices / second value is NOT inclusive
+        "string".slice(2, 4);      // returns "ri"   (from, to) indices / second value is NOT inclusive
+
+      handling equal arguments
+        "string".substr(3, 2);     // returns "in"
+        "string".substring(3, 2);  // returns "r"    (swaps the larger and the smaller number)
+        "string".slice(3, 2);      // returns ""     (just returns "")
+
+      handling negative arguments
+        "string".substr(2, -4);    // returns ''
+        "string".substring(2, -4); // returns 'st'   (converts negative numbers to 0
+                                                      causing this example to swap first and second position)
+        "string".slice(2, -4);     // returns ''
+
+        "string".substr(-2, 4);    // returns 'ng'    -2 is a valid starting position 4 just reads to the end
+        "string".substring(-2, 4); // returns 'stri' converts to 0
+        "string".slice(-2, 4);     // returns ''
+
+
+      how to remember
+        substring has an 'i' just like slice and these two take indices
+
+      // splice is used for arrays only because it mutates the caller and strings are immutable
+      arr.splice(begin, end)
+        start => startingIndex
+        end   => number of elements to remove
+          mutates the original array
+          returns the deleted elements
+
+
+********************************************************************************
+*immutable values ( passed by value, passed by reference )
+
+  primitive values (string, number, boolean, null, undefined) in javaScript are immutable
+  meaning they can't be changed once they are created
+    var str = 'awesome?';  // undefined
+    str[7] = '!';          // '!'
+    str                    // 'awesome?'
+  instead entire values must be re-assigned
+
+  arrays and functions are objects and are mutable meaning they can be changed
+
+  var name = 'Bob';
+  var saveName = name;
+  name.toUpperCase();
+  console.log(name, saveName);  // Bob Bob
+
+  strings are primitive so name is immutable and cannot be changed and therefor Bob Bob is returned
+
+  #passed by value     => a copy of the value
+  passed by reference => is the actual variable (original copy)
+
+********************************************************************************
+*variables ( declaration, assignment, initialization assignment, single / multiple declaration )
+
+  variables can be described as containers that hold data
+  variables are case sensitive and can be any length
+    they must start with a Unicode letter, '_', or '$'
+
+  #declaration, assignment, initialization assignment, single / multiple declaration
+    declaration happens first
+      variables are declared before they are used
+    assignment
+      when a variable is given a value
+    initialization assignment
+      doing both at the same time
+
+  declaration       =>  var i;      //undefined
+                    (declaration is not definition, definition is more like assignment without equals)
+  assignment        =>  i = 1;
+  declaration and initialization assignment  =>  var i = 1;
+
+  single declaration with an initialization assignment
+    var one = "first";
+  multiple declaration with initialization assignments
+    var one = "first";
+    var two = "second";
+    var three = "third";
+
+********************************************************************************
+*dynamic typing
+
+  javaScript is a #dynamically typed language meaning variables can hold any data type
+    variables can be re-assigned data of different types without error
+
+  static type language such as Pearl and (quasi) Java and C declare variable types and cannot be reassigned
+    (Java and C cannot be reassigned but they can be read as a different type)
+
+    static and dynamic is not to be confused with #strong and weak type
+      a strong type language does not allow for the conversion of type such as Ruby, Python
+        where an error is thrown if you try to add a string and number 'x' + 3
+      weak typing such as javaScript allow for type conversion
+
+
+    Java is static typed and strong typed;
+    C is static typed and weak typed (owing to its casting ability).
+    Python is dynamic typed and strong typed;
+    Ruby is dynamic typed and strong typed
+    javaScript is dynamic typed and weak typed;
+
+
+
+********************************************************************************
+*operators and operands
+
+  #operators, operands, input
+
+  operators => symbols ( + - * / % ) tell computers how to preform operations on operands
+  operands  => values
+
+  operations are usually preformed on two operands
+  1(operand) + 4(operand);
+
+  the operands surrounding the operator (+) are the operators input
+  +     => operator
+  1 & 4 => operator's inputs
+
+  #remainder % operand
+    returns the remainder of an operand divided by another operand
+    same as modulo except handling negative numbers
+    with modulo negative numbers will return negative numbers
+    with remainder negative numbers return absolute(positive) numbers
+
+      5 % 2;     // 1
+      5 % 3/     // 2
+
+    different than the modulus found in other languages negative operands still
+    return a positive remainder
+
+      10 % -3    // 1
+      10 % -4    // 2
+
+      33 % 55    // 33
+      33 % 56    // 33
+
+
+    modulus in ruby or other languages
+
+      10 % -3    // -2
+      10 % -4    // -2
+      10 % -8    // -6
+
+      33 % 55    // 33
+      33 % 56    // 33
+
+    #compound assignment operators
+      +=, -=, *=, /=, %=
+
+      var sum = 0;
+
+      sum = sum + 1;
+      sum += 1;
+
+*#comparison operators ( type-converting comparison, strict comparison, comparing strings )
+  ( ===, <==, !== ... ) return a boolean value
+
+  type-converting comparison operators ( == )
+  if values are different types coercion is used to try to convert them to the same type
+
+  strict comparison operators ( === )
+  returns true if values are the same value and type
+  there is no strict comparison operator for greater than or less than
+
+  comparing strings
+    'a' < 'c'          // true
+    'apple' < 'cat'    // true
+
+    '50' < '6'         // true
+
+  when comparing objects the actual objects are being compared and not their values
+    see *arrays and operators
+
+
+********************************************************************************
+*#expressions and statements
+
+  statements (help you do something / control something)
+    (variable assignments, if, else, for, while, switch)
+    statements do not have to evaluate to a value
+    they are used to control the execution of a program
+
+  expressions (give you a value to use)
+    any valid code that resolves to a value including (string, arithmetic, logical(true/false) )
+    an expression can be anywhere a value is expected or allowed
+
+    examples
+      var a;                // variable declarations are statements
+      var a = (a = 5)       // assignments are expressions(resolving to a value)
+      var a = (var a = 5)   // error because statements can't be used as part of an expression
+
+  ********************
+  all statements can also be expressions because a statement accepts an expression but not vise versus
+    so statements are sometimes referred to as expression statements
+
+
+    statements // expression statements (help you control something)
+      (wherever you can write an statement you can also write a expression)
+      examples: something that evaluates to a value,
+        variables, variable values, variable declarations, if else statements
+    expressions (gives you a value)
+      (you cannot write a statement where an expression is expected)
+      examples:
+        operators(+, -, *..), equality operators(===, <=, !), function, class, this, yield, i++, delete, typeof
+
+********************************************************************************
+*operator precedence, and incrementing operators
+
+  (), /, *, +, -
+
+  #incrementing    decrementing
+    a++ or ++a      a-- or --a
+
+  if the incrementing or decrementing operator appears after the operand (a++)
+    the expression is evaluated first and then the operand is incremented
+
+    a = 1;
+    b = a++;    //  b = a; a++;           (a++ is considered a postfix increment operator)
+                    b   // returns 1
+                    a   // returns 2
+
+  if the operator is before the operand (++a) the operand is incremented first
+    a = 1;
+    b = ++a;    //  ++a; b = a;           (++a is considered a prefix increment operator)
+                    b   // returns 2
+                    a   // returns 2
+
+
+********************************************************************************
+*prompt (collecting user information)
+
+  var name = prompt('what is your name?')
+    uses popup window to collect information 'ok' to return the data 'cancel' to return null
+    all collected data is returned in string format.
+
+
+********************************************************************************
+*Analogous arithmetic assignment operators
+compound operators
+
+  var i = i + 1;    // standard way
+  var i += 1;       // Analogous arithmetic assignment operator way
+
+********************************************************************************
+*Logical operators ( &&, ||, !, !! )
+
+  generally used to return a boolean value of true or false
+  # ! logical not
+    returns true if the operand can be converted to false
+      !true   // false
+      !false  // true
+      !!false  // false  (!! can also be used to convert values to boolean values)
+
+      it is a #urinary operator
+        meaning an operator that can only take one operand
+
+  **********************************
+  however when using && or || the value of the operand that evaluates to true is returned
+    1 || 2;         // 1
+    1 && 2;         // 2
+    'hi' && false;  // 'hi'
+    false && 'hi'   // false     wait what??
+
+    but..
+    everything works fine if you are using normal evaluation such as comparison operators on values
+    however if you are using truthy and falsey values things get buggy
+    null && false      // null
+    false && null      // false  (returns the first variable if false is compared with falsey??)
+    null && undefined  // null
+
+    watch out
+    'hi' && undefined  // undefined
+    undefined && 'hi'  // undefined
+
+    funky here too
+    false || undefined  // undefined
+    undefined || false  // false
+    null || undefined   // undefined
+    undefined || null   // null
+
+    undefined with && takes precedence over truty values ??
+    'a' && undefined   // undefined
+    undefined && 8     // undefined
+    but not falsy values
+
+    keep in mind the evaluation of the left side, it short circuts the right side
+
+
+    these can still be used to control conditionals because they still evaluate to true or false
+    if (1 || 2)    // truthy
+    if (1 && 2)    // truthy
+
+
+********************************************************************************
+*#Converting explicit primitive type conversions  ( Strings to numbers, Numbers to strings )
+
+  Strings to #numbers
+
+    Number()  ( wrapper object )
+              ( wrapper objects surround primitive data types such as String() Number() Boolean() )
+      converts a string containing a number into a primitive type number including fractional numbers
+      validates that all numbers in the string are valid
+      Number('8923.234')      //  8923.234
+        if the number is invalid it returns NaN
+        Number('234a3.33')    //  NaN
+
+    parseInt(str, 10)   ( a function that supposed to be used with whole numbers only )
+      converts a string containing a whole number into an integer (whole number)
+      should be used with the radix of 10
+      ParseInt('8923.234')    //  8923
+        if the number is invalid it will return as much of the number as possible
+        parseInt('234a3', 10)       //  234
+        parseInt('23,323', 10)       //  23
+
+    parseFloat()  ( a function )
+      converts a string containing a number into a primitive type number including fractional numbers
+      parseFloat('2342.23')   //  2342.23
+        if the number is invalid it will return as much as possible
+        parseFloat('2.24a2')  //  2.24
+
+  Numbers to strings
+    #String is the preferable option because it does not return an error even if the value is null or undefined
+
+    String(1232)            //  '1232'
+    String(1232.55)         //  '1232.55'
+    String(undefined)       //  'undefined'  no error
+    (1231).toString()       //  '1232'
+    (1231.55).toString()    //  '1232.55'
+    (undefined).toString()  //  TypeError!
+    1231 + ''               //  '1231'  this method is not advised because it is not as explicit
+    1231.55 + ''            //  '1231.55'
+
+
+  booleans to strings
+
+    var str = String(2 == '2');        //  true;  typeof(str) string
+    var str = (2 === '2').toString()   //  false;  typeof(str) string
+
+
+    *Checking for truthy or falsy  ( Boolean(), !!() )
+
+      Boolean(false);       // false          !!(false);       // false
+      Boolean(0);           // false          !!(0);           // false
+      Boolean(NaN);         // false          !!(NaN);         // false
+      Boolean(undefined);   // false          !!(undefined);   // false
+      Boolean(null);        // false          !!(null);        // false
+      Boolean('');          // false          !!('');          // false
+      Boolean('abc');       // true           !!('abc');       // true
+      Boolean(6);           // true           !!(6);           // true
+      Boolean('true');      // true           !!('true');      // true
+      Boolean('false');     // true           !!('false');     // true
+
+
+********************************************************************************
+*Converting implicit primitive type coercions ( Strings to numbers, Numbers to strings )
+
+  sometimes make it difficult to know where errors are occurring in code
+
+  true can be converted to 1    // true + 2; returns 3
+  false can be converted to 0   // false + 2; returns 2
+    var val = (true === false) + 9;   // 9
+    var val = (false === false) + 9;  // 10
+
+  strings added to numbers returned concatenated strings
+    '4' + 3    // returns '43'
+    4 + '3'    // returns '43'
+    '4 ' + 3   // returns '4 3'
+
+  +() tries to convert to a number
+    +(true)    //  1  (all truthy values are converted to 0)
+    +('')      //  0  (all falsy values are converted to 0)
+
+  when the + operator is used with two operand numbers a number is returned
+    (1 + 3)    // returns 4
+    (1 + true) // returns 2
+  when the + operator is used with a string the two values are concatenated into a string
+    (1 + '4')  // returns '14'
+    ('1' + true)  //  returns '1true' because true is converted to a string
+
+  all other operators ( -, *, /, % ) do not use concatenation so they are always converted to numbers
+    '10' - 8      //  returns 2
+    '10' - '8'    //  returns 2
+    10 * '8'      //  returns 80
+    '99' - true   //  returns 98
+
+  multiplying a string x number of times
+    only the '+' operator attempts to convert a number to string if one number is a string
+    to multiply a string the repeat() method is used to return a string x number of times
+
+    'hi'.repeat(9);    //  'hihihihihihihihihi'
+    es6
+    String.prototype.repeat();
+
+  relational operators ( >, <, <=, >= )
+    can be used with numbers or strings
+    tries to convert everything to numbers unless both operands are strings
+    in this circumstance 'strings' are not converted to 1 or 0('') but NaN
+    '11' > 9        // returns true
+    124 > 'a'       // false because 'a' is converted to NaN
+    124 >= 'a'      // false
+
+  non-strict(type-converting) equality operators
+    0 == false        // true - false is coerced into number 0
+    '' == undefined   // false - undefined is coerced to "undefined"
+    '' == 0           // true - "" is coerced to 0
+    true == 1         // true - comparison of a boolean and a non-boolean will coerce the boolean to a number
+    'true' == true    // false, and source of many bugs
+
+
+********************************************************************************
+*Conditionals ( if/else, switch )
+
+  if (<expression>)  => the parentheses hold an expression evaluates to a boolean
+  if ()              => is a conditional statement
+  {}                 => a block that groups one or more statements
+  else {}            => an optional clause that is run if the statements condition evaluates to false
+  if else {}         => allows you to text multiple conditional statements
+                        only the first if() or if else() statement that evaluates to true is executed
+
+  switch statements 'fall through' if they don't have break statements after each executed statement
+    there is unusual behavior that if an expression evaluates to true the statement is executed and
+    then each statement in following cases are also executed even if their control statement evaluates to false
+
+
+    switch (go) {
+      case 'one':
+        // execute statement
+        break
+      case 'two':
+        // execute statement
+        break
+      case 'three':
+        // execute statement
+        break
+      default:
+        // execute statement
+    }
+
+    ternary operator
+      the only operator that takes three operands
+      condition ? expression1 : expression2
+      expressions can hold multiple operations separated by a ','
+
+    example
+      var condition = true
+      var returnMessage = condition === true ? "message1" : "message2"
+      console.log(returnMessage)
+
+
+********************************************************************************
+*Looping and iteration ( break, return )
+
+  allow statements or blocks of statements to be executed repeatedly while an expression evaluates to true
+
+  while loop
+    while (condition)
+      // execute statement
+      // the while loop repeats until the condition evaluates to falsy or a break statement is executed
+      if (condition) { break }
+      // continue stops executing and returns to the beginning of the loop
+      if (condition) { continue }
+    }
+
+  do while loop
+    similar to the while loop but the condition is evaluated at the end so the loop will execute at least once
+    do {} while (condition)
+
+  the for loop
+    has 3 components
+    for (initialExpession; condition; incrementExpression) {}
+    the initalExpression allows you to declare a variable (variable declaration)
+      you can also skip any of the three components but ';' still needs to be used
+        var i = 0;                      for (var i = 0; ; i++) {          for (var i = 0; i < 10; ) {
+          for (; i < 10; i++) {           if (i >= 10) {                    console.log(i);
+          console.log(i);                   break                           i++;
+        }                                 }                               }
+                                          console.log(i);
+                                        }
+
+  break  (allows you to break out of a loop or switch statement)
+  return (allows you to exit a function)
+
+
+////////////////////////////////////////////////////////////////////////////////
+
+********************************************************************************
+*functions ( parameters vs arguments, invocations, passing arguments )
+
+  Functions(procedures) in JS are used to package and reuse chunks of code.
+  this allows you to extract common code and so that it can be reused
+  a function will return the value of undefined if it does not have return value specified
+
+  functional vs procedural programing
+    functional tries to avoid mutable objects (side affects) and avoid state
+    procedural programing uses a series of steps to generate state
+
+  #function declarations include
+    function keyword
+    function name
+    function parameters
+    a block of statements
+
+
+  #parameters vs arguments
+    parameters => used when defining a function
+    arguments  => used when invoking a function
+
+    parameters are the variables used when we define a function
+      function method(a, b)    (the parameters are a and b)
+                               (the function method() takes two parameters)
+    arguments refer to the variables that are made available within the function when we call the function
+      function method(a, b) {
+        return a + b;       (these are the arguments a and b)
+                            (they are no longer parameters because we are now referring to actual values)
+      }
+      method(1, 2)        (when calling the function the values being passed are arguments not parameters,
+                           parameters are related to the definition of the function)
+
+      #missing / extra arguments
+        when being passed to a function, if arguments are missing, an error is not thrown
+          instead, missing arguments are undefined
+          this may cause computations to evaluate to NaN (number + undefined = NaN)
+        if too many arguments are passed the extra arguments will be ignored
+        extra arguments can be accessed with the 'arguments' key word
+
+      #arguments and global variables
+        when passed to a function, arguments become local variables
+        so their values cannot be assigned to a global variable
+        even if var is not declared
+
+  invocations
+    the standard way to invoke a function is to add () after it
+    functionName();
+
+    functions can also be assigned to variables and can still be invoked with () on the variable name
+    newName = functionName() { //statements };
+    newName()     (invokes the original functionName() function)
+
+  #nested functions
+    nested functions are allowed and there is no limit to how deep(how many) are nested
+
+********************************************************************************
+*functional scopes and lexical scoping ( function's scope, closures, lexical scoping, variable assignment )
+
+  whenever a new function is created it creates a new variable scope
+  all variables in the same or surrounding scope are accessible from within that scope
+
+  #functional scoping vs block scoping
+    functional scoping differers from block scoping
+      because it does not search inward to other scopes in the block
+    functional scoping only moves outward to search surrounding scopes for variables
+
+  the scope of a function is the area a variable can be accessed by it's name
+  variable scoping rules determine if accessing previously declared variable is allowed
+
+  a function's scope also includes any surrounding scope
+    if a variable is not found inside a functions scope
+      it can still be accessed if found in any surrounding scope
+    this is regardless of how far the current function scope is nested in other scopes
+    the function's scope has access to any surrounding scope up to and including the global scope
+
+  closures
+    a function creates a closure over the code in the function's scope
+    any scope within that function can be accessed by calling the closure
+      the closure has access to the functions surrounding scope even when called form a different invocation point
+      this access is available for as long as the closure exists wherever the Function is called
+      if a variable changes it's value the closure has access to the newly updated value
+
+  #lexical scoping (opposite of dynamic scoping)
+    the scope is defined by the source code
+    lexical scoping searches the local scope for a variable first
+      then progresses to any surrounding scope up the hierarchy until it reaches the global scope if necessary
+      the first variable that is found is returned and the search is stoped
+      this can cause shadowing (when a variable is defined twice but only the first variable is returned)
+        the first variable that is returned is shadowing the outer variable
+
+    #the current scope can gain access to a variable in two ways
+      1. through lexical scope, and being assigned as a variable (var assignment)
+      2. by being passed a variable as an argument
+
+  variable assignment
+    whenever a variable is assigned a new variable will be either be created or an old one changed
+
+    var country = 'spain'
+      country = 'france';       // changes the original var declaration to 'france'
+      var country = 'france';   // now there are two country variable declarations
+      var city = 'paris';       // creates a new variable within the current scope of the declaration
+      city = 'madrid';          // searches for a previously declared city variable, if not found creates a global variable
+
+    when a variable is reassigned without the 'var' declaration
+      the surrounding scopes are searched for any previously declared var declarations attached to the variable name
+      if a previous var has not been declared, a new variable will be established at the global scope (bad)
+
+    #two main variable scoping rules
+      every function declaration creates a new variable scope
+      all variables in the local, surrounding or global scope are available from within the variable scope
+
+    state;
+    if a variable is called(not assigned) and the variable has not been declared, RefferenceError is thrown
+
+
+********************************************************************************
+*functions and closures ( video notes https://www.youtube.com/watch?v=hQVTIJBZook )
+
+  It is bad practice to create global variables
+  because they can collide with other code or libraries of code you load
+
+    // bad (global object)
+    var NAMES = ['tim', 'joyce', 'heather', 'tilda', 'mike', 'alex'];
+
+    console.log(NAMES[2]);      // 'heather
+
+  One option is to wrap the variable in a function
+
+    // better (wrapped in a function)
+    var findName = function(n) {
+      var NAMES = ['tim', 'joyce', 'heather', 'tilda', 'mike', 'alex'];
+      return NAMES[n];
+    }
+
+    console.log(findName(2));  // 'heather'
+
+  But this is slow because each time the function is called the array has to be re-initialized
+  The best option is to create a closure
+
+    // best (wrapped in a closure)
+    var findName = function () {
+      var NAMES = ['tim', 'joyce', 'heather', 'tilda', 'mike', 'alex'];
+      return function(n) {
+        return NAMES[n];
+      }
+    }();
+
+    console.log(findName(2));  // 'heather'
+
+  in a closure there is an outer function that returns the inner function
+    the inner function has access to the variables of the outer function
+    the outer function gets executed immediately
+    the function will be bound to the variables found in the inner function for as long as it lives
+
+
+
+********************************************************************************
+*hoisting ( hoisting variable declarations, hoisting functions, hoisting rules )
+
+  hoisting variable declarations(ex: var a;  not to be confused with assignments var a = 2;)
+    are processed before any code inside a scope is executed
+  this is essentially the same as all declarations being moved to the top of the scope (aka hoisting)
+
+  function are hoisted first with their entire body
+
+  function name() {
+    var a = 'hi';
+    return b;      // return undefined because var b; declaration is hoisted to the top of the scope
+    var b = 'man'
+  }
+
+  so it essintially looks like this
+    function name() {
+      var a;
+      var b;
+
+      var a = 'hi';
+      return b;      // b is undefined
+      var b = 'man'
+    }
+
+  with hoisting it is important to remember that the variable declaration is getting hoisted to the top of
+    the scope not the variable assignment
+
+  hoisting functions
+
+    entire function declarations including the body are hoisted to the top of the scope before any code is executed
+    even though greet() has not been defined the following does not raise an error
+
+      greet();
+
+      function greet() {
+        console.log('hi nate');
+      }
+
+    however assigning functions to declared variables do not hoist the body of the function with the declaration
+
+      hello()    //  "Uncaught TypeError : hello is not a function"
+
+      var hello = function greet() {
+        console.log('hi nate');
+      }
+
+      this is because the variable assignment 'hello = function greet()' is not being hoisted
+      only the 'var hello;' declaration is hoisted
+
+
+  hoisting rules (how to avoid bugs)
+
+     1. always declare variables at the top of the scope (mimicking the automatic behavior of hoisting)
+     2. always declare functions before calling them
+
+********************************************************************************
+*function declarations ( function statements, function expressions, named function expressions)
+
+  #difference between function statement and function expression
+
+  function statements
+    function statements are declared with the function key word
+    assignment is possible but not necessary, many times they are just defined with a name
+    in the following example 'greeting' is the value of the function variable
+      function greeting() {}
+
+    the value of the function variable is the function itself (not the functions value)
+    function declarations follow other general scoping rules
+
+  function expressions
+    are typically variable assignments where a name is assigned to the function
+      example of an anonymous function assigned to the variable name
+
+        var name = function() {
+          console.log('hi');  // function
+        };
+
+      an anonymous function can be invoked on the variable name
+
+  named function expression
+    the function name is only available from within the function but they can be better than
+    anonymous functions for debugging purposes
+
+    var hello = function foo() {
+      console.log(typeof foo);  // function
+      // foo can only be accessed from within the function
+    };
+
+
+////////////////////////////////////////////////////////////////////////////////
+
+********************************************************************************
+*regex (replace, test, match)
+
+modifiers review
+  i = case insensitive
+  g = global / returns all instances
+  <left blank> = returns first instance only
+
+  var pattern = /[b]/
+  var search = 'AaaBbbCcc'.search(pattern);   //  returns 4  -> the index of the first instance of the patern
+  var pattern = /[f]/
+  var search = 'AaaBbbCcc'.search(pattern);   //  returns -1
+
+  var replace = 'AaaBbbCcc'.replace(/[A-B]/g, "x");   //  returns 'xaaxbbCcc'
+  var replace = 'AaaBbbCcc'.replace(/[A-B]/gi, "x");  //  returns 'xxxxxxCcc'
+
+
+#regex what is the difference between
+    str.search(pattern)
+    str.indexOf(var)
+
+    replace (returns a string)
+      replaces the matched regex with a specified character and returns a transformed string copy
+        str = '123 324-234/234'
+        str.replace(/[\D]/g, '');
+        => '123324234234'
+
+    match (returns an array)
+      collects and returns all the elements that match the regex in a array
+        str = '123 324-234/234';
+        str.match(/[\d]/g);
+        => [ '1', '2', '3', '3', '2', '4', '2', '3', '4', '2', '3', '4' ]
+
+    test (returns true or false)
+      is asserted on the regex pattern and passed the string value that returns only true or false
+      str = '123 324-234/234';
+      /[\d]/.test(str)    (basically asks if the string contains a single instance of a matching regex)
+      => true
+
+
+    check(match) how many matches exits
+      str = '123 324-234/234';
+      str.match(/[\d]/g).length  (don't forget the global(g) flag)
+
+
+********************************************************************************
+*arrays ( Array.isArray(), arr.sort(), arr.reduce() .slice() .splice(deleting with) .splice(adding with) )
+
+  arrays ARE mutable
+  they are actually objects (or Array Like Objects)
+
+  Array.prototype.reverse()   => mutates the caller
+  Array.prototype.sort()      => mutates the caller
+    arr.sort(function(a, b) { return b - a; });
+  Array.prototype.sum()       => does not mutate the caller
+    [0, 1, 2, 3].reduce(function(acc, val) { return acc + val; }, 0);
+
+  arrays use a zero based index
+  values can be accessed with bracket notation
+  var arr = ['a','b','c'];
+  arr[1];  // returns 'b'
+  arr[9];  // returns undefined;
+
+  unlike primitive data types (number, string, boolean, null, undefined)
+  arrays CAN be changed / updated once they are created
+
+  var arr = ['a','b','c'];
+  arr[1];  // returns 'b'
+  arr[1] = 'z';
+  arr[1];  // returns 'z'
+
+  values can be inserted at any position
+  if a value is assigned a position greater that the highest current position,
+    the indexes between the highest index and the new indexes will be assigned undefined
+
+    var arr = ['a', 'b', 'c'];
+    arr[6] = 'f';
+    arr          // returns ['a', 'b', 'c', , ,'f']
+    arr.length   // returns 7
+
+  arrays can also be shaped by assigning a value to .length
+    var arr = ['a', 'b', 'c'];
+    var arr.length = 5;
+    arr          // returns ['a', 'b', 'c', , ]
+    var arr.length = 2;
+    arr          // returns ['a', 'b']
+
+  since arrays are actually objects you can not test for an array with typeof
+    typeof([]);  // returns 'object'
+    instead use
+    Array.isArray(['a', 'b']);  // returns true
+
+    slice returns a copy of selected elements by their index
+    the begin is the based on the 0 based index and the return copy does not include the end index
+      arr.slice(begin, end)
+
+      arr = [1, 2, 3, 4, 5, 6]
+      arr.slice(2, 4)   // [3, 4]
+      arr               // [1, 2, 3, 4, 5, 6]
+      arr.slice(0, 1)   // [1]
+      arr.slice(3, 2)   // []   if the end is larger than the begin an empty array is returned
+
+
+      .slice() can also be used to make a copy within a block that won't be mutated
+        sortedArrCopy = arr.slice().sort(function(a, b) { return b - a; });
+
+
+    splice() mutates the array it is passed
+    it can delete or add elements by specifying an index in the array
+
+    deleting with splice()
+      splice(begin, deleteCount)
+      begin is 0 based index
+      deleteCount of the number of elements to be deleted
+        arr = [1, 2, 3, 4, 5, 6, 7]
+        arr.splice(2, 4)    // [3, 4, 5, 6]  returns what was deleted
+        arr                 // [1, 2, 7]     arr is now mutated
+      if no deleteCoun is specified the splice will delete until the end of the array
+        arr = [1, 2, 3, 4, 5, 6, 7]
+        arr.splice(3)       // [4, 5, 6, 7]
+        arr                 // [1, 2, 3]
+
+      splice can delete from the end of the array
+        arr = [1, 2, 3, 4, 5, 6]
+        arr.splice(-3)    //  [4, 5, 6]
+        arr               //  [1, 2, 3]
+
+    adding with splice()
+      splice(start, deleteCount, arguments)
+      adding can be thought of as deleting and adding at the same time
+      the first two arguments specify what portion of the array you would like to have removed if any
+      the the remaining arguments are the elements to be appended to the specified space
+      the start is the new index for the element you are appending
+
+      appending one element and deleting none
+        arr = ['hi', 'how', 'you?']
+        arr.splice(2, 0, 'are')       // []  returns the elements that are removed
+                                             the delete count is 0 so you are only adding an element
+        arr                           // [ 'hi', 'how', 'are', 'you?' ]
+
+      appending 3 elements and deleting 3
+        arr = [1, 2, 3, 4, 5, 6, 7]
+        arr.splice(1, 3, 'two', 'three', 'four')  //  [2, 3, 4]
+        arr                                       //  [1, 'two', 'three', 'four', 5, 6, 7]
+
+      appending 2 elements and deleting 1
+        arr = [1, 2, 3, 4, 5]
+        arr.splice(2, 1, 'three' 'extra4')   // [3]
+        arr                                  // [1, 2, 'three', 'extra4', 4, 5]
+
+
+
+********************************************************************************
+*arrays and operators  (+, -, /, *, %, +=, -=, ==, !=, ===, !==, >, >=, <, <=)
+  it is a bad idea to use operators on arrays because they behave weirdly and there are no errors so just avoid it
+
+  examples
+    arr1 = [1, 2, 3];
+    arr2 = [1, 2, 3];
+    arr1 + arr2;        // [1, 2, 45, 7, 9]
+
+  #comparing arrays
+    arr1 === arr2;      // false
+    arr1 == arr2;       // false
+
+      arr1 and arr2 are not equal even though they hold the same values because
+        the equality operators only check if the arrays are the same object regardless of the values in the arrays
+      if you assign the object to a different variable and compare them they will evaluate to true
+      this is the behavior when comparing all objects
+
+    arr1 = [1, 2, 3];
+    arr2 = arr1;
+    arr1 === arr2       // true
+
+
+********************************************************************************
+*objects ( standard built in objects, custom objects, properties, methods )
+
+  javaScript is an object-oriented language, objects are used to organize code and data
+    data values and the functions performed on the data values belong to the same object
+
+  standard built in objects (String, Array, Object, Math, Date...)
+    in order to #apply a method to a primitive data type, it must be converted to an object
+    this is done automatically so that the following code works
+      even though we are applying the method directly to a primitive data type and not an object
+
+  Strings, Numbers, and Boolean values can be treated as objects
+    even though they are primitive data types
+    because they are converted to objects automatically when an object method is called on them
+
+    'hi'.toUpperCase()  // 'HI',  'hi' is automatically converted to an object
+
+    a primitive data type can also be created as an object manually
+
+      str = new String('hi') // [String: 'hi']
+      typeof(str)            // 'object'
+
+
+  custom objects
+    #objects can contain two things, data or behavior
+      these data / value attributes are know as properties
+
+      when an object property is a value it is data
+      when an object property is a behavior is is a method (the method can be called on the object)
+
+      object values => data
+      object behavior => method
+
+    #objects and trailing commas
+      when creating an object you should use trailing commas so that additional properties
+        can be added without multiple line changes in version control
+
+    var colors = {
+      red: '#f00',         (red is the object property, '#f00' is the value of the object property red)
+      orange: '#ff0',
+    };                     // undefined because of var declaration, without var declaration
+                              or when object is called in the future the object is returned
+
+    typeof colors;         // 'object'
+
+    to access a value of an object property use <object name>.<object property name>
+    colors.red;            // '#f00'
+
+    this works with primitive values also
+    'hi'.length
+
+    values can be changed by assignment to the object property name
+    colors.blue = '#00f'
+
+  properties
+    property name  => must be a valid string or expression
+    property value => must be a valid string or expression
+
+    any valid expression can be used as a #property name
+      newColor = 'purple';
+      colors['blue ' + newColor] = '#f34';
+      colors['blue purple']  // '#f34'
+
+    to #add a new property to an object
+      append the new property name or valid expression to the object name and assign it to an expression value
+      <object name>.<property name / valid expression> = value
+      colors.green = '#f87'  // '#f87'
+
+      if the property name already exists the value will be re-assigned
+      colors.green = '#f98'  // '#f98'
+
+    to #delete a property from an object
+      use reserved word 'delete'
+
+      delete colors.green    // true
+      colors.green           // undefined
+
+    property values can be accessed through 'dot notation', or 'bracket notation'
+      (dot notation is usually preferred)
+
+      colors.blue            // #'00f'
+      colors['blue']         // #'00f'
+      colors.round           // unidentified
+      colors['blue yellow']  ('blue yellow' is a valid string but with a space must be accessed with bracket notation)
+
+    nested properties can be accessed using the following
+      1. chaining dot notation
+      2. chaining bracket notation
+      3. a combination of both
+
+        users = {
+          id : 1,
+          name : {
+            first : 'Jim',
+            last : 'Thomas'
+          }
+        }
+
+        users.name.first        //  'Jim'
+        users['name']['first']  //  'Jim'
+        users['name'].first     //  'Jim'
+
+    stepping through object properties to access values
+      to access each value in an object is can be done with the following for loop notation
+      for (<variable name representing the value> in <object name>) {};
+
+      Object.keys(<object name>) returns the property names of an object in an array
+
+      example
+
+        users = {
+          id: 1,
+          first_name: 'Nate',
+          last_name: 'Lipp',
+        }
+
+        for (value in users) {
+          users.first_name = users.first_name.toLowerCase();    ( converts all names to lowercase )
+        }
+
+        arrayOfValues = [];
+        for (value in users) {
+          console.log(value)          // returns all the property names (id, first_name, last_name)
+          console.log(users[value])   // returns the property values (1, 'nate', 'lipp')
+        }
+
+        arr = [3, 4, 5, 6, 7, 8];
+        odds = [];
+
+        for (i in arr) {
+          if (arr[i] % 2 === 1) odds.push(arr[i])
+        }
+
+        odds  // [3, 5, 7]
+
+        colors = {
+          red: '#f09',
+          green: '#f34',
+        }
+        for (value in colors) {
+          console.log(value)
+        }
+
+
+  methods
+    when a function is assigned as the value of property name it is a called method
+    because the function is a property value, it can be called on the object
+
+    'hi'.toUpperCase()  ( toUpperCase() is a function / method belonging to the object String )
+
+    the () following a function invoke the function and sometimes accept parameters
+    Math.floor(3.4)   //  3
+
+
+
+********************************************************************************
+*arrays and objects ( arrays are actually object, arrays and the length property )
+
+  #arrays and objects are both data structures each one better suited for different uses
+
+    arrays
+      best used with the same type of data, but can be used with multiple types
+        single type data    =>  [1, 2, 3, 4, 5]
+        multiple type data  =>  [1, 2, 'w', 'g']
+
+      arrays are best used for iterating over data, adding, retrieving, modifying, removing elements
+      arrays maintain data in specific order
+
+    objects
+      best used with data that has multiple parts
+      use key access => sometimes referred to as associative array
+        objects can also hold behavior as a value property
+
+    arrays are actually objects
+      arr = [4, 5, 6];
+      typeof(arr)         // object
+      arr[1]              // 5            1 is the property name and returns the property value
+      Object.keys(arr)    // [0, 1, 2]
+
+      length and keys() are an Object properties / methods that contain behavior
+
+        str = 'hi'
+        Object.keys(str), and str.length work because they are automatically converted to the Object class
+
+        arr = [1, 2, 3]
+        Since arr is an Array and a standard built in object, Object.keys(arr) and arr.length also work
+
+  arrays and length property
+    #length values are non negative integers
+    the length property value is always one value higher than the largest array index
+
+    if a property name is created for an Array Object and assigned a value
+      it will appear after the numeric property names in the unsorted order it was created
+
+      arr = []        // []
+      arr.z = 'z'     // 'z'
+        arr           // [z: 'z']
+      arr[0] = 5      // 5
+        arr           // [5, z: 'z']
+      arr[1] = 1      // 1
+        arr           // [5, 1, z: 'z']
+      arr.a = 'a'     // a
+        arr           // [5, 1, z: 'z', a: 'a']
+
+      however length will only return 2 because a: 'a' and z: 'z' are not elements
+
+      arr.indexOf(5)    // 0
+      arr.indexOf(1)    // 1
+      arr.indexOf('z')  // -1
+      arr.indexOf('a')  // -1
+
+      arr[-1] = 'hello'  // 'hello'
+        arr              // [5, 1, z: 'z', a: 'a', '-1': 'hello']   opps!
+        arr.length       // 2
+        arr.slice(-1)    // 1 (non mutating)
+      arr.push(8)        // 3
+        arr              // [5, 1, 8, z: 'z', a: 'a', '-1': 'hello']
+        arr.length       // 3
+        arr[-1]          // 'hello'    still 'hello'
+        arr.slice(-1)    // 8
+
+      arr                // [5, 1, 8, z: 'z', a: 'a', '-1': 'hello']
+      arr.length         // 3
+      Object.keys(arr)   // [0, 1, 2, 'z', 'a', '-1']
+           (returns the property names even though they are not included in the length calculation)
+
+    a property name is a valid array index only if it is non negative integer
+    the indexes are elements, but all other property names and values are not elements of the array
+    Array.prototype.indexOf() only searches through index elements
+    length is greatest index element value + 1
+    you can not access the length of the values including the non element property values with length
+      but the length can be counted this way
+        Object.keys(arr).length
+
+    since Array is an Object you can use 'in' and 'delete' but
+      'in' is not that explicit
+      0 in arr        // true  0 refers to the index
+
+      'delete' is ok but Array.prototype.splice() is better
+      arr = [1, 2, 3, 4]
+      delete arr[0]     // true
+        arr             // [, 2, 3, 4]
+      arr.splice(0, 1)  // [2]
+        arr             // [3, 4]
+
+
+********************************************************************************
+*mutability of values and objects
+
+primitive values are immutable (can't be changed) string, boolean, number, unidentified, null
+  operations on these values return a new value of the same type
+
+objects are not a primitive data type and are mutable (they can be changed)
+  the values 'inside' the object can be changed, aka #inner values can be changed
+
+arrays are objects and are mutable (they can be changed)
+  when we assign an array to a variable the variable is pointing to the array value
+  this array value can be changed and the variable will still hold its reference to the changed array
+    variables => hold reference to an array
+              => point to the location the array is stored
+
+  example
+    ar = ['a','b','c','d','e']
+    the ar variable holds reference to the array
+    the array holds unique references to each of the 5 strings
+
+    if we change a value inside an object
+      ar[2] = 'z'     // 'z'
+      ar              // [ 'a', 'b', 'z', 'd', 'e' ]
+    the original ar is still holds reference to the object even after it changes
+
+
+********************************************************************************
+*pure functions and side effects
+
+  #function side effects are when when a function has the ability to change external values
+
+    functions can modify external values in two ways
+      1. by accessing variables defined in outer scopes
+      2. by mutating objects that are passed to them as arguments
+
+  a #pure function is when a function doesn't have the ability to change external values
+    in order for a function to be a pure function it must return a value (otherwise it is not really useful anyway)
+
+    example
+
+      function add(a, b) {
+        return a + b;
+      }
+        add() is a pure function because it returns a value and doesn't modify any external values
+
+
+    example of a function with side effects
+
+      var sum = 0;
+      function add(a, b) {
+        sum = a + b;
+      }
+
+      add(1, 3)     // undefined
+      sum           // 4
+        sum() function has side effects because it modifies the external value sum
+        sum() is not a pure function
+
+
+  pure function vs non-pure function (with side effects)
+
+  non-pure function (side affects)
+    var friends = ['Joe', 'David', 'Mary', 'David'];
+
+    function removeElement(array, element) {
+      for (var i = 0; i < array.length; i++) {
+        if (array[i] === element) {
+          array.splice(i, 1);
+        }
+      }
+    }
+
+    removeElement(friends, 'David');     // undefined
+    friends;                             // ["Joe", "Mary"]
+
+
+  pure function example 1
+
+    var friends = ['Joe', 'David', 'Mary', 'Bill'];
+
+    function removeElement(array, element) {
+      var newFriends = [];
+      for (var i = 0; i < array.length; i++) {
+        if (array[i] !== element) {
+          newFriends.push(array[i])
+        }
+      }
+      return newFriends;
+    }
+
+    console.log(removeElement(friends, 'David'))   // ["Joe", "Mary", "Bill"]
+    console.log(friends);                          // ['Joe', 'David', 'Mary', 'Bill'];
+
+    instead of splicing the array we are building a new arr
+
+
+  pure function example 1
+
+    var friends = ['Joe', 'David', 'Mary', 'Bill'];
+
+    function removeElement(array, element) {
+      arr = array.slice();
+      return arr.filter(function(value) {
+        return value !== element;
+      })
+    }
+
+    console.log(removeElement(friends, 'David'))  // ["Joe", "Mary", "Bill"]
+    console.log(friends);                         // ["Joe", "David", "Mary", "Bill"]
+
+
+pure functions are more explicit than using functions with side effects
+friends = removeElement(friends, 'David');
+
+
+********************************************************************************
+*math and date objects ( round(), random(), getFullYear(), max and min )
+
+  Math
+
+    round()
+
+      Math.round(50.72);  // 51
+      Math.round(50.22);  // 50
+      Math.floor(50.72);  // 50
+      Math.ceil(50.72);   // 51
+
+    random()
+      0 to a num
+        Math.round(Math.random() * num)
+
+      for a range (min to max)
+        Math.round(Math.random() * (max - min) + min)
+
+      details
+        when calculating a random number 0 to number
+          Math.round(Math.random() * 3)  // includes numbers from 0 to 3 because > .5 rounds down to 0
+
+        when calculating a random number range
+          Math.random()   // returns number between 0 and 1
+          to specify a range you need to determine the difference between min and max
+            difference = (max - min)
+          multiply the difference by the random number between 0 and 1
+            Math.random() * difference    //  returns the number 0 to difference so need to add the min
+            Math.random() * difference + min
+
+  max and min
+    Math.min(7, 2, 7, 9, 4)    // 2
+    Math.max(7, 2, 7, 9, 4)    // 9
+
+    with arrays use..
+
+    Math.min.apply(null, [7, 2, 7, 9, 4]);  // 2
+    Math.max.apply(null, [7, 2, 7, 9, 4]);  // 9
+
+  ******************************************************************************
+  Date
+
+    getting the current date
+      Date()     // 'Wed Mar 15 2017 12:10:09 GMT+0900 (KST)' returns the current date as a string
+      Date.now() // returns the count of milliseconds since 1970
+      new Date().toDateString()  // 'Wed Mar 15 2017'
+
+      today = new Date()
+      today.getTime()
+      today                 // 2017-03-15T03:33:57.315Z
+      today.getDay()        // 3  (Sunday = 0..Friday = 6)
+        var daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        daysOfWeek[today.getDay()]    // 'Wed'
+      today.getDate()       // 15
+      today.getMonth()      // 2 (0 => Jaunary.. 2 => March..)
+
+      tmro = new Date()     // 2017-03-15T05:12:22.471Z
+      tmro.setDate() = 16
+      tmro                  // 2017-03-16T05:12:22.471Z
+
+
+    creating a date
+      new Date(year, month, day, hour, minute, second, millisecond)
+      months start with 0 so January is 0 not 1
+      date = new Date(2010, 10, 4)    //  2010-11-03T15:00:00.000Z
+      date.setYear(2012)              //  1351954800000 returns milliseconds count since 1970
+      date                            //  2012-11-03T15:00:00.000Z
+
+    convert milliseconds to readable date
+      readable = new Date(1351954800000)  // 2012-11-03T15:00:00.000Z
+      readable.getUTCMonth()              // 10
+      readable.getUTCDate()               // 3
+      readable.getUTCFullYear()           // 2012
+
+
+********************************************************************************
+*working with the function arguments object
+
+  the arguments object allows functions to accept an unspecified number of arguments
+
+    function pets(types) {
+      console.log(types)             // 'dog'
+      console.log(arguments)         // ["dog", "cat", "rabbit", "snake"]
+      console.log(arguments[1])      // 'cat'
+    }
+
+    pets('dog', 'cat', 'rabbit', 'snake')
+
+    typeof(arguments)          // 'object'
+
+  arguments is not actually an array but array-like object
+    Array.isArray(arguments)   // false
+    arguments.slice(1, 2)      // TypeError arguments.slice is not a function
+
+  it is possible to create a copy of an arguments array-like object in Array format
+    args = Array.prototype.slice.call(arguments)
+    Array.isArray(args)       // true
+    args.slice(1, 2)          // 'cat'
+
+  you don't need any parameters to access passed in arguments
+    function foo() {
+      console.log(arguments)  // [1, 2, 3, 4]
+    }
+
+    foo([1, 2, 3, 4])
+
+    however this is not that easy to read
+    ES6 fixes this with function(...args)
+
+
+********************************************************************************
+*errors ( ReferenceError, TypeError, SyntaxError, try / catch / finally )
+
+  #ReferenceError (doesn't exist)
+    calling a function that doesn't exist or variable that hasn't been defined
+
+  #TypeError  (undefined)
+    often occurs when trying to access a value that is undefined or null
+      var a;
+        a.length   // TypeError: Cannot read property 'length' of undefined
+      a = null;
+        a.length   // TypeError: Cannot read property 'length' of null
+
+    trying to preform a function call on a non function
+      a();           // TypeError: Property 'a' is not a function
+
+  #SyntaxError  (coding mistake)
+    the entire code is scanned for SyntaxErrors before the code is run and can throw SyntaxError
+    SyntaxError can also be thrown at runtime in some circumstances
+      JSON.parse('not really JSON'); // SyntaxError: Unexpected token i in JSON at position 0
+
+try / catch / finally
+  sometimes you cannot use a guard clause to catch errors because you are using a built in JS function
+    example JSON.parse(), readFile(), writeFile()
+  or it may be impractical or impossible to write a guard clause
+  instead you can use a try / catch / finally block (finally is optional)
+
+  if try runs without errors, catch is skipped, finally will still run if it is specified
+  catch is used to catch errors
+  finally can be ran regardless of errors and is optional
+
+  example
+
+  function parseJSON(data) {
+  var result;
+
+    try {
+      JSON.parse(data);  // Throws an Error if "data" is invalid
+    } catch (e) {
+      // We run this code if JSON.parse throws an Error
+      // "e" contains an Error object that we can inspect and use.
+      console.log('There was a', e.name, 'parsing JSON data:', e.message);
+      result = null;
+    } finally {
+      // This code runs whether `JSON.parse` succeeds or fails.
+      console.log('Finished parsing data.');
+    }
+      return result;
+  }
+
+  var invalidData = 'not valid JSON';
+  var validData = '{ "name": "Ferdinand", "age": 13 }'; // valid JSON
+
+  read = parseJSON(invalidData);
+
+  gaurd clause
+    it is code that guarantees data is the correct format
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+********************************************************************************
+*****                              after quiz                             ******
+********************************************************************************
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+
+********************************************************************************
+*passing functions as arguments
+
+  passing functions as arguments allows you to write open ended abstractions defined by the caller
+
+  functions are #first class objects in javaScript
+    they can be stored as variables and passed to other functions as objects
+    functions can be passed as arguments
+
+    arguments passed to functions dictate the behavior of the function
+    functions passed to a function allow us do dictate the behavior in the receiving function
+
+  #functions two types of behavior
+    Inherent behavior         => hard coded behavior in the function (can't be changed or controlled)
+    Determined by parameters  => can be controlled by the elements passed to it
+
+    passing a functions to a parameter as a callback function allows us to control Inherent behavior
+
+    the forEach method is a built in method (abstraction) that allows you iterate through an array
+      without writing a for loop
+
+
+********************************************************************************
+*declarative programing with abstractions
+
+  #imperative style
+    focuses on the steps and mechanics of solving a program
+    imperative code is code that is not abstracted
+    providing detailed instructions for the computer to handle step by step
+
+  imperative style with #function abstractions
+    moving or abstracting certain aspects of a function to a new function
+    the abstraction level is raised by moving / abstracting 'how to do something' into a new function
+      and replacing it with what to do (calling the function)
+
+  iteration focused abstraction
+    the built in forEach is an example of #iteration being abstracted
+      (meaning you don't need to implement the for loop yourself)
+      this abstraction does not require you to write your own function, it is built in
+      now you can just tell the program what to do without without telling it how to do it
+
+  filter abstraction that truly reflects purpose (most abstract)
+    example
+
+      var oddNumbers = array.filter(isOddNumber);
+
+      function isOddNumber(number) {
+        return number % 2 === 1;
+      }
+
+      filter is a (built in) abstraction that clearly reflects the purpose, to filter
+      isOddNumber is an additional (function) abstraction that states what to do
+        and abstracts into another function how to do it
+
+
+    each abstraction raised the abstraction level of the program
+
+
+  example
+    imperative stye with a lower abstraction
+      create an empty array                   (declaration initialization assignment)
+      iterate through the original array      (for loop)
+      push the odd elements to the new array  (push())
+      log the new array to the console        (console.log original declaration)
+
+    raising the abstraction level to include the built in filter method
+      console.log the return value of array filter for odd values
+
+  abstracting code allows it to be
+    more readable
+    more concise
+    more robust? (don't need to write your own function)
+
+
+  #Declarative programing
+    allows you to tell the computer what you want done instead of specifying how to do it
+      css example
+        p { color: red}
+        you don't instruct the computer how to change the color, those details are abstracted away
+
+    higher the abstraction level = the more declarative the code is
+    higher levels of abstraction allows humans to understand more comfortably
+    a more imperative style is when you are providing all the steps in more detail
+
+  there are a variety built-in #list processing abstractions in JavaScript
+    forEach, filter, map, reduce, sort, every, some
+  list processing abstractions allow you to code more declaratively
+
+    | "The developer defines how to implement the chosen (list processing) abstraction.
+    | Because the methods "call back" the Function, we often call this Function a callback."
+
+    you can control the inherent behavior of a built in method by passing it a callback function
+    the callback function allows you to specify what to do with each element passed to the method
+
+  building your own abstractions allows you to #'push down' the implementation details of your code
+
+
+********************************************************************************
+*built in array list processing
+
+
+  forEach (iteration)
+    callback(value, index, array)
+    calls a function using three arguments (value, index, array (the one being processed))
+    the return value is not used, the return value is undefined
+    because of this the only time forEach is useful is for mutating objects (processing side affects)
+
+  filter (filtering/selecting)
+  callback(value, index, array)
+    takes a single function as an argument, the function is invoked for each element in the array
+    filter is called with three arguments (value(current element in the array), index(current), array)
+    if the callback evaluates to true the current element will be included in the return array
+    unlike forEach it returns an array that includes all the elements that evaluated to true
+
+  map (transformation)
+    callback(value, index, array)
+    takes a single function as an argument, that is invoked for each element in the array
+    three arguments (value, index, array) are passed to the function argument
+    transforms each value and returns the transformed values in an array
+
+  reduce (reducing / folding)
+    callback(previous value, current value, index, array)
+
+    four arguments are passed to the callback function on each call
+      return value of the previous callback invocation
+        (with the exception of the first call which returns the initial value on the first iteration,
+          or a caller provided value)
+      the value of the current element in the array
+      the index of the current element
+      the array being processed
+
+    return value is the final value of the callback invocation
+
+  every, some (Interrogation)
+    callback(value, index, array)
+    some, stops iterating and returns true immediately if the callback evaluates to true else returns false
+    every, stops iterating and returns false immediately if the callback evaluates to false else return true
+
+  sort (ordering / arranging)
+    callback(value1, value2)
+    preforms an in-place sort which means it mutates the array
+
+
+********************************************************************************
+*Functional Abstractions on Objects
+
+  Objects do not have the same built in list processing methods as arrays do
+    instead it is common to convert the object parameters to a an array to iterate through
+    arr = Object.keys(obj);
+
+    var myObject = {a: 1, b: 2, c: 3};
+
+    Object.keys(myObject).forEach(function(key) {
+      console.log('key: ' + key + ', value: ' + String(myObject[key]));
+    });
+
+    in order to achieve the same affects of map, filter.. on an object you can use side effects
+
+    function doubleObjectValues(object) {
+      var newObject = {};
+      Object.keys(object).forEach(function(key) {
+        newObject[key] = object[key] * 2;       // side effect
+      });
+      return newObject;
+    };
+
+    doubleObjectValues({a: 1, b: 2, c: 3});         // {a: 2, b: 4, c: 6}
+
+
+////////////////////////////////////////////////////////////////////////////////
+********************************************************************************
+*string processing
+
+  string processing is many times broken into 4 steps
+    1. declare a result container
+    2. convert to an array, clean the string, remove unwanted characters, break it down
+    3. list processing, loop over the text if needed
+    4. convert back to a string if needed
+
+
+  indexOf()      finds the index of the text pattern in a string / array
+                 don't forget you can search a char pattern not just single char
+
+  lastIndexOf()  searches indexOf backwards
+
+  replace()      used with regex is most common but does not require regex for simple char replacements
+  split()        this could be useful var numsArr = '1 2 3 4 5 6 7 8 9'.split(' ');
+  #substr()      (index start, element count)
+  #substring()   (index start, end index) automatically switches largest num to first position
+  endsWith()     str = 'string'  /  str.endsWith('g') => true
+
+
+********************************************************************************
+*regex book revisit (character classes, anchors, quantifiers, greedy and lazy, regex splitting sentences on match)
+
+  meta-characters (special characters that need to be escaped)
+  $ ^ * + ? . ( ) [ ] { } | \ /
+
+    there are fewer meta-characters inside of character classes(see below for character class definition)
+      ^ \ - [ ]
+
+  #alternation => matches multiple patterns / searches for pattern not individual character
+    /(cat|dog|rabbit)/   matches cat, dog, or rabbit
+    /(https|http)/
+
+  ******************************************************************************
+  character classes
+
+      [nyNY]        => character classes go between the brackets
+      /[abc][12]/      search for a single instance of each element
+
+    #negated classes
+      /[^a-z]/      => matches everything except lowercase letters
+      /[^y]/        => matches everything except 'y'
+
+    #character class shortcuts
+      /./           => matches any character but does not work as a character class []
+      \s            => whitespace characters                    ( equivalent to /[ \t\v\r\n\f]/  )
+      \S            => everthing except whitespace characters   ( equivalent to /[^ \t\v\r\n\f]/ )
+      \d	          => any decimal digit (0-9)
+      \D	          => all characters except decimal digits
+      \w            => all word characters (but also includes digits and '_')
+      \W            => everything except word characters digits and '_'
+      \h (Ruby only)	 => Any hexadecimal digit (0-9, A-F, a-f)
+      \H (Ruby only)	 => Any character but a hexadecimal digit
+
+
+  ********************************************************************************
+  #anchors
+    (^) fix to the beginning
+    ($) fix to the end
+
+    /^cat/ strings starts with 'cat'
+    /cat$/ string ends with 'cat'
+      in ruby the beginning can also start at the beginning of a new line /n
+      javaScript only pays attention to the beginning of a new string
+
+  #word boundaries
+    \b            => can be used to find where a word ends or begins
+                     examples
+                       find a string with three characters between word boundaries b\w\w\w\b
+                       /\bcat$/  returns 'cat' at the end of a string but not 'wildcat'
+
+
+  ********************************************************************************
+  quantifiers
+
+    *
+                     => selects 0 or more occurrences of the pattern to the left
+    \d*              => select multiple digits but also selects no digits
+    /\b\d\d\d\d*\b/  => matches 3 or more digits (boundary + 3 digits + unlimited digits + word boundary)
+    * selects 0 or more (\co*t actually matches ct because there are 0 occurrences of 'o')
+      1(234)*5 would select  1 plus, 0 -> unlimited occurrences of (123), followed by one 5
+
+    +
+                     => select 1 or more occurrences of the pattern to the left
+    /\b\d\d\d+\b/    => matches 4 or more digits because + can't be 0
+    + selects 1 or more ((\co+t would not match ct because there are no occurrences of 'o')
+      1(234)*5 would select  1 plus, 1 -> unlimited occurrences of (123), followed by one 5
+      so 15 would not be selected
+
+    ?
+                     => selects an optional pattern of the pattern to the left
+                        it occurs to the left once or doesn't occur at all
+    /coo?t/          => the 'o' to the left of ? is optional (matches cot and coot)
+    20170111         => if you have dates and want to allow for an optional '-'
+    2017-01-11          /\b\d\d\d\d-?\d\d-?\d\d\b/
+
+    {}
+      {n}              => allows you to specify how many occurrences exactly
+      {n,}             => allows for n or more occurrences
+      {n,n}            => allows you to specify a range
+
+      examples
+        /\b\d{10}\b/      => must have 10 digits between the word boundaries
+        /\b\d{3,}\b/      => must have 3 or more digits between the word boundaries
+        /\b\d{3,8}\b/     => must have between 3 and 8 digits between the word boundaries
+        /\b[a-z]{5,8}\b/  => word must be between 5 and 8 characters
+
+  ********************************************************************************
+  greedy and lazy    http://stackoverflow.com/documentation/regex/429/greedy-and-lazy-quantifiers#t=201702260220098110839
+
+    greedy    => (default) quantifiers match the longest string possible
+    lazy(?)   => allow quantifiers match the fewest number of characters possible
+
+    greedy example
+      /a[abc]*c/   => xabcbcbacy
+          matches  =>  abcbcbac  ( does not match 'abc' or 'abcbc' because these strings are shorter)
+
+    lazy example   (? is placed directly to the right of the quantifier)
+      /a[abc]*?c/  => xabcbcbacy
+          matches  => 'abc' 'ac'
+
+    examples
+                                 <h1>ABC</h1> <p>Paragraph</p> <h1>DEF</h1><p>Done</p> (string to match)
+      <h1>.*<\/h1>  (greedy)  => <h1>ABC</h1> <p>Paragraph</p> <h1>DEF</h1>
+      <h1>.*?<\/h1> (lazy)    => <h1>ABC</h1> <h1>DEF</h1>
+
+
+  ********************************************************************************
+  regex with ruby and javascript
+
+    ruby string.match(/regex/)  => returns truthy or nil
+    JS   string.match(/regex/)  => returns truthy or null
+
+    ruby string.match(/regex/)  => return value is not an array but MatchData
+    ruby string =~ /regex/      => similar to .match() but returns the index of the matched data or nil
+    ruby string.scan(/regex/)   => iterates through the string and returns all matches in an array
+
+    split() allows you to convert tab separated strings into arrays
+      record = "xyzzy\t3456\t334\tabc"
+      fields = record.split("\t")
+
+    split() also allows you to use regex as the delimiting character
+      record = "xyzzy  3456  \t  334\t\t\tabc"
+      fields = record.split(/\s+/)
+
+    transformations
+      ruby gsub()
+        text = 'Four score and seven'
+        vowelless = text.gsub(/[aeiou]/, '')
+        # -> 'Fr scr nd svn'
+
+      ruby sub()
+        text = %(We read "War of the Worlds".)
+        puts text.sub(/(['"]).+\1/, '\1The Time Machine\1')    // use '' single quotes to avoid using double backslash
+        # prints: We read "The Time Machine".
+
+      javascript
+        var text = 'Four score and seven';
+        var vowelless = text.replace(/[aeiou]/g, '')
+        // -> 'Fr scr nd svn'
+
+        var text = 'We read "War of the Worlds".';
+        console.log(text.replace(/(['"]).+\1/, '$1The Time Machine$1'));  // uses $1 instead of \1
+        # outputs: We read "The Time Machine".
+
+  ********************************************************************************
+  regex splitting sentences on match
+
+      var sentencesStr = 'I like pizza. I don\'t like cake. Do you like bananas? I do! I also like carrots.';
+      console.log(sentencesStr);
+
+      var sentencesArr = sentencesStr.match(/\b.+?[.!?]/g);
+      console.log(sentencesArr);  // ["I like pizza.", "I don't like cake.", "Do you like bananas?", "I do!", "I also like carrots."]
+
+********************************************************************************
+*problem solving approach (steps to solve each problem)
+
+  Understand the problems
+    note taking process
+    abstract away the key points of the instructions
+    ask questions to clarify the problem
+
+  Examples / test cases
+    create some examples and test cases based on the notes from the previous step
+    the test cases will have inputs and expected outputs
+    ask questions about edge cases
+      other things you may need to handle
+        boundaries (min max lengths of data)
+        upper case, lower case
+        abnormal data types for inputs
+    how should the data be returned? a string or printed to the screen
+
+    Don't for forget to Interact with the interviewer / ask questions
+
+  ********************************************************************************
+  steps to solve each problem
+
+  1. take notes
+  2. make tests/examples (if not provided)
+  3. make steps
+      - edge cases handling
+      - convert argument to data structure
+      - write in one or two sentences how you will solve the problem
+        - if it takes more than that you need to break down the problem into multiple steps
+
+  don't!!!
+    try to impress the interviewer instead of coming up with a working problem
+      -these are timed and most important is coming up with a working solution
+      -later you can refactor or talk about refactoring more complex approaches
+
+  de-risk!
+    avoid these risks
+
+      not understanding the problem
+      - starting to code without understanding the problem, then later realizing you are solving the wrong thing
+      - instead take plenty of time to ask questions and map out approaches
+
+      compounding bugs
+      - if you miss a mistake but move forward it becomes hard to find the mistake
+      - instead check you building blocks. Each time you implement something check if it works,
+          before putting it together
+        (check you code often, use the console)
+
+      not understanding the solution first
+      - You are not sure how you are going to find the solution but just want to try coding
+      - Instead have a mental model, and take notes of how you will solve the problem
+          solving the problem takes the most mental energy so do this step first
+          don't start with the easy parts of the problem because you don't know how to do the hard parts
+          if you don't understand how to solve it figure it out first don't just hope it will come to you
+
+    Don't write code until you know exactly what you are going to do (with notes)
+    find the hard parts and tackle them first
+      writing the code should be the easy part
+      don't finish the code quickly, not until you have verified all of your algorithms
+
+
+
+
+********************************************************************************
+*problem solving lessons learned
+
+  get the right most number in a multi-digit number
+    12345 % 10   // 5
+    1234 % 10    // 4
+    123 % 10     // 3
+    12 % 10      // 2
+    1 % 10       // 1
+
+  get the left most number in a multi-digit number
+    12345 / 10     // 1234.5  (use Math.floor())
+    12345 / 100    // 123.45
+    12345 / 1000   // 12.345
+    12345 / 10000  // 1.2345
+    12345 / 100000 // 0.12345
+
+  find the left most digit
+    var num = 53432;
+
+    var length = num.toString().length
+    var divisor = Number('1' + '0'.repeat(length - 1));
+
+    var result = Math.floor(num / divisor);
+    console.log(result);      // 5
+
+
+  forEach vs for loop
+    you cannot return out of a forEach or any of the other built in list processing
+    use for loop to return and break out of iteration
+
+
+
+********************************************************************************
+*data structures and algorithms
+
+    #when to use a string?
+      for regex
+      to add or concat two data structures together (adding arrays does not work well in javaScript)
+
+    #when to use an array?
+      to step through the data (iteration)
+      to use built in abstractions (map, filter, some, every, forEach, reduce)
+
+    #when to use an hash/object?
+      lookup table / dictionary
+
+
+
+
+********************************************************************************
+key terms
+********************************************************************************
+#5 primitive data types and 1 compound data type
+#object literal notation example
+#difference between whole numbers, integers, and absolute value
+#fractional numbers (good bad?)
+#joining multiple line strings (best way?)
+#difference between substring and substr
+#passed by value (vs reference)
+#declaration, assignment, initialization assignment, single / multiple declaration
+#dynamically typed language
+#strong and weak type
+#operators, operands, input
+#remainder % operand
+#compound assignment operators
+#expressions and statements
+#incrementing    decrementing
+# ! logical not
+#urinary operator
+#Converting explicit primitive type conversions
+*Converting implicit primitive type coercions
+////////////////////////////////////////////////////////////////////////////////
+#parameters vs arguments
+#missing / extra arguments
+#nested functions
+#arguments and global variables
+#function declarations
+#var declaration vs definition
+#functional scoping vs block scoping
+#lexical scoping
+#the current scope can gain access to a variable in two ways
+#two main variable scoping rules
+////////////////////////////////////////////////////////////////////////////////
+#regex what is the difference between (replace, test, match)
+#comparing arrays
+////////////////////////////////////////////////////////////////////////////////
+#apply a method to a primitive data type
+#objects can contain two things
+#property name
+#add a new property to an object
+#delete a property from an object
+#arrays and objects (how to choose?)
+#length values (arrays)
+#inner values
+#function side effects  (non-pure function)
+#pure function
+////////////////////////////////////////////////////////////////////////////////
+#ReferenceError
+#TypeError
+#SyntaxError
+#gaurd clause
+
+////////////////////////////////////////////////////////////////////////////////
+/////                              after quiz                              /////
+////////////////////////////////////////////////////////////////////////////////
+#first class objects
+#functions two types of behavior
+#imperative style
+#function abstractions
+#iteration being abstracted
+#Declarative programing
+#list processing abstractions
+#'push down'
+////////////////////////////////////////////////////////////////////////////////
+#substr()
+#substring()
+  regex
+#alternation
+#negated classes
+#character class shortcuts
+#anchors
+#word boundries
+#when to use a string?
+#when to use an array?
+#when to use an object?

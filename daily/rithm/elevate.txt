@@ -1,0 +1,36 @@
+**************************************************
+elevate
+
+
+
+import DashboardAppointments from "./../Routes/Dashboard/dashboardAppointments";
+import DashboardManage from "./../Routes/Dashboard/dashboardManage/dashboardManage";
+import DashboardTemplates from "./../Routes/Dashboard/dashboardTemplates";
+
+import AdminPrivateRoute from "./adminPrivateRoute";
+
+**************************************************
+
+
+backend/config
+const SEED_DOCUMENTS_SQL = `
+INSERT INTO documents (user_id, title, counterparty, url, date_submitted, date_reviewed, status ) VALUES 
+(1, 'Burger Flipper', 'Squidward', 'www.spongebob.com', '2020-08-29', '2019-11-13', 'Completed'),
+(2, 'Burger Consumer', 'Patrick Star', 'www.spongebob.com', '2019-09-02', '2019-09-02', 'Received'),
+(1, 'Burger Flipper Manager', 'Squidward', 'www.spongebob.com', '2020-08-29', '2019-11-13', 'In Progress');
+`;
+
+
+backend/data.sql
+
+CREATE TABLE documents
+(
+  id serial PRIMARY KEY,
+  title TEXT NOT NULL,
+  counterparty TEXT NOT NULL,
+  date_submitted TEXT DEFAULT current_timestamp,
+  date_reviewed TEXT,
+  url TEXT,
+  user_id INTEGER REFERENCES users(id),
+  status TEXT
+);

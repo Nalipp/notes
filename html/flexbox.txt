@@ -1,0 +1,120 @@
+*******************************************************************************************
+flexbox
+*******************************************************************************************
+  overview
+
+    display: flex       -> needs to be applied to the parent container
+
+    main axis
+    cross axis
+
+    ************************************************** 
+    parrent container properties
+
+      flex-direction               -> row, row-reverse, column, column-reverse
+      justify-content (main axis)  -> (right to left) flex-start, flex-end, center, space-between, space-around, space-evenly
+      align-items (top to bottom)  -> flex-start, flex-end, center, baseline, stretch (applies to content that is wrapped)
+      flex-wrap                    -> wrap, nowrap, wrap-reverse
+      align-content (cross axis)   -> flex-start, flex-end, center, space-between, space-around, stretch (for entire multiple row content with wrap)
+
+
+    ************************************************** 
+    individual container properties
+
+      order               -> allows you to specify the order of individual items and accepts a + - interger
+      align-self          -> flex-start, flex-end, center, baseline, stretch (overrides the align items for a specific element)
+      justify-self        -> (cross-axis) or just use margin auto 
+
+      flex: 1             -> shorthand for flex-grow, flex-shrink and flex-basis
+      flex-basis:         -> similar to width
+
+      flex-grow: 1        -> gives all the elements in that container an equal width regardless of the screen width
+      flex-shirnk:
+
+
+  *******************************************************************************************
+  more details
+
+    ************************************************** 
+    parent properties
+
+      flex-direction      -> allows you to conotrol the direction of the content
+                               when reversing the row the justify-content arguments also have to be reversed
+      justify-content     -> allows you to space things out using the available space on the main axis
+                               flex-end             -> puts all remaining space before the elements
+                               flex-start (default) -> puts all remaining space after the elements
+                               space-center         -> puts all remaining space split before and after the elements
+                                 you can specify the width of the children elements using flex-basis: 30% otherwise it will take up the needed width
+      align-items         -> allows you distrubute the available space on the cross axis (not between rows)
+                               by default has equal height columns (stretch) 
+      flex-wrap           -> flex and allows you to wrap items if the row total exceeds the item widths
+      align-content       -> allows you to distrubute the avalable space between rows on the cross axis
+
+
+      **difference between align-items and align-content
+          align-items   -> only center will really have an affect because it is managing space by element not row
+          align-content -> works better with flex-start and flex-end because it is managing space by row
+
+
+    **************************************************
+    child properties
+
+
+      order               -> allows you to specify the order of individual items and accepts a + - interger
+                               all elements have default value of 1 so you have to give each element a value in order 
+                               you can't expect it to work by applying a value to just one value
+      align-self          -> same as align-items but used to override the align-items assignment to an individual
+
+
+      flex: <flex-grow> <flex-shrink> <flex-basis>    -> shorthand for the following three
+        flex-basis        -> similar to width, allows us to specify the initial ideal width
+                              instead of specifying the width of an element it is better to use flex-basis: %30
+                              flex-basis is differnet than width because it will also act as height if you change the flex-direction from row to column
+                              that way if you remove the display: flex (maybe with media queries) the flex-basis amount defaults to %100;
+                              it also will automatically size an element to fit in a flex container if it is too large 
+                                (then you can control it with flex-grow or flex-shrink)
+
+        flex-grow         -> allows you to specify how unused space is used up by the flex items
+                             if all elements are set to flex-grow: 1 each element will split up the available space evenly
+                             if one is overridden for flex-grow: 2 it will take up two slots of all the available space 
+                             it is not double the space it is just assigned to the extra unused space
+                             if all the elements are not given a flex-grow value (they default to 0) and there is extra space, 
+                               if one of the element is given flex-grow: 1; then it will recieve all of the extra space
+
+        flex-shirnk       -> dictates how items should shrink when there isn't enough space in the container
+                             when elements are actually larger than the available space (and flex-wrap is set to no-wrap) they are crammed in the space
+                             flex-shrink is set to 1 by default
+                             if flex-shrink is set to 0 is will not shirink to fit into the available width of the container 
+                               it will always stay the width it is specified to be
+
+
+    **************************************************
+    additional example
+
+      example:
+                             
+        .container {
+          display: flex;
+          flex-wrap: wrap;
+        }
+
+        .box {
+          flex-basis: 200px;
+          flex-grow: 1;
+        }
+
+        each box will take up a minimum of 200px and break to new lines if needed
+        if a box or boxes break to a new line and there is extra space it/they will grow to take up the entire space
+
+          *********************************
+          |  box 1 200px  |  box 2 200px  |
+          *********************************
+          |         box 3 (grow 1)        |
+          *********************************
+
+        shorhand
+
+        flex: 1 1 200px;
+
+
+      flex-flow           -> shorthand for (flex-direction, flex-wrap)

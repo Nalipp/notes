@@ -1,0 +1,97 @@
+****************************************************************************************************
+conputer science tech interview prep
+****************************************************************************************************
+
+*bigO notation
+*recursion
+*searching
+*sorting
+
+****************************************************************************************************
+big O notation
+
+  Describe big-O notation
+    Big o notation is a way of describing the number of processes needed to complete a task for different algorythms
+    allow you to compare the efficiency of an emplementation of an algorythm
+
+  Evaluate the runtime of algorithms using big-O notation
+
+  Compare fastest to slowest asymptotic complexities of common runtimes (e.g. O(1), O(log(n)), O(n), O(nlog(n)), O(n2), etc).
+    constant time
+    liner time
+    quadratic time
+    log time
+
+  Explain the difference between time complexity and space complexity
+
+****************************************************************************************************
+recursion
+
+  what is a stack overflow?
+  when using recursion what two things to you need to prevent a stack overflow?
+  what benifits does iteration have over recursion?
+  what benefits does recursion over iteration?
+
+****************************************************************************************************
+searching
+
+Introduction
+
+linear search 
+  the simpelest way to search but worst case is O(n)
+  traverses every element in an array or list until it finds a match or reaches the end (indexOf)
+
+binary search (divide and conquer)
+  better than linear search but requires the data set to be sorted
+  split the data set in half and discard the half that is higher or lower than the value being searched
+  repeat until the value is found
+  time complexity is O(log(n))
+
+Both types of search use the same input and have the same expected output
+
+  Example : Data type is arr
+
+  input        output
+    1. arr       if the char is found output the index
+    2. char      if the char is not found output -1
+
+  problem 1. use linear seach with iteration
+  problem 2. use linear seach with recursion
+
+  problem 3. use binary search with iteration
+  problem 4. use binary search with recursion
+
+If you want a more indepth introduction I am following rithm's free curiculumn (javaScript)
+  https://www.rithmschool.com/courses/javascript-computer-science-fundamentals/searching-algorithms
+
+Or Udacity has a great course too (python)
+  https://www.udacity.com/course/technical-interview--ud513
+
+
+
+****************************************************************************************************
+*Sorting
+
+bubble
+  worst: O(n2)
+  best: O(n)
+    iterate through the arr if an element is higher than the next element swap them
+    iterate through the arr until the arr is sorted
+    the final element will the the largest and can be ignored
+
+insertion
+  worst: O(n2)
+  best: O(n)
+    compare the second element with the first, if the second element is smaller swap the two
+    compare the third element with the first then second, 
+    if the third element is smaller than first or second place the second element before the smaller element
+
+selection
+  worst: O(n2)
+  best: O(n2)
+    assign the first element as the min element, then iterate through all elements to find a smaller/smallest element
+    if the smallest element is smaller than the min swap them
+    iterates once for each element in the array
+
+merge
+quick

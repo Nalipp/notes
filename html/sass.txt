@@ -1,0 +1,306 @@
+*******************************************************************************************
+sass
+*******************************************************************************************
+
+*concepts
+*syntax examples
+*code examples
+*import
+*extend
+*mixin
+
+*******************************************************************************************
+*concepts
+
+  sass vs scss
+
+  sass -> indented similar to jade or pug and with out semi colons but is not as compatable with traditional css
+  scss -> instead of intention uses brackets and semicolons and is compatable with traditional css
+
+*******************************************************************************************
+*syntax examples
+
+  varaiables
+    $myColor: #eee;
+    $fontSize: 2em;
+    $family: Helvetica, sans-serif;
+    $border: 1px solid #fff;
+
+  calculations
+    font-size: 4px + 4   -> 8px
+    font-size: 4px * 4   -> 16px
+
+  color functions
+    color: lighten($color, 10%);
+    color: darken($color, 10%);
+
+    color: saturate($color, 10%);
+    color: desaturate($color, 10%);
+
+    color: fade_in($color, .1);
+    color: fade_out($color, .1);
+
+  more functions
+    $value: if(true, $color1, $color2)
+
+    $rnd: round(3.14)
+    $top: ceil(3.14)
+    $bot: floor(3.14)
+    $per: percentage(.14)
+
+  interpolation
+    $name: 'my-class';
+
+    .#{$name} {
+      color: blue;
+    }
+
+  nesting
+    nav {
+      background-color: lighten($baseColor, 25%;);
+      padding: 20px;
+      ul {
+        margin: 20px;
+        font-size: $baseFontSize;
+        li {
+          padding: 2px;
+          text-align: center;
+        }
+      }
+    }
+
+    example : nesting hover example 
+
+      a {
+        text-decoration: none;
+        color: $baseColor;
+        &:hover {
+          color: lighten($baseColor, 25%);
+        }
+      }
+    
+
+*******************************************************************************************
+*code examples
+
+  // main.css
+
+    $mainColor: #efefef;
+    $secondaryColor: #fff444;
+    $baseFontSize: #14px;
+    $baseClassName: 'aside';
+
+    #{$baseClassName} h1 {
+      color: $mainColor;
+      size: $baseFontSize + 20;
+    }
+
+    #{$baseClassName} p {
+      color: lighten($mainColor, 25%);
+      size: $baseFontSize -4;
+    }
+
+    #{$baseClassName} ul {
+      color: $secondaryColor;
+    }
+
+
+*******************************************************************************************
+*import
+
+  importing with sass files is better than the standard css import because of less trips to the server
+
+  // colors.scss
+    $baseColor: #ff44ff;
+    $secondaryColor: #ffee11;
+
+  // main.scss
+
+    @import "resets"
+    @import "colors";
+
+    h1 {
+      color: $baseColor;
+    }
+    
+
+*******************************************************************************************
+*extend
+
+  allows you to apply the properties specified in other elements 
+
+  .button {
+    color: $baseColor;
+  }
+
+  .submitButton {
+    @extend .button;
+    border: 1px solid $baseColor;
+  }
+
+*******************************************************************************************
+*concepts
+
+  sass vs scss
+
+  sass -> indented similar to jade or pug and with out semi colons but is not as compatable with traditional css
+  scss -> instead of intention uses brackets and semicolons and is compatable with traditional css
+
+*******************************************************************************************
+*syntax examples
+
+  varaiables
+    $myColor: #eee;
+    $fontSize: 2em;
+    $family: Helvetica, sans-serif;
+    $border: 1px solid #fff;
+
+  calculations
+    font-size: 4px + 4   -> 8px
+    font-size: 4px * 4   -> 16px
+
+  color functions
+    color: lighten($color, 10%);
+    color: darken($color, 10%);
+
+    color: saturate($color, 10%);
+    color: desaturate($color, 10%);
+
+    color: fade_in($color, .1);
+    color: fade_out($color, .1);
+
+  more functions
+    $value: if(true, $color1, $color2)
+
+    $rnd: round(3.14)
+    $top: ceil(3.14)
+    $bot: floor(3.14)
+    $per: percentage(.14)
+
+  interpolation
+    $name: 'my-class';
+
+    .#{$name} {
+      color: blue;
+    }
+
+  nesting
+    nav {
+      background-color: lighten($baseColor, 25%;);
+      padding: 20px;
+      ul {
+        margin: 20px;
+        font-size: $baseFontSize;
+        li {
+          padding: 2px;
+          text-align: center;
+        }
+      }
+    }
+
+    example : nesting hover example 
+
+      a {
+        text-decoration: none;
+        color: $baseColor;
+        &:hover {
+          color: lighten($baseColor, 25%);
+        }
+      }
+    
+
+*******************************************************************************************
+*code examples
+
+  // main.css
+
+    $mainColor: #efefef;
+    $secondaryColor: #fff444;
+    $baseFontSize: #14px;
+    $baseClassName: 'aside';
+
+    #{$baseClassName} h1 {
+      color: $mainColor;
+      size: $baseFontSize + 20;
+    }
+
+    #{$baseClassName} p {
+      color: lighten($mainColor, 25%);
+      size: $baseFontSize -4;
+    }
+
+    #{$baseClassName} ul {
+      color: $secondaryColor;
+    }
+
+
+*******************************************************************************************
+*import
+
+  importing with sass files is better than the standard css import because of less trips to the server
+
+  // colors.scss
+    $baseColor: #ff44ff;
+    $secondaryColor: #ffee11;
+
+  // main.scss
+
+    @import "resets"
+    @import "colors";
+
+    h1 {
+      color: $baseColor;
+    }
+    
+
+*******************************************************************************************
+*extend
+
+  allows you to apply the properties specified in other elements 
+
+  .button {
+    color: $baseColor;
+  }
+
+  .submitButton {
+    @extend .button;
+    border: 1px solid $baseColor;
+  }
+
+
+*******************************************************************************************
+*mixin
+
+  mixins can be a seperate scss file that can be imported
+
+  @import "mixins";
+
+  @mixin font-large {
+    font: {
+      size: $baseFontSize + 20;
+      family: sans-serif;
+      weight: bold;
+    }
+  }
+
+  #form {
+    @include font-large;
+  }
+
+  *******************************************************************************************
+  parameters example
+    
+    commonly used with webkits
+
+    @mixin rounded-corners-all($size, 5px) {  // the 5px is default if no value $size is specified
+      border-radius: $size;
+      -webkit-border-radius: $size;
+      -moz-border-radius: $size;
+    }
+
+    #form {
+      @include rounded-corners-all(10px);   // will have 10px rounded corners 
+      @include rounded-corners-all;         // will have 5px rounded corners  
+    }
+
+

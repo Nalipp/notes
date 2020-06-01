@@ -1,0 +1,702 @@
+********************************************************************************
+Structured data Introduction
+
+ps -ef | grep mysql
+
+
+  -relational database
+
+    a rdbms gives you added featuers that an spreadsheet (.xml) file won't
+      can handle much larger datasets
+      more reliable
+      validations
+      integrity (no duplicate rows)
+      transition rollback
+
+
+  Structured data is stored in tabular format with rows and columns.
+  It can be sorted by column.
+
+  Structured data is similar to a spreadsheet.
+  Spreadsheet      is a   database
+  Worksheet        is a   table
+  Worksheet Column is a	  table Column
+  Worksheet Row	   is a   table Record
+
+  SQL Allows you to
+  Select (find)
+  Order (organize)
+  and Delete or Add (manage)
+
+  RDBMS = relational database management systems
+  RDMBS's include SQLite, MS SQL, Postgres and MySQL
+          Relational Database Managment System -> a system for software application for managing a relational database (postgresql, msql, etc)
+
+  Postgres is a client-server database
+  To run Postgres in the terminal
+
+  Interface / clients -> PostGreSql is an interface that allow you to interact with a RDBMS application
+
+
+********************************************************************************
+getting started
+
+  Start
+  $ brew services start postgresql
+  End
+  $ brew services stop postgresql
+  Restart
+  $ brew services restart postgresql
+
+  Once started
+  $ psql postgres
+
+  General
+    # \list
+    # \l
+    # \c [database name] => change databases
+    # \dt => check the current list of tables
+
+  Create a new database
+    $ createdb [database name]
+    $ dropdb [database name]
+
+    # CREATE DATABASE [database name];
+    # DROP DATABASE [database name];
+
+    pg_dump - used for backing up databases
+
+    $ pg_dump --inserts --clean sql_book (prints the sql statements used for to create a schema and data for database)
+    $ pg_dump --inserts --clean sql_book > dump.sql (allows you to save the statement to a file)
+    psql -d sql_book < dump.sql (restoring a database if it has been lost or altered after a pgdump)
+      (if the sql_book was destroyed (dropdb sql_book ) then a new empty database (createdb sql_book) must be created before running the previous command)
+
+
+********************************************************************************
+Importing sql data (inside the session)
+
+  # \i
+  $ psql -d my_database
+  my_database=# \i ~/some/files/file_to_import.sql
+
+********************************************************************************
+pg_dump data
+
+  # Extract Schema Only		-s option
+  pg_dump -s weather > weather.sql
+
+  # Extract Data Only		-a option
+  pg_dump -a weather > weather.sql
+
+  # Extract Both Data and Schema
+  pg_dump -d sql-course -t weather --inserts > dump.sql  (inserts makes the INSERT data more readable but slower/not necessary)
+
+
+********************************************************************************
+Creating a new table
+
+  library=# CREATE TABLE users (
+    id serial,
+    username CHAR(25) NOT NULL,
+    enabled boolean DEFAULT TRUE,
+    PRIMARY KEY (id)
+    );
+
+  db_name # \d+ [table name]       //show table schema
+
+  the column definition go between the () after the table name
+  column definitions accept three arguments | name | datatype | constraints(optional)
+
+  text, char(), varchar()
+    db_name # CREATE TABLE test (
+      first_name varchar(5),  // variable limit (without padding) -> throws error if insert value is too long
+      middle_name text,       // specified limit with added padding if necessary -> throws error if insert value is too long
+      last_name char(5)       // unlimited variable length
+    );
+
+  alter table column
+    ALTER TABLE names ADD COLUMN brother_city_name varchar(100);
+    ALTER TABLE names RENAME brother_city_name TO bro_city_name;
+    ALTER TABLE names DROP bro_city_name;
+
+  numbers, timestamp
+    db_name # CREATE TABLE test (
+      num1 smallint,                        // 2 bytes 	| small-range integer	-32768 to +32767
+      num2 integer,                         // 4 bytes  |	typical choice for integer	-2147483648 to +2147483647
+      num3 bigint,                          // 8 bytes	| large-range integer	-9223372036854775808 to +9223372036854775807
+      num4 decimal(nums left, nums right),  // accepts two arguments, number of digits to the left of the decimal, and the number of places right of decimal
+      time timestamp,                       // both a simple date and time in YYYY-MM-DD HH:MM:SS format
+    );
+
+  constraints
+    NOT NULL
+    UNIQUE
+    DEFAULT
+    serial - column type is integer, non-null, and that each id is sequential (but doesn't prevent the input of null, or duplicate values)
+    CHAR(25) - holds maximum 25 characters
+    NOT NULL - value must not be empty
+    boolean values - TRUE/FALSE values
+    PRIMARY KEY (id) - a table can only have one primary key value, primary key values must be unique.
+
+
+********************************************************************************
+Inserting data
+
+
+  INSERT INTO users (id, username, enabled)
+            VALUES (20,'John Smith', false);
+
+  INSERT INTO users VALUES (20,'John Smith', false);
+
+  * Because we set the PRIMARY KEY (id), this prevents multiple inputs to the same key
+  If we run the same INSERT INTO key twice we will get an error
+
+  When inserting new rows it is better to let the database insert the next id automatically
+
+  library=# INSERT INTO users (username, enabled)
+            VALUES ('Harry Potter', false);
+
+
+********************************************************************************
+Selecting(viewing) data from a table
+
+library=# SELECT * FROM users; (* selects all columns)
+library=# SELECT username FROM users; (selects all usernames)
+library=# SELECT username,id FROM users; (selects all usernames and ids)
+library=# SELECT username FROM users WHERE enabled = true; (selects only enabled false values)
+library=# SELECT username,id FROM users ORDER BY username; (orders the selection by username)
+library-# SELECT username,id FROM users ORDER BY username DESC; (orders the selection by username descending)
+library-# SELECT username,id FROM users ORDER BY username ASC; (orders the selection by username smaller to larger values)
+
+# When selecting NULL values or NOT NULL values use OK
+SELECT * FROM people WHERE occupation IS NULL;
+
+********************************************************************************
+Updating/Deleting data (before updating or deleting, it is a good idea to backup your database)
+
+Delete a table
+DROP TABLE users;
+
+#Update all elements from a table
+UPDATE users SET enabled = false;
+
+#Update a single element from a table
+UPDATE users SET enabled = true
+WHERE username = 'John Smith II';
+
+#update multiple elements from a table
+UPDATE films SET director = 'John McTiernan', duration = 132 WHERE title = 'Die Hard';
+
+UPDATE temperatures SET rainfall = ((low+high)/2)-35 WHERE ((low+high)/2) > 35;
+
+#Update all elements that contain II
+UPDATE users SET enabled = true
+WHERE rtrim(username) LIKE '% II';
+
+#Delete elements from a table
+DELETE from users WHERE username = 'John Smith';
+
+#Delete all elements from a table
+DELETE FROM books;
+
+
+********************************************************************************
+Altering columns
+
+# Add a column
+ALTER TABLE users ADD COLUMN last_login timestamp NOT NULL DEFAULT NOW();    (Now() is current time)
+
+# Rename a column
+ALTER TABLE users RENAME COLUMN username TO full_name;
+
+# Changing a columns datatype
+ALTER TABLE users ALTER COLUMN full_name TYPE VARCHAR(25);    (VARCHAR(25) only uses the space it needs up to 25 characters where CHAR(25) always uses 25 spaces )
+ALTER TABLE films ALTER COLUMN title SET NOT NULL;            (SET is used to change modifiers)?
+
+# Remove a column
+ALTER TABLE users DROP COLUMN enabled;
+
+# Rename an entire table
+ALTER TABLE users RENAME TO all_users;
+
+# Delete an entire table
+DROP TABLE all_users;
+
+# Add a primary key to a table
+ALTER TABLE distributors ADD PRIMARY KEY (dist_id);
+
+# ADD uniqueness across columns in a table
+CREATE UNIQUE INDEX unique_index ON books_categories (book_id, category_id);
+ALTER TABLE books_categories ADD UNIQUE (book_id, category_id);
+
+
+
+********************************************************************************
+Data Definition Language vs Data Manipulation Language
+Data                     vs Schema
+
+  Data(DML) is the actual id(4), username('Tom Smith') in the rows, the data of the table.
+    The data is viewed with the SELECT command
+
+  Data Definition language (DDL) is the details/definition about the data structure in the column, id, username, VARCHAR(25), serial, NOT NULL.
+    The schema is like the construction plan for a table.
+    \d $table_name allows access to the schema
+
+  Data manipulation statements for DML (CRUD)
+  INSERT
+  SELECT
+  UPDATE
+  DELETE
+
+  Manipulating the table structures for DDL
+  CREATE
+  ALTER
+  DROP
+  DESCRIBE
+
+
+  https://www.postgresql.org/docs/9.5/static/ddl-alter.html#AEN2849
+
+
+********************************************************************************
+mapping table relationships
+
+Types of table relationships
+  One-to-One	  A User has ONE address
+  One-to-many	  A Book has MANY reviews
+  Many-to-Many	A user has MANY books and a book has MANY users
+
+One-to-One example : 
+  CREATE TABLE users (
+    id serial,                                                          #
+    username VARCHAR(25) NOT NULL,                                         (NOT NULL constraints must have valid values)
+    enabled boolean DEFAULT TRUE,
+    last_login timestamp NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (id)
+  );
+
+/*
+ one to one: User has one address
+*/
+
+CREATE TABLE addresses (
+  user_id int NOT NULL,                                               #
+  street VARCHAR(30) NOT NULL,
+  city VARCHAR(30) NOT NULL,
+  state VARCHAR(30) NOT NULL,
+  PRIMARY KEY (user_id),
+  CONSTRAINT fk_user_id 
+  FOREIGN KEY (user_id) REFERENCES users(id)    #
+);
+
+#one-to-many example
+CREATE TABLE books (
+  id serial,                                                          #
+  title VARCHAR(100) NOT NULL,
+  author VARCHAR(100) NOT NULL,
+  published_date timestamp NOT NULL,
+  isbn int,
+  PRIMARY KEY (id),
+  UNIQUE (isbn)                                                          (Applies an unique constraint to isbn numbers)
+);
+
+/*
+ one to many: Book has many reviews
+*/
+
+DROP TABLE IF EXISTS reviews;
+CREATE TABLE reviews (
+  id serial,
+  book_id int NOT NULL,                                              #
+  user_id int NOT NULL,                                              #
+  review_content VARCHAR(255),
+  rating int,
+  published_date timestamp DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE,      #   (ON DELETE CASCADE means that if a book is deleted all reviews will also be deleted)
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE       #
+);
+
+# many to many relationship
+CREATE TABLE users_books (
+  user_id int NOT NULL,                                              #
+  book_id int NOT NULL,                                              #
+  checkout_date timestamp,
+  return_date timestamp,
+  PRIMARY KEY (user_id, book_id),                       (A composite key is when a primary key is made of two columns, usually in many to many relationships)
+  FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE,      #
+  FOREIGN KEY (book_id) REFERENCES books(id) ON UPDATE CASCADE       #
+);
+
+********************************************************************************
+Primary keys and Foreign keys
+
+Primary keys are used to identify unique rows of data in a table
+Foreign keys are used to reference rows of data usually in other tables
+
+********************************************************************************
+Inputing Data
+
+# setval example
+SELECT pg_catalog.setval('users_id_seq', 3);
+SELECT pg_catalog.setval('books_id_seq', 3);
+SELECT pg_catalog.setval('reviews_id_seq', 3);
+
+setval() sets the current value of a sequence, this is used when values are manually supplied and we want the auto increment function to still work.
+
+
+********************************************************************************
+Joins
+
+  Joins (join tables) are operations that rely on foreign keys
+
+  #Inner Join example
+  SELECT books.title, books.author, users_books.checkout_date  // (This line requests the columns from both tables to be displayed)
+  From books                                                   // (The first table)
+  INNER JOIN users_books                                       // (The second table)
+  ON books.id=users_books.book_id;                             // (The matching keys)
+
+  # Inner Join example (returns values only when they are present in both tables)
+  SELECT users.*, addresses.*
+  FROM users
+  INNER JOIN addresses
+  ON users.id = addresses.user_id;
+
+  # Left (outer) Join example (returns blank values even if they are not present in both tables)
+  SELECT users.*, addresses.*
+  FROM users
+  LEFT JOIN addresses
+  ON users.id = addresses.user_id;
+
+  # Cross join (returns every user in record mapped with every record in address / 6 records for 3 users x 2 addresses)
+  SELECT *
+  FROM users
+  CROSS JOIN addresses;
+
+  # Right Join (returns every element from the right table, even if there isn't a corresponding value in the left table)
+  SELECT users.username, books.title
+  FROM users
+  RIGHT JOIN users_books ON (users_books.user_id = users.id)
+  RIGHT JOIN books ON (books.id = users_books.book_id);
+
+  # Left Join
+  SELECT users.username, books.title
+  FROM users
+  LEFT JOIN users_books ON (users_books.user_id = users.id)
+  LEFT JOIN books ON (books.id = users_books.book_id);
+
+  # Joining three tables
+  SELECT users.username, reviews.review_content, users_books.checkout_date
+  FROM users
+  JOIN reviews
+  ON users.id=reviews.user_id
+  JOIN users_books
+  ON users_books.user_id=reviews.user_id;
+
+  http://stackoverflow.com/questions/9853586/how-can-i-join-multiple-sql-tables-using-the-ids
+
+
+********************************************************************************
+Exporting a CSV file
+
+COPY
+(SELECT * FROM users)
+TO '/Users/natelipp/csv/users.csv'
+WITH CSV HEADER;                                        (includes csv header)
+
+COPY
+(SELECT u.username, b.title
+FROM users u
+INNER JOIN users_books ub ON (ub.user_id = u.id)
+INNER JOIN books b ON (b.id = ub.book_id))
+TO '/Users/natelipp/csv/users_books.csv'
+WITH CSV;                                               (does not include csv header)
+
+
+********************************************************************************
+Importing a CSV file
+
+\copy books (title, author, published_date) FROM './gutenberg_books.csv' DELIMITER ','  CSV;
+(while inside of psql you can simply use \copy to get the direct path to a file)
+
+********************************************************************************
+More on Select
+
+# OR
+SELECT * FROM users
+WHERE username = 'John Smith' OR username = 'Jane Smiley';
+
+# LIKE  (like can only be used with text not numbers, but you can temporarily change the datatype to text (see below))
+SELECT * FROM books WHERE title LIKE '%My%';                      (All titles that include 'My')
+
+# AND
+SELECT * FROM books
+WHERE title LIKE '%My%' AND author='John Mayer';                  (And satisfies two requests)
+
+# LIKE (with numbers)
+SELECT * FROM parts WHERE part_number::text LIKE '3%';
+
+# CONCAT
+SELECT CONCAT(title,' by ', author) AS "Books By" FROM books;     (AS "column name" prints a different alias name)
+
+# SELECT DISTINCT
+SELECT u.username FROM users u                                    (normal way)
+  LEFT JOIN  users_books ub ON (ub.user_id = u.id);
+
+SELECT DISTINCT u.username FROM users u                           (returns only distinct records)
+  LEFT JOIN  users_books ub ON (ub.user_id = u.id);
+
+# Limit (Limit is used for large data sets where you don't want to return all the records)
+SELECT title, author FROM books LIMIT 5;
+
+# Subqueries
+SELECT u.username FROM users u
+WHERE u.id NOT IN (SELECT ub.user_id FROM users_books ub);
+
+# Same results with Join or Subqueries (general rule joins are faster than subqueries)
+SELECT users.* FROM users INNER JOIN addresses ON users.id = addresses.user_id;
+
+SELECT * FROM users
+WHERE users.id = (SELECT user_id FROM addresses WHERE user_id = users.id);
+
+
+********************************************************************************
+Operators
+
+Comparison operators
+=, <, >, <=, >=
+
+# IS NULL / NOT NULL
+SELECT * FROM users LEFT JOIN addresses ON users.id = addresses.user_id WHERE addresses.street IS NULL;
+SELECT * FROM users LEFT JOIN addresses ON users.id = addresses.user_id WHERE addresses.street IS NOT NULL;
+
+# IN / NOT IN
+SELECT * FROM users WHERE id IN (1,2);
+SELECT * FROM users WHERE id NOT IN (1,2);
+
+# LIKE / NOT LIKE
+SELECT * FROM users WHERE username LIKE 'John%';                                (Checks for usernames that begin with 'John')
+SELECT * FROM books WHERE title LIKE '%ers';                                    (Checks for words that end in 'ers')
+SELECT * FROM books WHERE title LIKE '%The%';                                   (Checks for the word 'The') (case sensitive)
+
+SELECT * FROM books WHERE title NOT LIKE '%The%';                               (NOT LIKE is the opposite)
+SELECT * FROM books WHERE title NOT LIKE '%The%' AND title NOT LIKE '%My%';     (selects everything except titles that include 'The' or 'My')
+                                                                                (CAUTION : AND does not mean that it satisfies both request, processes them seperatley)
+
+********************************************************************************
+Functions
+
+# For dealing with Strings
+
+# trim
+SELECT author FROM books WHERE trim(author)='Rudyard Kipling';       (Trims/ignores spaces before or after the author name)
+
+# length
+FROM books WHERE length(author) = 0;                                 (Counts the length, but cannot be used on integers)
+
+# concat                                                             (Concat means to combine)
+SELECT CONCAT(title, ' by ', author) AS "Books By" FROM books;       (AS gives a title and must be used with "")
+SELECT CONCAT('ID: ', id, ' | ', 'NAME: ', username) AS "id and username" FROM users;
+https://www.postgresql.org/docs/current/static/functions-string.html
+
+# COUNT lets you count the rows or a return
+SELECT COUNT(*) FROM books;
+
+# MAX
+SELECT MAX(id) FROM books;
+
+# MIN
+SELECT MIN(published_date) FROM books;
+https://www.postgresql.org/docs/current/static/functions-aggregate.html
+
+# Date Time formats
+SELECT NOW(),CURRENT_DATE,CURRENT_TIME;
+
+# Comparing time
+SELECT * FROM books WHERE published_date > '1900-04-15';
+SELECT * FROM books WHERE published_date > CURRENT_DATE;
+SELECT CURRENT_DATE - 10 AS "Ten Days Ago";
+SELECT * FROM books WHERE published_date > CURRENT_DATE - 10;
+SELECT COUNT(*) FROM books WHERE published_date > CURRENT_DATE - 10;
+https://www.postgresql.org/docs/current/static/functions-datetime.html
+
+********************************************************************************
+Mathmatical
+
+# Absolute value
+SELECT ABS(-10);
+
+# Round
+SELECT ROUND(-10.2);
+
+# Random
+SELECT RANDOM();
+https://www.postgresql.org/docs/current/static/functions-math.html
+
+********************************************************************************
+Analyzing data (file: finance.sql)
+
+# DISTINCT
+SELECT COUNT(DISTINCT description) FROM transactions;
+SELECT DISTINCT(description) FROM transactions;
+SELECT DISTINCT(description), paid_out FROM transactions ORDER BY paid_out;
+
+# SUM
+SELECT SUM(paid_out) FROM transactions;
+SELECT SUM(paid_out) FROM transactions WHERE description = 'Online Shopping';
+
+# SUM / GROUP BY    (Allows you to sum up the values grouped by type)
+SELECT SUM(paid_out) AS paid_out_total, description FROM transactions GROUP BY description;
+
+# TO_CHAR()
+SELECT TO_CHAR(date, 'Month') FROM transactions;
+SELECT TO_CHAR(date, 'Month') FROM transactions GROUP BY TO_CHAR(date, 'Month');
+SELECT SUM(paid_out), TO_CHAR(date, 'Month') FROM transactions GROUP BY TO_CHAR(date, 'Month');
+
+# MAX
+SELECT MAX(paid_out) FROM transactions;
+
+# MIN
+SELECT MIN(paid_out) FROM transactions;
+
+
+********************************************************************************
+Normalizing databases
+
+1NF (First normal form), 2NF (Second normal form), 3NF etc. 3NF is usually good enough although BCNF is another common solution.
+
+Normalizing a database is separating it into different tables and allows for future growth and keeps the normal form.
+Denormalized database example is when there is Author1, Author2, and Author3 columns, which limits growth and breaks the normal form.
+
+1NF = One row per author, multiple rows with duplicate records if there are more than one author. (Normalized form)
+2NF = (Not common) Uses the 1NF format but separates the multiple authors data into different tables with One to One relationship. (Normalized form)
+3NF = (Most common) Uses Identifiers instead of data to reference entities. (book.id -> author.book_id)
+      Joins are used to display the data and no limit to number of authors.
+      Relationship - Book has many authors (one-to-many)
+
+Denormalizing data can be inefficient because it requires multiple joins to view the data. If there are not many books
+with multiple authors it may be best to use the 1NF form.
+
+
+********************************************************************************
+Column Data Types
+
+Strings
+Char()    = designates x number of characters in a space and leaves empty spaces if the characters are not used up
+Varchar() = only uses the amount of space needed up to the maximum amount
+charset   = designate the type of encoding. Some languages use different formats to encode to binary, charset allows to change the encoding
+            example : library=# \encoding CHARACTER_SET
+                      For Japanese
+                      library=# \encoding EUC_JP
+
+********************************************************************************
+ENUM = allows you to specify what data will be accepted.
+
+# Example specify a list of days for each weekday
+CREATE TYPE day AS ENUM('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
+CREATE TYPE
+
+# View the ENUM values
+SELECT enum_range(NULL::day)
+
+# Create a new table using the defined ENUM DAY
+CREATE TABLE messages (
+id SERIAL,
+day_of_week DAY DEFAULT NULL,
+message VARCHAR(255) NOT NULL,
+PRIMARY KEY (id)
+);
+CREATE TABLE
+
+# Insert values
+INSERT INTO messages (day_of_week, message)
+VALUES ('monday', 'This is a message on Monday');
+
+Only values found in the ENUM will be valid
+ENUM('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday')
+
+
+********************************************************************************
+Numerical data
+
+# PSQL predefined ranges
+SMALLINT - range: -32768 to 32767
+INT - range: -2147483648 to 2147483647
+BIGINT - range: -9223372036854775808 to 9223372036854775807
+
+# signed and unsigned values
+signed = can be negative
+unsigned = must be positive
+However psql does not have unsigned values like other RDBMS.
+
+# CHECK constraint to simulate unsigned values in psql
+CREATE TABLE people(age SMALLINT CHECK (age > 0));
+
+# DECIMAL() (The decimal requires two values, the first is the max num of digits, the second the number of digits stored to the right of the decimal place)
+CREATE TABLE decimal_values (
+id SERIAL,
+item VARCHAR(50) NOT NULL,
+value DECIMAL(13, 2) NOT NULL,
+PRIMARY KEY(id)
+);
+
+INSERT INTO decimal_values (item, value) VALUES ('Test Item1', 12.355);
+INSERT INTO decimal_values (item, value) VALUES ('Test Item2', 12.354);
+
+1 | Test Item1 | 12.36
+2 | Test Item2 | 12.35
+
+DECIMAL(13, 2) is common for inputing money data
+
+#FLOATING POINT TYPE (Should not be used for storing money data)
+REAL - precision: 6 decimal digits
+DOUBLE - precision: 15 decimal digits
+
+
+********************************************************************************
+Booleans
+
+ALTER TABLE users ADD COLUMN enabled BOOLEAN DEFAULT FALSE;
+
+
+********************************************************************************
+Date and Time
+
+DATE = MM-DD-YYYY
+
+TIMESTAMP = YYYY-MM-DD HH::MM:SS
+ALTER TABLE users ADD COLUMN date_created TIMESTAMP DEFAULT NOW();
+
+
+********************************************************************************
+Spans of time
+
+Documentation
+https://www.postgresql.org/docs/9.1/static/datatype-datetime.html#DATATYPE-INTERVAL-INPUT
+
+
+********************************************************************************
+Creating indexes
+
+# Create index
+CREATE INDEX ON table_name (field_name)
+CREATE INDEX ON books (author);
+
+# Show index / all indexes
+\d books
+\di
+
+# Delete index
+DROP INDEX books_author_idx;
+
+
+********************************************************************************
+Other commands (Got an error in this example not sure why)
+
+$ pg_dump --inserts --clean sql_book > dump.sql     (is used for backing up an entire database)
+$ psql library < dump.sql                           (is used for restoring the data of an entire database)
+
+# pg_restore (allows for fine tuned backup)
+$ pg_dump -Fc sql_book > db.dump
+$ dropdb sql_book
+$ pg_restore -C -d dbname db.dump

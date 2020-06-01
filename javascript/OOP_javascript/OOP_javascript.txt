@@ -1,0 +1,126 @@
+****************************************************************************************************
+Object Oriented JavaScript
+
+  *classes
+  *prototype object
+
+
+****************************************************************************************************
+*classes
+
+  javascript doesn't actually have classes 
+  without a Calss constructor method we can instead create our own constructor function with with the 'new' keyword that mimics a Class
+
+  when nameing a constructor function it is best practice to capitalize the first character
+  
+
+  example: constructor function
+
+    function House(bedrooms, bathrooms, squareFeet) {  // you cannot use the arrow function to create a constructor function
+      this.bedrooms = bedrooms;
+      this.bathrooms = bathrooms;
+      this.squareFeet = squareFeet;
+    }
+
+    let house1 = new House(2, 2, 1100);  // the keyword 'new' must be used because the function is not actually returning anything
+
+  **************************************************
+  the 'new' keyword
+
+    1. the 'new' keyword creates an empty object
+    2. and sets the keyword 'this' value to the empty object that was just created
+    3. it then adds 'this' as a return value of the function
+    4. finally it adds __proto__ to the empty object which links the prototype property on the constructor function (aka dunder proto property)
+
+    without using 'new' the function could work as long as you returned 'this' from the function 
+    however, 'this' would be the global window without using the 'new' keyword (bad)
+
+
+  **************************************************
+  re-using properties from a different object
+
+    function Car(make, model, year) {
+      this.make = make;
+      this.model = model;
+      this.year = year;
+      this.numWheels = 4;
+    }
+
+    function Motorcycle(make, model, year) {
+      // this.make = make;
+      // this.model = model;
+      // this.year = year;
+      Car.call(this, make, model, year);  // the properties of a different constructor function can be accessed with call (or apply) but remember to set the 
+      this.numWheels = 2;                 // value of the keyword 'this' 
+    }
+
+      //    Car.apply(this, [make, model, year])  // apply can also be used
+      //    Car.apply(this, arguments)            // or you can just pass the agruments keyword (which hass access to all of the agruments)
+
+    let car1 = new Car('chevy', 'malibu', 2012);
+    let motorcycle1 = new Motorcycle('harley', 'cruiser', 1980);
+
+    console.log(car1);
+    console.log(motorcycle1);
+
+
+****************************************************************************************************
+*prototype object
+
+  in javaScript every single function has a property called 'prototype'
+    when using the 'new' keyword an additional property, the 'dunder proto' (__proto__) is also created
+    __proto__ points to the 'prototype' property of the constructor function
+    __proto__ also has a property of 'constructor' that points back to the actual constructor function
+
+    example :
+
+      function Person(name) {
+        this.name = name;
+        // this.sayHi = function() {
+        //   return 'Hi ' + this.name + '!';
+        // }
+      }
+
+      Person.prototype.sayHi = function() {
+        return 'Hi ' + this.name + '!';
+      }
+
+      person1 = new Person('nate');
+
+      console.log(person1.sayHi());
+
+
+    example 2 :
+
+      function Vehicle(make, model, year) {
+        this.make = make;
+        this.model = model;
+        this.year = year;
+        this.isRunning = false;   // all of these properties are unique instance of the constructor function 
+      }
+
+      Vehicle.prototype.turnOn = function() {  
+        this.isRunning = true;                 
+      }
+
+      Vehicle.prototype.turnOff = function() { 
+        this.isRunning = false;
+      }
+
+      Vehicle.prototype.honk = function() {
+        if (this.isRunning === true) return 'beep!';
+      }
+
+      vehicle1 = new Vehicle('chevy', 'malibu', 2012);
+
+      console.log(vehicle1);           // the entire object
+      console.log(vehicle1.honk());    // undefined
+      console.log(vehicle1.isRunning); // false
+      console.log(vehicle1.turnOn());  // undefined
+      console.log(vehicle1.isRunning); // true
+      console.log(vehicle1.honk());    // beep!
+
+
+if the property is not unique to the instance of the constructor function that can be attached to the prototype object
+this is better for functions because you don't want to create a new function for each instace that is created, instead they can be shared with prototype
+

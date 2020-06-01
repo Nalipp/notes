@@ -1,0 +1,56 @@
+*******************************************************************************************
+arrow function subtleties
+
+
+  *example :
+
+    var square = (x) => {
+      return(x * x);
+    }
+
+    square(8);         // 64
+
+
+
+  *can be rewritten 
+
+    var square = x => x * x;
+
+    square(8);         // 64
+
+
+
+  *there is a problem... this binding does not work with arrow functions
+
+    var greeting = {
+      name: 'nate',
+      logArguments: () => {
+        console.log(arguments);
+      },
+      greet: () => {
+        return 'hello, nice to meet you ' + this.name;
+      }
+    }
+
+    greeting.greet()                 // hello, nice to meet you undefined;
+    greeting.logArguments(1, 2, 3)   // instead of returning on array like object with 1, 2, 3 as values we recieve the global arguments 
+                                        or arguments are undefined
+
+
+  *however if you remove the arrow and ':' key value association it will work as expected
+
+
+    var greeting = {
+      name: 'nate',
+      greet () {
+        return 'hello, nice to meet you ' + this.name;
+      },
+      logArguments () {
+        console.log(arguments);
+      }
+    }
+
+    greeting.greet()                 // hello, nice to meet you nate
+    greeting.logArguments(1, 2, 3)   // { '0': 1, '1': 2, '2': 3 }
+
+

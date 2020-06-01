@@ -1,0 +1,39 @@
+
+********************************************************************************
+React Router
+********************************************************************************
+
+npm install --save react-router-dom
+
+const ReactRouter = require('react-router-dom');
+const Router = ReactRouter.BrowserRouter;
+const Route = ReactRouter.Route;
+
+<Router>
+  <div className='containername'>
+    <Route path='/pathname' component={componentName}>
+  </div>
+</Router>
+
+
+
+********************************************************************************
+from docs video
+
+npm install react-router-dom
+
+import { BrowserRouter, Link, Route } from 'react-router-dom';
+
+<Link to={'route/`${argument}`}> (argument is passed as a parameter that can be accessed on the match object (see below))
+  text
+</Link>
+
+<Route path={'route/name:argument'} component={<ComponentName>} />
+       (if the path={} matches the to={} the component={} renders a component name)
+
+parameters can be passed to the component on a match object
+
+const componentName = ({ match }) => {
+  match.params.argument
+              (because :argument was used after the name)
+}

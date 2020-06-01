@@ -1,0 +1,34 @@
+************************************************************
+absolute paths (not related to testing)
+
+  .env (goes in the root file)
+    NODE_PATH=src/
+
+
+************************************************************
+test setup 
+
+  npm install --save enzyme enzyme-adapter-react-16
+
+  setupTests.js (goes in src/frontend folder)
+    import Enzyme from 'enzyme';
+    import Adapter from 'enzyme-adapter-react-16';
+
+    Enzyme.configure({ adapter: new Adapter() });
+
+
+************************************************************
+examples
+  ~/code/react/react/playground/stephen_grider/testing
+  https://github.com/Nalipp/time_keep/tree/master/src/components
+
+docs
+  https://airbnb.io/enzyme/
+
+
+************************************************************
+testing http requests
+
+  npm install --save axios redux-promise moxios
+
+  https://github.com/axios/moxios

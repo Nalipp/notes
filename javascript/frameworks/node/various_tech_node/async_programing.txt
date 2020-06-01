@@ -1,0 +1,41 @@
+*******************************************************************************************
+async programing
+*******************************************************************************************
+
+callback function
+  a function that gets passed as an argument to another function and is executed after some event happens
+
+what is async programing in javascript
+
+  call stack
+  node apis
+  callback que
+  event loop
+
+  call stack
+    like a can of tennis balls
+      -> if you add a ball to the top you can't remove the ball from the bottom of the can without removing the top first
+      -> things stak on the top, last in first out, first in last out
+
+      var one = 1;
+      var two = 2;
+
+      var one gets added to the call stack is executed and imediately removed before var two is added to the call stack
+      in this example you are moving line by line through the program
+
+      function are a little different
+        when you call a function will be added and stay in the call stack until it returns a value
+
+  node apis
+    functions that are included in javascript such as setTimeout() are executed in the call stack and registered in node apis
+    once executed they are passed to the callback que
+
+  callback que
+    functions that have been ran in the node apis are stored and wait to be ran by the event loop
+    
+  event loop
+    watches the call stack and waits for it to be empty and then runs events that have been registered in the callback que
+
+
+
+

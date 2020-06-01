@@ -1,0 +1,280 @@
+
+
+jan - march
+19500
+ 4125
+-----
+15375
+ 
+1000 usbank april 1
+1000 wayne  april 15
+1000 usbank may   1
+1000 wayne  may   15
+1000 ca     june  1
+1000 ca     june  15
+1000 wayne  july  1
+1000 usbank july  15
+
+
+per month expenses
+  1200
+
+april    may   june  july15 august
++400    +400   +400   +800  +1600
+
+
+total
+  9400
+
+usbank
+  4000  
+
+wayne bank
+  4000
+
+fidelity
+  1000
+
+cc
+  -1000
+
+ca tax
+  2400
+
+federal tax
+  1600 or 0
+  
+stimulus check
+  2900 or 1700 or 0
+
+
+
+****************************************************************************************************
+portfolio
+
+
+100
+
+
+30000 s&p
+10000 20 all us
+
+8000  tech
+8000  world
+        4000 stable
+        4000 emerging
+
+4000  pics
+        2000 tesla
+        2000 berk
+
+
+buckets
+40 us
+12 tech/pics
+ 6 world
+ 2 world
+---
+60
+
+
+
+
+
+
+
+
+
+
+
+investment
+****************************************************************************************************
+
+47000
+ 8000
+-----
+55000
+
+
+total
+  VT     18800  VTWAX
+2 FNILX   9400
+4 FXAIX
+
+  SWPPX
+
+large
+1 FSPGX   4700
+
+Mid
+2 VIMAX   9400
+
+Bonds
+1 VBTLX   4700
+
+
+
+
+
+international emerging
+  FPADX
+  VEMAX
+
+
+
+50000
+8000
+
+58000
+
+s&p500
+
+
+
+
+Fidelity Blue Chip Growth Fund (FBGRX)
+Fidelity Nasdaq Composite Index Fund (FNCMX)
+
+Fidelity Total Market Index Fund (FSKAX)
+
+
+****************************************************************************************************
+
+5000 bonds
+
+11000 6 Fidelity 500 Index Fund (FXAIX)
+4000  2 Fidelity ZERO Total Market Index Fund
+
+4000  2 Fidelity ZERO Large Cap Index Fund
+4000  2 Fidelity ZERO International Index Fund
+
+4000  2 Fidelity Extended Market Index Fund (FSMAX)
+4000  2 Fidelity ZERO Extended Market Index Fund
+
+8000 2.5 Cheap Tech?
+      FTEC 0.08
+
+
+
+
+     1.5 Cheap Real Estate?
+      VNQ 0.12
+
+1500 2.5     ISHARES GLOBAL REIT 0.14
+2500 4.5     SCHH SCHWAB US REIT 0.07
+
+3000  1.5 TESLA
+3000  1.5 BERK
+
+1000 bonds
+
+
+5000
++
+11000
++
+4000
++
+4000
++
+4000
++
+4000
++
+4000
++
+8000
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Tech small and mid
+Fidelity OTC Portfolio (ticker: FOCPX)
+
+This five-star Morningstar-rated fund is among the best-performing large growth Fidelity funds in the past decade. The Fidelity over-the-counter fund invests more than 80% of its portfolio in stocks trading in the Nasdaq composite index or over-the-counter markets. OTC markets have more small- and medium-sized companies, which generally offer more growth opportunities. That explains the high returns of this fund, but it also means the fund comes with more risk. Add the lower transparency and regulation on OTC markets, and it's easy to see why FOCPX gets a high-risk rating. Investors should also note the fund's top 10 holdings account for nearly 44% of the overall portfolio, which is in turn nearly 45% invested in the technology sector. High-performing this one may be, but highly diversified it is not.
+
+10-year average annual returns: 16.96%
+Net expense ratio: 0.89%
+Risk: high versus U.S. large growth category
+
+
+Fidelity Blue Chip Growth Fund (FBGRX)
+
+It's not easy to find blue-chip companies with big growth potential; giants can only grow so much bigger, after all. But this is exactly what the managers of FBGRX aim to do. This blue-chip large growth fund targets companies in the S&P 500 and Dow Jones Industrial Average, and companies with at least $1 billion in market capitalization. From those criteria, management selects only the companies it feels offer above-average growth potential. Bear in mind this means the fund is heavily invested in technology (almost 38% of the total portfolio) and consumer discretionary (almost 22% of the total portfolio). It also carries a lot of its weight (more than 43%) in its top 10 holdings, which include common names like Apple (AAPL), Google’s parent company, Alphabet (GOOG, GOOGL) and Amazon.com (AMZN).
+
+10-year average annual returns: 15.66%
+Net expense ratio: 0.8%
+Risk: above average versus U.S. large growth category
+
+
+Fidelity Nasdaq Composite Index Fund (FNCMX)
+
+If you favor index funds, the best-performing Fidelity fund for your retirement is FNCMX. The fund aims to track the performance of the Nasdaq, which includes more than 3,000 stocks. FNCMX holds 2,065 of them. As with FOCPX, it's heavily weighted toward information technology – but then, so is the U.S. economy, and FNCMX has less weight in IT (33.66%) than the Nasdaq Composite Index (41.55%). FNCMX also carries a lot of its weight in its top 10 holdings (more than 33% of the portfolio), which include familiar names like Apple, Amazon and Microsoft Corp. (MSFT). So while FNCMX is another high performer, order this one with a side of diversification for a less volatile retirement. Also note that for an index fund, FNCMX is on the expensive side at 0.3%.
+
+10-year average annual returns: 15.47%
+Net expense ratio: 0.3%
+Risk: above average versus U.S. large growth category
+
+
+Fidelity 500 Index Fund (FXAIX)
+
+FXAIX is offered by more than 14,000 of the 23,000 401(k) plans on Fidelity’s platform, according to the company, making it one of the most accessible Fidelity funds for retirement. It also happens to be among the best-performing Fidelity funds for retirement with a 10-year return of 12.64% as of Feb. 29. It has taken a beating, however, down almost 24% year-to-date, which could signal a buying opportunity. With a tidy expense ratio of only 0.015%, the Fidelity 500 Index fund is one of the lowest-cost funds of the 10 best-performing Fidelity funds for retirement. Formerly FUSEX, the fund replicates the S&P 500, making it a nice option for index investors or those looking for large blend exposure.
+
+10-year average annual returns: 12.64%
+Net expense ratio: 0.015%
+Risk: average versus U.S. large blend category
+
+
+Fidelity Total Market Index Fund (FSKAX)
+
+Fidelity’s Total Market Index Fund provides exposure to a broader swath of the U.S. stock market than S&P 500 funds like FXAIX. With more than 3,400 holdings, FSKAX reaches far beyond the S&P 500. No single company makes up more than 4% of the overall portfolio. For broad stock market exposure at index-fund pricing, FSKAX is definitely one of the best-performing Fidelity funds for retirement. That said, Fidelity’s recently debuted Zero Total Market Index Fund (FZROX) accomplishes the same thing with no expense ratio. It has also outperformed FSKAX since 2018, when the new zero-expense ratio funds were debuted. You likely won’t find the Zero funds in your 401(k), as most providers wait until funds are at least 3 years old before adding them, but FZROX is available in any Fidelity IRA.
+
+10-year average annual returns: 12.46%
+Net expense ratio: 0.015%
+Risk: average versus U.S. large blend category
+
+
+Fidelity Growth Strategies Fund (FDEGX)
+
+Moving from the large-cap category into mid-caps now, which generally target companies with between $2 billion and $10 billion in market capitalization, FDEGX is the best-performing mid-cap fund. While it focuses on medium-sized companies, the fund may invest in small or large companies as well, provided the managers believe they offer the potential for accelerated revenue or earnings growth. FDEGX currently has more large-caps than mid-caps in its portfolio, with its top 10 holdings being well over the $10 billion market capitalization mark. That said, they aren’t your usual suspects. Names like Global Payments (GPN), Fiserv (FISV) and KLA Corp (KLAC) don’t make the top 10 of many (if any) large-cap funds.
+
+10-year average annual returns: 12.08%
+Net expense ratio: 0.56%
+Risk: average versus U.S. mid-cap growth category
+
+
+Fidelity Extended Market Index Fund (FSMAX)
+
+Another popular fund in Fidelity 401(k) plans is the Fidelity Extended Market Index Fund. Benchmarked to the Dow Jones U.S. Completion Total Stock Market Index, which excludes companies in the S&P 500, FSMAX can be a good source of small- and mid-cap stock exposure and a nice complement to a large-cap or S&P 500 index fund. FSMAX is also highly diversified among those smaller companies with more than 3,100 holdings, the top 10 of which account for only about 5.4% of the portfolio, and representation in every market sector. If you like the sound of this fund, now could be the time to buy as it’s down more than 30% year-to-date.
+
+10-year average annual returns: 11.61%
+Net expense ratio: 0.045%
+Risk: above average versus U.S. mid-cap blend category
+
+
+Fidelity Real Estate Investment Portfolio (FRESX)
+
+If you want to add real estate to your retirement portfolio, the best-performing Fidelity real estate fund in the past decade is FRESX. The fund aims for capital growth with above-average income and a yield more than that of the S&P 500. It’s managing to do that but barely, with a yield of 2.62% versus closer to 2% on S&P 500 funds like FXAIX. It invests primarily in the common stock of companies in the real estate industry or engaged in real estate investing, with the bulk being industrial and offices or residential. Over half of the portfolio’s assets are in its top 10 holdings, but then with only 44 companies in the entire portfolio, this isn’t too surprising.
+
+10-year average annual returns: 11.3%
+Net expense ratio: 0.74%
+Risk: average versus U.S. real estate category
+
+
+Fidelity Balanced Fund (FBALX)
+
+For a less-aggressive approach to retirement investing, consider the Fidelity Balanced Fund. FBALX invests about 40% of its portfolio in fixed-income securities like bonds. Right now, it’s just less than 30% in fixed income, which explains why Morningstar gives it a high risk rating compared with the 50% to 70% asset allocation category average. Its fixed income is primarily investment-grade credit, U.S. Treasurys and mortgage pass-through securities. With this more conservative approach to investing comes more conservative returns, however. FBALX rounded out the past decade with a 9.56% average annual return. So FBALX is more of a best-performing Fidelity fund for semi-conservative retirement investors. That said, it’s a five-star fund from Morningstar and earned a score of 8.7 out of 10 from U.S. News & World Report.
+
+10-year average annual returns: 9.56%
+Net expense ratio: 0.53%
+Risk: high versus U.S. allocation 50% to 70% equity category

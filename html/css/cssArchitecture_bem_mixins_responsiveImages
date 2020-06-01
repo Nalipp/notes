@@ -1,0 +1,387 @@
+****************************************************************************************************
+css architecture
+
+*BEM
+*css architecture
+*responsive images
+*react styled components (alternative to bem)
+
+
+****************************************************************************************************
+*BEM
+
+  block__element--modifier
+
+  example : bem
+
+    <div class="large-hero">                                      // block
+      <h1 class="large-hero__title">TStory</h1>                   // element
+      <h3 class="large-hero__sub-title">Learn to code</h3>        // element
+      <button class="btn btn--large">Sign up</button>             // block and modifier
+      <button class="btn btn--large btn--green">Log in</button>   // block and 2x modifiers
+    </div>
+
+
+  example : nesting
+
+    .large-hero {
+      position: relative;
+      with: 100%;
+      height: 400px;
+
+      &__text-content {      // the preprocess will generate the appropriate bem name (large-hero__text-content) -> & === .large-hero
+        font-size: '10px';
+        text-align: center;
+      }
+    }
+
+
+**************************************************
+  Why Bem
+
+    Makes the relationship between html and css clearer
+    Instaed of relying on the page cascade we are relying on a direct one to one relationship between the html and css
+    Bem selectors should target selectors specifically instead of relying on type or desendent selectors
+    Blocks are self contained allowing us to move then around freely and reuse them without hurting the cascade
+    We try to identify patterns that allow us to create single responsibility blocks
+    Blocks can be nested inside other blocks
+
+    Block -> is a reusable chunk of css (not unique)
+    Element -> belong/ to an element but will not be used again (is unique)
+    Modifier -> can be used on an Block or an Element to modify the default state of an object
+
+    example : Block
+
+      A page will have multiple testimonials but the images in each of them will be different
+
+      <div class="testimonial">
+        <h1>title</h1>
+      </div>
+
+    example : Element
+
+      The testimonial block is not unique and will be used over and over, 
+      but the image in the testimonaial will have css with a specific img so it is an element
+
+      <div class="testimonial">
+        <img class="testimonial__image" />
+      </div>
+
+
+
+    example : Modifyer
+
+      btn is a block element that is reused throughout the page, but some buttons are a different color than the default
+
+      <a class="btn btn"></a>                        // original state without modifier 
+      <a class="btn btn--orange"></a>                // with modifier
+      <a class="btn btn--orange btn--large"></a>     // two midifiers
+
+
+**************************************************
+bem nesting with &<name>  
+
+  Nesting goes against the bem philiosiphy because when a preprocessor compiles the nested css it compiles it into a desendent selector relationship
+  instead you can use & (which is the outer selector) plus the 
+
+  .large-hero {
+    position: relative;
+    with: 100%;
+    height: 400px;
+
+    &__text-content {      // the preprocess will generate the appropriate bem name (lare-hero__text-content)
+      font-size: '10px';
+      text-align: center;
+    }
+  }
+
+
+****************************************************************************************************
+*css architecture
+
+  main css file imports in different single responsibililty css files including any resets
+
+  // styles/main.css
+  @import "normalize.css";
+  @import "base/global";           // base can hold global styles and variables
+  @import "base/_variables";       // holds all variables for things like hex colors
+  @import "base/_mixins";          // mixins belong in the base, see below example
+  @import "modules/_large-hero";   // modules can hold partials (files that are ment to be imported)
+  @import "modules/_btn";          // a module can be used for even something as small as a btn
+
+  example : using variables
+
+    // styles/modules/_btn.css
+    .btn {
+      background-color: $mainBlue;  // variable should be defined in base/_variables.css
+      height: 2rem;
+      width: 4rem;
+    }
+
+  example : mixins (using external library)
+
+    npm install --save-dev postcss-mixins
+    require('postcss-mixins');
+
+
+    // styles/base/_mixins.css
+      @define-mixin atSmall {
+        @media (min-width: 530px) {
+          @mixin-content;
+        }
+      }
+
+      @define-mixin atMedium {
+        @media (min-width: 800px) {
+          @mixin-content;
+        }
+      }
+
+      ...
+
+    // styles/modules/_large-hero
+      @mixin atSmall {        // allows you to use the same media query instead of re-typing
+        font-size: 4.rem
+      }
+
+
+
+****************************************************************************************************
+*responsive images
+
+with mobile first web design you should not be requiring the user to download the same image file for all devices
+an image intended for mobile download dosen't need to be as large or have as find of pixels as a desktop download
+you may also want to crop the image to be a differnt shape on a mobile device
+the clinet can be instructied which image file do download (first example) but most browsers can actually figure this out on their own (second example)
+
+  mobile first responsive images 
+
+  example : specifying what we want the browser to do specifically
+
+    <picture>
+      <source srcset="images/dog-crop-large.jpg" media="(min-width: 1200px)">
+      <source srcset="images/dog-crop-medium.jpg" media="(min-width: 760px)">      
+      <img src="images/dog-crop-small.jpg" alt="puppy in the sand">               // the base image that all clients will recieve inclues the alt tag
+    </picture>
+
+
+  example (better) : letting the browser decide what image to use
+
+    when given a list of choices, browsers are actually smart enough to choose which image is best for the device it is being rendered on 
+    but because we don't want the browser to have to downlaod all of the images we should to specify the width of the images with <size>w
+
+    <img srcset="images/dog-crop-small.jpg 570w, images/dog-crop-medium.jpg 1200w, images/dog-crop-large.jpg 1920w" alt="puppy in the sand">
+
+
+  example : somtimes you may want to mix the two approaches
+
+    some monitors are 4k or even 5k meaning they can handle high dbi
+    to cover this senario we can use the following which assigns the browser to use one of 8 different pictures
+    sending 4 different croped versions of an image and allowing it to choose between the low or high dbi version
+
+    <picture>
+      <source srcset="images/dog-crop-large.jpg 1920w, images/dog-crop-large-hi-dbi.jpg 3840w" media="(min-width: 1380)">
+      <source srcset="images/dog-crop-large.jpg 1380, images/dog-crop-large-hi-dbi.jpg 2760w" media="(min-width: 990)">
+      <source srcset="images/dog-crop-large.jpg 990, images/dog-crop-large-hi-dbi.jpg 1980w" media="(min-width: 640)">
+      <source srcset="images/dog-crop-large.jpg 640, images/dog-crop-large-hi-dbi.jpg 1280w" alt="dog in the sand">
+    </picture>
+
+
+****************************************************************************************************
+*react styled components (alternative to bem)
+
+  Alternative to bem where you split your react code into more components that contain their own styling
+  for example instead of creating a react component that makes an api fetch and renders the stying to the page you create two components
+    1. container component -> handles data fetching, example <SidebarContainer />
+    2. styling component -> handles the styling of the component example : <Sidebar /> and not the state (a funtional (dumb) component)
+
+  component based systems have
+    containers -> are how things work
+    components -> are how things look
+      this makes debuging easier because it seperates out the backend (data based) bugs and the front end (styling based) bugs
+
+    some additional concepts
+    1. Single-use classes -> example : you should only use the .btn class to style buttons 
+    2. Components as a styling construct
+
+  styled-components (library)
+    removes the mapping between styles and components
+
+    example :
+
+      import styled from 'styled-components';
+      
+      const Title = styled.h1`
+        font-size: 1em;
+        text-align: center;
+        color: crimson;
+      `
+
+      const Wrapper = styled.section`
+        color: crimson;
+        padding: 4em;
+        height: 100%;
+        width: 100%;
+      `
+    styled.h1 and styled.section are function calls
+    the backticks are actually calling the function with the css parameters as their arguments
+
+    Title and Wrapper are react components! and can be used anywere
+
+        const App = () => {
+          <Wrapper>
+            <Title>
+              Hello, this is the title
+            </Title>
+          </Wrapper>
+        }
+
+    styled components let you write css in javaScript (not inline styles but literal css) meaning you can have media queries and nesting
+
+
+************************************************** 
+media queries, hover, and nested
+
+
+    example : nested and media queries
+
+      import styled from 'styled-components';
+
+      const ColorChange = styled.section {
+        background: crimson;
+
+        > h2 {
+          color: lawngreen;
+        }
+
+        &:hover {
+          transform: translateY(1px);
+          box-shadow: 0 2px 3px rgba(0, 0, 0, .15);
+        }
+
+        @media (min-width: 875) {
+          background: yellow;
+
+          > h2 {
+            color: violet;
+          }
+        }
+      }
+
+
+**************************************************
+altering css using js based on props as arguments
+
+
+    function can also be embeded in the css
+    
+    example 1 : buttons that display color based on the props being passed to the component
+
+      <Button>Log in</Button>
+      <Button primary>Log out</Button>
+
+      const Button = styled.button`
+        background: ${(props) =>
+          props.primary ? 'crimson' : 'lawngreen'; 
+        };
+        color: ${(props) =>
+          props.primary ? 'lawngreen' : 'crimson'; 
+        };
+
+        font-size: 2em;
+        width: 5em;
+        height: 2.5em;
+        ...
+      `;
+
+      export default Button;
+
+    props allows you to pass in arguments from the html component tag to manipulate the css
+
+
+    example 2 (not sure if this actually works)
+
+      const Sky = styled.section`
+        ${props => props.dusk && 'background-color: dusk' }
+        ${props => props.day && 'background-color: white' }
+        ${props => props.night && 'background-color: black' }
+      `;
+
+      <Sky dusk />
+      <Sky day />
+      <Sky night />
+
+
+**************************************************
+component.extend
+
+  an alternate way of changing styles is to create a differnt name for the component that extend the base component (instaed of passing props)
+
+  const Button = styled.button {
+    ...
+  }
+
+  const ButtonDanger = Button.extend {
+    color: 'red';
+  }
+
+  const SignIn = () =>
+    <div>
+      <Button>Add</Button>
+      <ButtonDanger>Delete</ButtonDanger>
+    </div>
+
+  export default SignIn;
+
+
+**************************************************
+ThemeProvider
+
+  Declare variables that can be accessed in components where the them is assigned
+
+  example : 
+
+    // src/App.js
+      import { ThemeProvider } from 'styled-components';
+
+      const mainTheme = {
+        primary: 'crimson',
+        secondary: 'lawngreen',
+      }
+
+      <ThemeProvider theme={mainTheme}>
+        <App />
+      </ThemeProvider>
+
+    // src/Wrapper.js
+      const Title = styled.section`
+        color: ${props => props.theme.primary};
+        background: ${props => props.theme.secondary};  // can access from the ThemeProvider object
+      `;
+
+
+**************************************************
+keyframes
+
+https://egghead.io/lessons/react-animate-your-user-interface-in-react-with-styled-components-and-keyframes
+
+
+**************************************************
+inject global
+
+  allows you to apply global styling to all components
+
+  // src/index.js
+    import { injectGlobal } from 'styled-components';
+
+
+    injectGlobal`              // injects the stylesinto the document head
+      body {
+        background: 'green';
+      }
+    `
+
+
+          
+
+

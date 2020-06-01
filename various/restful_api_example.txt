@@ -1,0 +1,12 @@
+7 restful routes
+
+page name   url                          verb       description                                   mongoose method
+=========================================================================================================================
+INDEX       https://domainname/dogs             GET      gets all dogs                            Dog.find()
+NEW         https://domainname/dogs/new         GET      gets a form for a new dog                N/A
+CREATE      https://domainname/dogs             POST     creates a new dog                        Dog.create()
+
+SHOW        https://domainname/dogs/:id         GET      gets one dog                             Dog.findById()
+EDIT        https://domainname/dogs/:id/edit    GET      gets a form to update an existing dog    Dog.findById()
+UPDATE      https://domainname/dogs/:id         Put      updates an existing dog                  Dog.findByIdAndUpdate(id, obj, cb) 
+DESTROY     https://domainname/dogs/:id         DELETE   deletes an existing dog                  Dog.findByIdAndRemove(id, cb) 

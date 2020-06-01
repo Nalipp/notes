@@ -1,0 +1,62 @@
+****************************************************************************************************
+react
+****************************************************************************************************
+
+virtual DOM
+ 1. when a change occurs, update the virtual dom
+ 2. update the previous dom representation with the current
+ 3. only update the real dom with what actually changed
+
+
+
+
+starter code :
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Component 1</title>
+    <link rel="stylesheet" href="first-component.css" />
+    <script src="https://unpkg.com/react@16.0.0/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16.0.0/umd/react-dom.development.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.js"></script>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script type="text/babel">
+    class Hobby extends React.Component {
+      render() {
+        const hobbies = ['Sleep', 'Eat', 'Play', 'Cuddle'];
+        return (
+          <ul>
+            {hobbies.map((v, i) => {
+              return <li key={i} style={{fontSize:"2em"}}>{v}</li>
+            })}
+          </ul>
+        )
+      }
+    }
+
+    class Pet extends React.Component {
+      render() {
+        const listStyle = {fontSize: '1.5em'};
+        return (
+          <div className="card">
+            <h2 className="name">Moxie</h2>
+            <img src="https://github.com/tigarcia/Moxie/raw/master/moxie.png" alt="Moxie the cat" />
+            <h5 style={{fontSize : '3em', margin : '10px'}}>Hobbies</h5>
+            <Hobby />
+          </div>
+        )
+      }
+    }
+
+    ReactDOM.render(<Pet />, document.getElementById('app'));
+  </script>
+</body>
+</html>
+
+
+

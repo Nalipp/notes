@@ -1,0 +1,11 @@
+callbacks
+  callbacks could be split into two lectures,
+    day1 -> introduction to functional programming
+              passing functions as arguments
+    day2 -> imperitive vs declaritive programming
+              using built in methods 
+              declaritive programming -> what we want to have happen
+              imperitive programming -> how we want to have happen
+
+              declaritive -> has more abstraction but is easier to reason about
+

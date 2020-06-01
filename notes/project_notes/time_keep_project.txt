@@ -1,0 +1,256 @@
+project name
+Tstory
+www.ti-story.com
+
+commit 1
+fork gaby project
+  tranfer models
+  update views
+    remove css
+    update forms
+  update db connection
+  package
+    remove travis until after deployment
+    keep lint and security
+  deploy to heroku
+
+commit 2
+  lintrc
+    (no travis)
+  security watch
+  add dev dependencies (this fixed security watch)
+  cleaned up database connections
+
+slips model
+slips views
+
+slips routes
+  slips test
+  slips forms
+  repo tests
+
+model validation tests users
+model validation tests slips
+seed data
+fix heroku deployment
+
+authentication
+  switch from username to email
+  flash messages not working
+
+  check for user logged in before changing someone else's profile not working
+    I think it is checking isLoggedIn fine but when trying to compare id to req.id it hangs
+
+  update password not working
+
+  improve error messages
+
+  create association between slip and user
+    update seed
+
+  user / slip routing
+
+  icon sprite sheet
+
+  slips html page
+
+  navbar
+
+---
+crud for slips 
+  problem with updating and deleting associations
+---
+
+socket.io
+
+
+require login to access pages
+
+add name to User model
+
+fix slip tests
+get rid of unneeded slip routes
+
+make sure authentication is still working
+
+front end structure
+  html css (scss?)
+  navbar
+
+
+authentication bugs
+  password validations not working
+
+  move index from users/home back to index
+  make the slips routes look like the users routes
+
+  testing
+
+bugs
+  url validation requires an url (can't be blank)
+  validations don't work on findByIdAndUpdate
+    https://stackoverflow.com/questions/31794558/mongoose-findbyidandupdate-not-running-validations-on-subdocuments
+
+Readme (instructions and picture)
+
+seperate out routes and repo tests
+
+needs a delete confirmation
+
+search ltc dales work to find es6 way of including parameters in routes
+
+seperate seed data into its own file
+
+go nuts on the testing routes (for each document field)
+
+authentication
+  password reset via email
+  oauth
+  require password match to change password
+
+
+
+*******************************************************************************************
+
+project name
+tee-slip
+www.tee-slip.com
+
+basic file structure
+  public
+    stylesheets
+      main.css
+    scripts
+      common.js
+    images
+  src
+    partials
+      header.pug
+      footer.pug
+    collections
+      users
+        routes.js
+        models
+          User.js
+        tests
+          modelValidation.tests.js
+          model.tests.js
+        views
+          index.pug
+          show.pug
+          new.pug
+          edit.pug
+      slips
+        routes.js
+        models
+          Slip.js
+        tests
+          modelValidation.tests.js
+          model.tests.js
+        views
+          index.pug
+          show.pug
+          new.pug
+          edit.pug
+  database_config.js
+  app.js
+  README.MD
+
+commit 2
+linting / travis
+
+commit 5
+deploy
+
+commt 6
+connect to db with user and slip models
+
+commit 8
+model validation tests
+
+--------
+populate user views
+  repo
+  tests
+--------
+
+seperate out routes and repo tests
+
+populate slip views (commit one method at a time)
+
+hook up database to heroku (troubleshoot practice with gaby and check how dale did it)
+
+validations don't work on findByIdAndUpdate
+  https://stackoverflow.com/questions/31794558/mongoose-findbyidandupdate-not-running-validations-on-subdocuments
+
+delete confirmation
+
+improve error messages
+
+create repos
+routing / integration test for repos
+
+authentication
+seed data
+
+testing / test config 
+  (supertest failing and mocha failing saftey test)
+
+
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+technologies
+  dev environment
+    -> webpack
+    -> babel
+    -> linting
+    
+    follow https://github.com/Nalipp/js_dev_environment/commits/master
+
+  testing
+    -> supertest (frontend)
+    -> mocha expect (models)
+    
+    create test helper
+    https://github.com/Nalipp/testing_mocha_mongodb
+    https://github.com/Nalipp/express_supertest_authentication/commits/master
+    
+  deployment
+    -> heroku
+
+    https://github.com/Nalipp/express_supertest_authentication/commits/master
+
+
+commit 1
+  create basic setup following dev environment
+commit 2
+  transpilers
+commit 3
+  bundling with webpack and eslint
+commit 4
+set up travis
+commt 5 
+test config
+
+connect database
+  update server.js
+  create config.js
+  create mongoose.js
+
+deploy (continuous deployment)
+
+create user model
+
+populate views
+
+routing
+
+
+
+authentication
+
+create slip model
+
+routing
+

@@ -1,0 +1,40 @@
+**************************************************
+python-tools
+
+  might revisit rest vs spread parameter before talking about unpacking
+    if '...' appears in a function definition it is a "rest parameter"
+      function someFn(a, b, ...otherParameters) {
+        // do stuff
+      }
+    if in "sread"
+
+    If '...' appears in a function invocation, it is spread 
+      Math.max(...aBunchOfValues);
+
+  possible questions
+    is there rest parameter? no
+      only spread opperator
+        show examples from slide, also calling a function with spread list
+          def fn(a, b):
+              print(a)
+              print(b)
+
+          lst = [3, 5]
+          fn(*lst)
+            => 3 
+               5
+
+    how do you raise a general error in python like js
+      JS
+        throw Error('error message');
+
+      python
+        raise Exception('error message')
+     
+
+  nice summary of tuples
+    https://www.programiz.com/python-programming/list-vs-tuples
+       
+
+  nice summary of tuples
+    https://www.programiz.com/python-programming/list-vs-tuples

@@ -1,0 +1,67 @@
+=============================================================
+css
+=============================================================
+
+background-image
+selectors
+
+
+=============================================================
+background-image
+
+  background: transparent url('images/icon_close.png') 0 0 no-repeat;
+
+
+=============================================================
+selectors
+
+	general
+		*           => selects all instances on the page but should generally not be used because it can be slow
+		#id					=> should only be used when you are sure it won't need to use it again
+
+	child selectors
+		li a 				=> desendant selectors select all elements inside the parent alement, even if they are nested
+									 it is best to minimize the number of selectors used to target an element and to not attach a x.class to the selector
+		li < a      => selects only the elements that are directly inside the parent element and not any nested elements
+
+	sibling selectors
+		CSS																														CSS
+		h2 ~ p {...}    (selects all the following siblings)					h2 + p {...} 		(selects the immediate siblings)
+
+		HTML																													HTML
+		<p>...</p>																										<p>...</p>
+		<section>																											<section>
+			<p>...</p>																										<p>...</p>
+			<h2>...</h2>																									<h2>...</h2>
+			<p>This paragraph will be selected</p>												<p>This paragraph will be selected</p>
+			<div>																													<div>
+				<p>...</p>																									<p>...</p>
+			</div>																												</div>
+			<p>This paragraph will be selected</p>												<p>...</p>
+		</section>																										</section>
+
+	pseudo-classes	http://learn.shayhowe.com/advanced-html-css/complex-selectors/
+		a:link 									Selects a link that has not been visited by a user
+		a:visited								Selects a link that has been visited by a user
+		a:hover									Selects an element when a user has hovered their cursor over it
+		a:active								Selects an element when a user has engaged it
+		a:focus									Selects an element when a user has made it their focus point
+		input:enabled						Selects an element in the default enabled state
+		input:disabled					Selects an element in the disabled state, by way of the disabled attribute
+		input:checked						Selects a checkbox or radio button that has been checked
+		input:indeterminate			Selects a checkbox or radio button that neither been checked or unchecked, leaving it in an indeterminate state
+		li:first-child					Selects an element that is the first within a parent
+		li:last-child						Selects an element that is the last within a parent
+		div:only-child					Selects an element that is the only element within a parent
+		p:first-of-type					Selects an element that is the first of it’s type within a parent
+		p:last-of-type					Selects an element that is the last of it’s type within a parent
+		img:only-of-type				Selects an element that is the only of it’s type within a parent
+		li:nth-child(2n+3)			Selects an element that matches the given number or expression, counting all elements from the beginning of the document tree
+		li:nth-last-child(3n+2) Selects an element that matches the given number or expression, counting all elements from the end of the document tree
+		p:nth-of-type(3n)				Selects an element that matches the given number or expression, counting only elements of it’s type from the beginning
+		p:nth-last-of-type(2n+1)Selects an element that matches the given number or expression, counting only elements of it’s type from the end 
+		section:target					Selects an element whose ID attribute value matches that of the URI fragment identifier
+		div:empty								Selects an element that does not contain any children or text nodes
+		div:not(.awesome)				Selects an element not represented by the stated argument
+	 
+	 

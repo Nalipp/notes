@@ -1,0 +1,296 @@
+=============================================================
+html
+=============================================================
+
+html skeleton
+definition lists
+css clearfix
+css resets
+center / align content (replaced elements)
+meida queries
+gradients
+links (frameworks)
+selectors
+sprite sheet example
+figcaptin
+definition list
+styling tables
+print view stylesheet
+
+=============================================================
+html skeleton
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width">
+		<title></title>
+		<link rel="stylesheet" href="main.css">
+	</head>
+	<body>
+	</body>
+</html>
+
+=============================================================
+javascript
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>exercises</title>
+    <link rel="shortcut icon" href="/"> <!-- to prevent favicon error -->
+    <script src="practice.js"></script>
+    <style media="screen">
+    body {
+      background: crimson;
+      color: white;
+      font-family: monospace;
+    }
+    </style>
+  </head>
+  <body>
+    <h1>practice</h1>
+  </body>
+</html>
+
+=============================================================
+definition lists
+
+<dl>
+	<dt></dt>
+	<dd>
+	</dd>
+</dl>
+
+dl => definition list
+dt => definition term
+dd => definition description
+* you can add multiple definition terms to a definition description and vise versa
+	inside the <dd></dd> you can also add <p> and other tags, but this is not allowed on <dt></dt>
+	http://maxdesign.com.au/articles/definition/
+
+=============================================================
+css clearfix
+	to prevent collapsing try to float first, otherwise...
+
+	<parent element> {
+		overflow: hidden;  // can cause unwanted scrollbars
+	}
+
+	<parent element>:after {
+		display: block;
+		clear: both;
+		content: "";
+	}
+
+	.clearfix:after {
+		content: ".";
+		visibility: hidden;
+		display: block;
+		height: 0;
+		clear: both;
+	}
+
+	.group:before,
+		.group:after {
+	content: "";
+	display: table;
+		}
+	.group:after {
+	clear: both;
+	}
+	.group {
+		*zoom: 1;
+	}
+
+
+	other options
+
+	fake div
+	<div style="clear: right;"></div>  // uses unsamantic html
+
+
+	=============================================================
+	css resets
+
+	examples: http://meyerweb.com/eric/tools/css/reset/
+	http://necolas.github.io/normalize.css/
+	http://cssreset.com/scripts/undohtml-css-tantek-celik/
+
+	(add to the top of the css file)
+	@import url("reset.css");
+
+ul,ol { list-style: none; }
+h1,h2,h3,h4,h5,h6,pre,code { font-size: 1em; }
+ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,body,html,p,blockquote,fieldset,input,dl,dt,dd, figure, figcaption {
+	margin: 0;
+	padding: 0; }
+a img,:link img,:visited img, fieldset { border: none; }
+address { font-style: normal; }
+header, section, article, nav, footer, hgroup, details, summary, figure, main { display: block; }
+mark {
+	color: inherit;
+	background: transparent; }
+abbr { border: none; }
+/* summary::-webkit-details-marker { display: none; } */
+
+
+=============================================================
+center / align content (replaced elements)
+
+  text-align  => applied to parent element unless the element is default display block
+                   can't be applied to inline, or block-inline level elements (even if the display is changed to block)
+                   works fine with <p> <div> defualt block elements
+  margin auto => used with blocks level elements and applied within the element (don't forget to specify the width)
+                   can be applied to inline, or block-inline level elements if their display is changed to block
+
+  transform   => position must not be default static, can cause issues with resizing the browser window
+
+                  position: relative;
+                  left: 50%;
+                  transform: translateX(-50%);
+
+
+replaced elements (inline elements that act as inline-block elements)
+  img is considered an inline element in the mdn documentation but it is actually a replaced element
+    so it behaves like an inline-block element https://developer.mozilla.org/en-US/docs/Web/CSS/Replaced_element
+
+some replaced elements
+    <img> <object> <video> <textarea> <input> <audio> <canvas>
+
+=============================================================
+meida queries
+
+	<meta name="viewport" content="width=device-width">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	@media (max-width: 875px) {
+	}
+	@media only screen and (min-width:480px) and (max-width: 640px)  {
+	}
+
+
+@media (min-width: 320px) and (max-width: 480px) {
+}
+@media (max-width: 600px) {
+}
+@media (max-width: 768px) {
+}
+
+
+	@media screen and (min-width:600px) {
+		nav {
+	float: left;
+	width: 25%;
+		}
+		section {
+			margin-left: 25%;
+		}
+	}
+	@media screen and (max-width:599px) {
+		nav li {
+	display: inline;
+		}
+	}
+
+=============================================================
+gradients
+
+background-color: #d2dcbe;
+background-image: linear-gradient(to bottom, #d2dcbe, #fcfff5);
+background-repeat: no-repeat;
+
+=============================================================
+frameworks
+	http://getskeleton.com/
+
+
+
+=============================================================
+selectors
+
++ adjacent selector => selects the first/next sibling
+~ sibling select    => selects all siblings
+> direct child      => selects child object from parent
+:only-child         => selects an element if it is alone
+:first-child        =>
+:last-child         =>
+:nth-child()        => select the counted occurance of a child
+:nth-last-child()   => count the backward the number of types
+:first-of-type      =>
+:last-of-type       =>
+:nth-of-type(2n+2)  => select all even elements (step + starting position)
+:only-of-type       => select a type only if it is alone
+:empty              => selects an element with no children
+:not(element)       => select all matching elements except the specified element
+[]                  => attribute
+[type^="Sa"]        => select attributes of type where first two letters are "Sa"
+[type$="to"]        => select attributes of type where last two letters are "to"
+[type*="bo"]        => select attributes of type that contain "bo"
+
+
+
+=============================================================
+sprite sheet example
+
+
+footer li a {
+  display: block;
+  width: 46px;
+  height: 46px;
+  overflow: hidden;
+  background: transparent url("images/icons_social-media.png") 0 0 no-repeat;
+}
+
+footer a.facebook {
+  background-position: 0 -46px;
+}
+
+use
+  background-size: cover;
+  to debug (shows the entire image inside the specified width and height)
+
+
+=============================================================
+figcaptin
+
+<figure>
+  <img></img>
+  <figcaption></figcaption>
+</figure>
+
+
+=============================================================
+definition list
+  /* definition lists can have mulitple descriptions or terms */
+  /* definition descriptions can also have block level elements but not definition terms */
+
+<dl>
+  <dt>definition term</dt>
+  <dd>definition description</dd>
+</dl>
+
+=============================================================
+styling tables
+
+  borders =>  https://developer.mozilla.org/en-US/docs/Learn/CSS/Styling_boxes/Styling_tables
+    border can be added but there is a transparet border between table data
+    remove the transparent border with
+      border-collapse: collapse
+    or
+      border-spacing: 0;
+
+  margins => margins cannot be applied to table cells
+     border-spacing can be used instead but must be applied to the entire tablexcexce
+
+
+=============================================================
+print view stylesheet
+
+  if you the print screen to be different (when user tries to print the screen) than the regular css
+    you can link a different css file when the user prints screen
+
+    <link rel="stylesheet" href="print.css" media="print">

@@ -1,0 +1,11 @@
+                         
+                           tStory                             LearnTeachCode app             vim speed master
+Most challenging           making a perfect node.js app
+What you learned            
+Most interesting           tStory
+Hardest bug                
+Enjoyed the most           coding with mentor dale
+Conflicts with teamates    ben falling behind (Situation.Aaction.Result)
+
+
+

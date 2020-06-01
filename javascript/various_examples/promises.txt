@@ -1,0 +1,38 @@
+*******************************************************************************************
+promises
+
+  example :
+
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width">
+      <title></title>
+      <!-- <link rel="stylesheet" href="main.css"> -->
+    </head>
+    <body>
+      <button>click</button>
+    <script>
+      function startGame() {
+        let count = 0;
+
+        document.querySelector('button').addEventListener('click', () => {
+          count++;
+        });
+
+        return new Promise( (resolve, reject) => {
+          setTimeout( () => {
+            if (count >= 6) return resolve(count);
+            reject(count);
+          }, 2000);
+        });
+      }
+
+      startGame()
+        .then( (count) => alert('you win! ' + count))
+        .catch( (count) => alert('you loose! ' + count));
+
+    </script>
+    </body>
+  </html>

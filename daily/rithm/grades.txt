@@ -1,0 +1,311 @@
+****************************************************************************************************
+web-dev-1 r14
+Grades
+
+92 Will Grover -3
+90 David Sommers -4
+88 Paige Godfrey -5
+
+84 Justin Cheng -10
+
+80 Adam Levitz -14
+78 Richard Dowdy -16
+
+
+
+RITHM
+David Sommers / Web Dev 1
+Link	Submitted	Comments
+Link	Jan. 12, 2020, 8:18 p.m.	5 hours
+Status
+Status changed
+2020-01-09 13:59:38
+Assessor
+Assessor
+Grade
+Grade
+Feedback
+***Conceptual***
+
+There were a few questions where I would have liked to see a little more detail, but overall awesome job!
+
+***oo-challenge***
+
+This is picky, but it is more typical to see 2 spaces of indentation here instead of 4 in JS
+
+Don't forget semicolons (missing at least 1)
+
+***almost-sort***
+
+There are some ways to clean this up a bit but this is the optimal solution
+great job with the pointers!
+On time
+O1 space
+
+
+***findMultiples***
+
+Nice use of Map!
+
+
+***roman-to-integer***
+
+Optimal solution, nice use of reduce!
+Feedback that will be shared with student.
+Notes
+-1
+-2
+-1
+Staff-only notes.
+
+RITHM
+Will Grover / Web Dev 1
+Link	Submitted	Comments
+Link	Jan. 11, 2020, 2:29 p.m.	~3 hours or so
+Status
+Status changed
+2020-01-09 13:59:38
+Assessor
+Assessor
+Grade
+Grade
+Feedback
+***Conceptual***
+
+There were a few questions where I would have liked to see a little more detail, but overall great job.
+
+Try to imagine these questions as if they were being asked in an interview.
+
+Nice job with the bigO notation and time complexity questions
+
+***oo-challenge***
+
+This is picky, but it is more typical to see 2 spaces of indentation here instead of 4 in JS
+
+***almost-sort***
+
+Nice approach!
+
+***findMultiples***
+
+Nice solution!
+
+***roman-to-integer***
+Feedback that will be shared with student.
+Notes
+-2
+-1
+Staff-only notes.
+
+RITHM
+Adam Levitz / Web Dev 1
+Link	Submitted	Comments
+Link	Jan. 12, 2020, 8:44 p.m.	
+Status
+Status changed
+2020-01-09 13:59:38
+Assessor
+Assessor
+Grade
+Grade
+Feedback
+***Conceptual***
+
+Some of these need more detail but overall good job.
+Try to imagine these questions as if they were being asked in an interview.
+
+- What is time complexity?
+  The first sentence is solid but I wasn't sure what you meant by increasing input size could require the same amount of work as a smaller input size
+
+
+***oo-challenge***
+
+Don't forget semicolons (missing at least 2)
+
+Missing the Car class, this should inherit from Vehicle with numWheels property set to 4
+
+When verifying that the auto being added to the garage class is in fact a vehicle we can use the instanceof keyword
+`auto instanceof Vehicle`
+checking that the auto is not a string will not work, if other data types are passed the error message will not be triggered
+
+
+***almost-sort***
+
+Nice job with the pointers on the second solution!
+
+
+***findMultiples***
+
+Nice solution!
+
+
+***roman-to-integer***
+
+This works and meets the time and space criteria
+See the solution for a way to write this more succinctly
+Feedback that will be shared with student.
+Notes
+-4
+-9
+-1
+Staff-only notes.
+
+RITHM
+Justin Cheng / Web Dev 1
+Link	Submitted	Comments
+Link	Jan. 11, 2020, 4:36 p.m.	This assignment took me 2-3 hours to do.
+Status
+Status changed
+2020-01-09 13:59:38
+Assessor
+Assessor
+Grade
+Grade
+Feedback
+***Conceptual***
+
+A few of these questions need more detail
+Try to imagine these questions as if they were being asked in an interview.
+
+- What are some differences between `var` and `let`?
+  We don't always have to be in the same function scope, we could for example be in an inner function's scope and still have access to variables found in an outer scope.
+  
+  For more info try searching keywords `js nested scope`, `js scope lookup chain`
+  
+  Another key difference is `var` can be re-declared but `let` cannot
+
+
+***oo-challenge***
+
+This is picky, but it is more typical to see 2 spaces of indentation here instead of 4 in JS
+
+Don't forget semicolons (missing at least 1)
+
+
+***almost-sort***
+
+Nice solution using pointers
+
+
+***findMultiples***
+
+Nice solution!
+
+
+***roman-to-integer***
+Feedback that will be shared with student.
+Notes
+-8
+-2
+Staff-only notes.
+
+RITHM
+Paige Godfrey / Web Dev 1
+Link	Submitted	Comments
+Link	Jan. 12, 2020, 7:27 p.m.	Not too difficult! Took roughly 4-5 hours.
+Status
+Status changed
+2020-01-09 13:59:38
+Assessor
+Assessor
+Grade
+Grade
+Feedback
+***Conceptual***
+
+Nice job on the conceptual questions
+
+- What are some differences between arrays and objects?
+  Extracting the keys of an object into an array does not mutate the object.
+  Doing so will not affect you ability to iterate over that object in the future.
+
+
+***oo-challenge***
+
+This is picky, but it is more typical to see 2 spaces of indentation here instead of 4 in JS
+
+Don't forget semicolons (missing at least 1)
+
+
+***almost-sort***
+
+Nice solution!
+very clean
+
+
+***findMultiples***
+
+Nice solution!
+
+
+***roman-to-integer***
+Feedback that will be shared with student.
+Notes
+-3
+-2
+Staff-only notes.
+
+
+RITHM
+Richard Dowdy / Web Dev 1
+Link	Submitted	Comments
+Link	Jan. 12, 2020, 4:23 p.m.	
+Status
+Status changed
+2020-01-09 13:59:38
+Assessor
+Assessor
+Grade
+Grade
+Feedback
+***Conceptual***
+
+Some things to keep in mind
+
+A few of these questions need more detail
+Try to imagine these questions as if they were being asked in an interview.
+You don't have to write all of these out as if you are speaking, bullet points are fine.
+
+- What are some differences between arrays and objects?
+  The points you made are valid but what are some additional differences?
+
+- What are some differences between `var` and `let`?
+  If a variable is declared with the `var` keyword it will be fully scoped to the function it was declared in and not leak out into the global scope
+  The only time we have to worry about a variable leaking into the global scope is when we don't use any keyword (`var`, `let` or `const`)
+  In addition to `let` allowing you to scope a variable to a function, it also allows you to scope variables to code blocks
+
+
+***oo-challenge***
+
+Typically we wouldn't uppercase the arguments to the constructor, instance variable can be lowercase.
+
+The instance variables are intented 5 spaces 
+
+Don't forget semicolons (missing at least 3)
+
+You are on the right track for the Garage class but we only care if the element being added is an instance of the vehicle class, the first check you have is sufficient
+
+
+***almost-sort***
+
+Nice solution using pointers!
+
+
+***findMultiples***
+
+Nice solution!
+This is a small thing but realize that the concatenation (+=) is not necessary on line 11 (+) would suffice
+This is because we are setting the freqCount[number] to the value that occurrence + 1 resolves to, concatenation updates the value being stored in occurrence which is not needed
+
+
+***roman-to-integer***
+
+This works and meets the time and space criteria
+See the solution for a way to write this more succinctly
+Feedback that will be shared with student.
+Notes
+-7
+-7
+-1
+-1
+Staff-only notes.

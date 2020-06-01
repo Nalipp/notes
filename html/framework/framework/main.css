@@ -1,0 +1,10 @@
+@import url('framework.css');
+
+body {
+	font: normal 40px sans-serif;
+	color: white;
+}
+section {
+	background: crimson;
+	padding: 20px;
+}
