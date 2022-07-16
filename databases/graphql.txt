@@ -1,0 +1,16 @@
+**************************************************
+graphQL
+
+  https://graphql.org/learn/
+
+  Queries and Mutations
+  ----------------------------------------
+    fields vs alias
+    arguments
+    fragment vs inline fragment
+    query vs mutation
+    variable
+    directive
+
+  Schemas and Types
+  ----------------------------------------

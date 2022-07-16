@@ -30,6 +30,7 @@ html skeleton
 	</head>
 	<body>
 	</body>
+  <script src="practice.js"></script>
 </html>
 
 =============================================================

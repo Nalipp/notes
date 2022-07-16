@@ -1,0 +1,50 @@
+ec2
+beanstalk (heroku)
+fargate (docker)
+lambda
+
+
+instance type -> type of hardware you are running
+
+
+questions
+  debian vs ubuntu
+  how does the scaling up work (elastic)
+
+  step 6
+    add http and https
+
+  what happens after 36 months
+
+all .pem files can live in
+ls ~/.ssh
+
+
+ssh -i robin.pem admin@[host name]
+(you might have to strengthen the permissions)
+(robin is joels server name)
+
+chmod robin.pem 600
+
+change host name
+
+sudo su
+change hostname from numbers to string
+hostname robin -> now admin@robin
+
+(-h is for human readable)
+$ df -h
+$ free -h
+
+$ ps
+
+add a password
+sudo su
+password
+
+sudo apt update
+sudo apt upgrade
+sudo apt install build-essentials
+sudo apt install python3-virtualenv
+sudo apt install nginx
+

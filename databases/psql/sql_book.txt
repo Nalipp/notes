@@ -1,3 +1,7 @@
+condensed view mode
+
+\x on
+
 ********************************************************************************
 Structured data Introduction
 
@@ -56,6 +60,7 @@ getting started
     # \l
     # \c [database name] => change databases
     # \dt => check the current list of tables
+    # \d [table name] => view the schema for a specific table
 
   Create a new database
     $ createdb [database name]
@@ -91,6 +96,14 @@ pg_dump data
   # Extract Both Data and Schema
   pg_dump -d sql-course -t weather --inserts > dump.sql  (inserts makes the INSERT data more readable but slower/not necessary)
 
+  pg_dump -a company_list --inserts > dump.sql  
+
+  # alternate
+  $ pg_dump -d company_list -f company_list.sql;
+  $ createdb company_list_backup
+  $ psql -d company_list_backup -f company_list.sql
+
+
 
 ********************************************************************************
 Creating a new table
@@ -118,6 +131,16 @@ Creating a new table
     ALTER TABLE names ADD COLUMN brother_city_name varchar(100);
     ALTER TABLE names RENAME brother_city_name TO bro_city_name;
     ALTER TABLE names DROP bro_city_name;
+
+    ALTER TABLE companies ALTER COLUMN company_name DROP DEFAULT
+    ALTER TABLE companies ALTER COLUMN company_name SET NOT NULL
+
+  change company column from text to int with default changed from '' to 0
+    ALTER TABLE builtin_companies ALTER COLUMN employee_count DROP DEFAULT;
+    UPDATE builtin_companies SET employee_count = 0 WHERE employee_count = '';
+    ALTER TABLE builtin_companies ALTER employee_count TYPE INTEGER USING employee_count::int;
+    ALTER TABLE builtin_companies ALTER COLUMN employee_count SET DEFAULT 0;
+
 
   numbers, timestamp
     db_name # CREATE TABLE test (
@@ -179,6 +202,8 @@ DROP TABLE users;
 
 #Update all elements from a table
 UPDATE users SET enabled = false;
+
+UPDATE builtin_companies SET job_count = 0 WHERE job_count = '';
 
 #Update a single element from a table
 UPDATE users SET enabled = true

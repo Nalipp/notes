@@ -1,0 +1,74 @@
+**************************************************
+Missing Semester
+  https://missing.csail.mit.edu/
+
+  common commands
+  ----------------------------------------
+
+    cd -        
+      jump to the previous path you were on
+
+    open <path> -a <application>
+      open a file with sofware on your machine
+
+    man <shell command>
+      get details about a shell command
+      https://tldr.sh/ (for most important commands)
+
+    sh
+      allows you to execute files (even if you don't have permission)
+
+    !!
+      places the last line statement in the current line statement
+
+    history
+      list history of previous shell commands
+
+    history 1
+      list all history from the first command
+    
+    history | grep <pattern>
+      list history of previous shell commands matching a pattern
+
+    ctr-r
+      search previous shell command history by pattern
+      (continue pressing ctr-r for additional pattern matches)
+
+    grep <pattern> <file>
+      search files for text or regex pattern
+
+    grep <pattern> -r <directory>
+      recursively search files for text or regex pattern
+
+    {}
+      cp /path/to/project/{foo,bar,baz}.sh /newpath
+      # Will expand to
+      cp /path/to/project/foo.sh 
+         /path/to/project/bar.sh 
+         /path/to/project/baz.sh 
+         /newpath
+
+    find
+      finds files or directories 
+      (grep finds text inside files and directories)
+
+      # Find all directories named src
+      find . -name src -type d
+
+      # Find all python files that have a folder named test in their path
+      find . -path '*/test/*.py' -type f
+
+      # Find all zip files with size in range 500k to 10M
+      find . -size +500k -size -10M -name '*.tar.gz'
+
+    tree
+      see file structure of the current directory
+      
+      
+  shell programming langauge 
+  ----------------------------------------
+  https://missing.csail.mit.edu/2020/shell-tools/
+    describes how to work with 
+      variables
+      functions
+      conditionals

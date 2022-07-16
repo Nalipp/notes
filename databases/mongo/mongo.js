@@ -107,7 +107,7 @@ var personSchema = new Schema({
 
      const {MongoClient, ObjectId} = require('mongodb');
 
-     MongoClient.connect('mongodb://localhost:27017/collection', (err, db) => {
+     MongoClient.connect('mongodb://localhost:27017/cities', (err, db) => {
        if (err) return console.log(error);
        console.log(db);
      });

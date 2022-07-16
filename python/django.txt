@@ -1,0 +1,38 @@
+Django
+https://docs.djangoproject.com/en/3.2/intro/
+
+--------------------------------------------------
+# create a new project
+$ django-admin startproject mysite
+
+# start the server
+$ python3 manage.py runserver
+
+# create a new app
+$ python3 manage.py startapp polls
+  # apps need 
+  #   1. views
+  #   2. to be added to 
+           <appname>/urls.py and 
+           <sitename>/urls.py
+           <sitename>/settings.py
+  #   3. models
+
+# creates the migration (which can be version controlled)
+$ python3 manage.py makemigrations polls
+
+# prints the schema
+$ python3 manage.py sqlmigrate polls 0001
+
+# runs the actual migration on the db
+$ python3 manage.py migrate
+
+# start the shell to interact with model objects
+$ python3 manage.py shell
+
+# create admin in <sitename>/urls.py 
+
+# create an admin user
+$ python3 manage.py createsuperuser
+
+# add apps to admin in <appname>/admin.py
