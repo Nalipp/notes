@@ -1,0 +1,113 @@
+**************************************************
+forgeting evt.preventDefault()
+
+  flask application
+    Post request to add a resource
+      The ajax request goes through and hits the db fine
+      But get an error related to the content-type being text instead of json
+  The issue was after the ajax request a form submission is fired that hits the enpoint with the form data causing the error
+
+**************************************************
+jobly
+
+  After deploying to heroku, the server is up and making a request to a route that doesn't exist returns a 404 as expected but any route that connects to the database hangs. The database is created, we can make queries in the heroku environment.
+
+Tim's solution
+
+  in the db.js of the express server
+
+  const client = new Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false
+    }
+  });
+
+**************************************************
+hack or snooze
+
+  issues with axios
+
+    the post request for adding a story works but the delete does not
+
+    https://stackoverflow.com/questions/51069552/axios-delete-request-with-body-and-headers?fbclid=IwAR3E8SumjyEsxBf_Np1pIXxmxM1EQqpQtIcsB8e4S_KIv6cVXem1NbDwR0o
+
+
+**************************************************
+jquery
+
+  appending the same jquery object multiple times
+
+  https://stackoverflow.com/questions/25939472/jquery-appending-an-object-multiple-times
+
+
+**************************************************
+psql
+
+lsof -i tcp:3000
+kill -9 PID
+
+------------------------------
+show list of all services brew is running (including psql)
+  brew services list
+
+start and stop postgres using brew
+    brew services start postgresql
+    brew services stop postgresql
+    brew services restart postgresql
+
+start and stop postgres without brew
+pg_ctl -D /usr/local/var/postgres start
+pg_ctl -D /usr/local/var/postgres stop
+
+m1 chip?
+pg_ctl -D /opt/homebrew/var/postgres start
+pg_ctl -D /opt/homebrew/var/postgres stop
+
+('postmaster' is even a level deeper)
+
+you can delete postgres from here
+
+----------------------------------------
+FATAL: lock file “postmaster.pid” already exists
+
+When psql starts a pid file is created in and removed when psql stops
+
+Sometimes the file isn't properly removed especially after an unexpected reboot
+You have to find the pid file, try these places
+
+/usr/local/var/postgres
+/opt/homebrew/var/postgres (m1 chips?)
+
+delete the file and run
+brew services restart postgresql
+
+----------------------------------------
+FATAL:  database files are incompatible with server
+DETAIL:  The data directory was initialized by PostgreSQL version 13, which is not compatible with this version 14.0. pg_ctl: could not start server
+
+brew services stop postgresql
+brew postgresql-upgrade-database
+brew services start postgresql
+----------------------------------------
+
+brew uninstall postgresql
+brew install postgresql
+
+database 'nalipp' does not exist
+(this just means you are starting fresh)
+createdb
+psql
+
+****************************************************************************************************
+Flask
+
+  ----------------------------------------
+  Flask is running an older version
+
+    AttributeError: 'Flask' object has no attribute 'get'
+
+    $ flask --version
+      Flask 1.1.4
+
+    $ pip install flask==2.0.0
